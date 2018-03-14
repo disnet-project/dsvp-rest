@@ -1,7 +1,6 @@
 package edu.ctb.upm.disnet.controller;
 
 import edu.ctb.upm.disnet.service._extract.WikipediaExtractService;
-import edu.ctb.upm.disnet.service._populate.PopulateDbNative;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ExtractionController {
 
-    @Autowired
-    private PopulateDbNative populateDbNative;
+
     @Autowired
     private WikipediaExtractService extractService;
 
@@ -59,6 +57,12 @@ public class ExtractionController {
 */
 
         return "Successful extraction and insertion in a DB!";
+    }
+
+    @RequestMapping(path = { "/wikipedia/report" }, //wikipedia extraction
+            method = RequestMethod.GET)
+    public void extractOnly() throws Exception {
+        extractService.onlyExtract();
     }
 
 

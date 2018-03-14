@@ -1,7 +1,7 @@
-package edu.ctb.upm.disnet.model.document_structure;
+package edu.ctb.upm.disnet.model.wikipedia.document_structure;
 
 
-import edu.ctb.upm.disnet.model.document_structure.code.Code;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Code;
 
 import java.util.Date;
 import java.util.List;

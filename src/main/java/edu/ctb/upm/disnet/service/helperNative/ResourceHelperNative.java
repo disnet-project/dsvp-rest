@@ -1,7 +1,7 @@
 package edu.ctb.upm.disnet.service.helperNative;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.disnet.model.document_structure.code.Resource;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Resource;
 import edu.ctb.upm.disnet.service.ResourceService;
 import edu.ctb.upm.disnet.common.util.Common;
 import edu.ctb.upm.disnet.common.util.UniqueId;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ctb.upm.disnet.common.util.Common;
 import edu.ctb.upm.disnet.common.util.UniqueId;
-import edu.ctb.upm.disnet.model.document_structure.Link;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.Link;
 import edu.ctb.upm.disnet.model.jpa.Url;
 import edu.ctb.upm.disnet.service.UrlService;
 import org.slf4j.Logger;

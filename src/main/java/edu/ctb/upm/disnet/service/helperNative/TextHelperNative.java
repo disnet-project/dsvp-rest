@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ctb.upm.disnet.common.util.Common;
 import edu.ctb.upm.disnet.common.util.UniqueId;
 import edu.ctb.upm.disnet.enums.ContentType;
-import edu.ctb.upm.disnet.model.document_structure.text.*;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.*;
 import edu.ctb.upm.disnet.service.HasTextService;
 import edu.ctb.upm.disnet.service.TextService;
 import org.slf4j.Logger;

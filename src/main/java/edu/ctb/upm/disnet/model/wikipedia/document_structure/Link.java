@@ -1,4 +1,4 @@
-package edu.ctb.upm.disnet.model.document_structure;
+package edu.ctb.upm.disnet.model.wikipedia.document_structure;
 import java.util.Objects;
 
 /**

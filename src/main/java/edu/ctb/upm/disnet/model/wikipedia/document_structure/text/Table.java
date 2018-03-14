@@ -1,4 +1,4 @@
-package edu.ctb.upm.disnet.model.document_structure.text;
+package edu.ctb.upm.disnet.model.wikipedia.document_structure.text;
 import java.util.List;
 
 /**

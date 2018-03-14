@@ -2,7 +2,7 @@ package edu.ctb.upm.disnet.service.helperNative;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.disnet.model.document_structure.code.Code;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Code;
 import edu.ctb.upm.disnet.service.CodeService;
 import edu.ctb.upm.disnet.service.ResourceService;
 import edu.ctb.upm.disnet.common.util.Common;

@@ -1,8 +1,8 @@
 package edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import edu.ctb.upm.disnet.model.document_structure.Source;
-import edu.ctb.upm.disnet.model.document_structure.code.Resource;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.Source;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Resource;
 
 import java.util.HashMap;
 import java.util.List;

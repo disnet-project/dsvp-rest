@@ -18,17 +18,19 @@ import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.a
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.Request;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response.Response;
 import edu.ctb.upm.disnet.model.WebLink;
-import edu.ctb.upm.disnet.model.document_structure.Doc;
-import edu.ctb.upm.disnet.model.document_structure.Link;
-import edu.ctb.upm.disnet.model.document_structure.Section;
-import edu.ctb.upm.disnet.model.document_structure.Source;
-import edu.ctb.upm.disnet.model.document_structure.code.Code;
-import edu.ctb.upm.disnet.model.document_structure.code.Resource;
-import edu.ctb.upm.disnet.model.document_structure.text.List_;
-import edu.ctb.upm.disnet.model.document_structure.text.Paragraph;
-import edu.ctb.upm.disnet.model.document_structure.text.Text;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.Doc;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.Link;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.Section;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.Source;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Code;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Resource;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.List_;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.Paragraph;
+import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.Text;
+import edu.ctb.upm.disnet.model.jpa.*;
 import edu.ctb.upm.disnet.model.response.DBpediaResponse;
-import edu.ctb.upm.disnet.service._populate.PopulateDbNative;
+import edu.ctb.upm.disnet.service.DocumentService;
+import edu.ctb.upm.disnet.service._populate.WikipediaPopulateDbNative;
 import edu.ctb.upm.disnet.service.helperNative.ConfigurationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +54,7 @@ import java.util.List;
 public class WikipediaExtractService {
 
     @Autowired
-    private PopulateDbNative populateDbNative;
+    private WikipediaPopulateDbNative wikipediaPopulateDbNative;
     @Autowired
     private DiseaseAlbumResourceService diseaseAlbumResource;
     @Autowired
@@ -67,6 +69,9 @@ public class WikipediaExtractService {
     private Constants constants;
     @Autowired
     private Common common;
+
+    @Autowired
+    private DocumentService documentService;
 
 
 
@@ -90,9 +95,9 @@ public class WikipediaExtractService {
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
                 //System.out.println("No poblara...");
-                populateDbNative.populateResource(resourceHashMap);
-                populateDbNative.populateSemanticTypes();
-                populateDbNative.populate(sources, version);
+                wikipediaPopulateDbNative.populateResource(resourceHashMap);
+                wikipediaPopulateDbNative.populateSemanticTypes();
+                wikipediaPopulateDbNative.populate(sources, version);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
@@ -335,6 +340,40 @@ public class WikipediaExtractService {
 
         //System.out.println("the task (model informtacion of diseases from wikipedia) has taken "+ ( (time_end - time_start) / 1000 ) +" seconds");
 
+    }
+
+
+    public void onlyExtract(){
+        List<WebLink> xmlLinks = new ArrayList<>();
+        List<Document> documents = documentService.findAll();
+        System.out.println("size: "+documents.size());
+        int count = 1;
+        for (Document document: documents) {
+            if (document.getDate().toString().equals("2018-02-15")){
+                List<HasDisease> hasDiseases = document.getHasDiseases();
+                String diseaseName = "";
+                for (HasDisease hasDisease:hasDiseases){
+                    Disease disease = hasDisease.getDiseaseByDiseaseId();
+                    diseaseName = diseaseName + disease.getName() + "; ";
+                }
+                List<DocumentUrl> documentUrls = document.getDocumentUrls();
+                String urls = "";
+                WebLink xmlLink = new WebLink();
+                for (DocumentUrl documentUrl: documentUrls) {
+                    String urlId = documentUrl.getUrlId();
+                    Url url = documentUrl.getUrlByUrlId();
+                    urls = urls + url.getUrl() + "; ";
+
+                    xmlLink.setUrl(url.getUrl());
+                    xmlLink.setConsult(diseaseName);
+                    break;
+                }
+                System.out.println("Disease: (" + count +")" + xmlLink.getConsult() + " | URL: " + xmlLink.getUrl());
+                xmlLinks.add(xmlLink);
+                count++;
+            }
+        }
+        //extractService.onlyExtract(xmlLinks);
     }
 
 }

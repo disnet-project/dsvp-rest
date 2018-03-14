@@ -14,6 +14,7 @@ public class WebLink {
 
     private Integer id;
     private String url;
+    private String consult;
 
 
     public Integer getId() {
@@ -30,6 +31,14 @@ public class WebLink {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getConsult() {
+        return consult;
+    }
+
+    public void setConsult(String consult) {
+        this.consult = consult;
     }
 
     @Override
