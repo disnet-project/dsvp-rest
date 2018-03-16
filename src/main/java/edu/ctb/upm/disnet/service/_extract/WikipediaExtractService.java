@@ -16,6 +16,7 @@ import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_li
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.response.ResponseLA;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.api_response.WikipediaTextsExtractionService;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.Request;
+import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.RequestJSON;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response.Response;
 import edu.ctb.upm.disnet.model.WebLink;
 import edu.ctb.upm.disnet.model.wikipedia.document_structure.Doc;
@@ -74,7 +75,10 @@ public class WikipediaExtractService {
     private DocumentService documentService;
 
 
-
+    /**
+     * @return
+     * @throws Exception
+     */
     public boolean extract() throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
@@ -84,8 +88,12 @@ public class WikipediaExtractService {
         DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version);
 
         if (dBpediaResponse!=null) {
-            //resourceHashMap = getWikipediaResources(dBpediaResponse.getLinks());
-            sources = getWikipediaTexts(dBpediaResponse.getLinks());
+            resourceHashMap = getWikipediaResources(dBpediaResponse.getLinks(), true, timeProvider.dateFormatyyyMMdd(version));
+            sources = getWikipediaTexts(dBpediaResponse.getLinks(), true, timeProvider.dateFormatyyyMMdd(version));
+
+            if (resourceHashMap!=null) {
+                resourceHashMap.toString();
+            }
             if (sources!=null){
                 extractionReport(sources);
             }
@@ -103,6 +111,8 @@ public class WikipediaExtractService {
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
                 confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
                 res = true;
+            }else{
+                System.out.println("ERROR extract texts ans resources");
             }
         }else{
             System.out.println("ERROR disease album");
@@ -112,6 +122,74 @@ public class WikipediaExtractService {
         return res;
     }
 
+
+    /**
+     * @param webLinks
+     * @return
+     */
+    public List<Source> getWikipediaTexts(List<WebLink> webLinks, boolean isJSONRequest, String snapshot){
+        System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
+        System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
+
+        List<Source> sourceList = null;
+        Response response;
+        if (isJSONRequest){
+            RequestJSON request = new RequestJSON();
+            request.setSnapshot(snapshot);
+            response = wteService.getWikipediaTextsByJSON(request);
+        }else {
+            Request request = new Request();
+            request.setWikipediaLinks(webLinks);
+            //Opción para guardar JSON y consumirlo despues (queue)
+            request.setJson(true);
+            response = wteService.getTexts(request);
+        }
+        System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
+        System.out.println("getResponseCode: " + response.getResponseCode());
+        if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())){
+            sourceList = response.getSources();
+        }
+
+        return sourceList;
+    }
+
+
+    /**
+     * @param webLinks
+     * @return
+     */
+    public HashMap<String, Resource> getWikipediaResources(List<WebLink> webLinks, boolean isJSONRequest, String snapshot){
+        System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
+        System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
+
+        HashMap<String, Resource> resourceMap = null;
+        Response response;
+        if (isJSONRequest){
+            RequestJSON request = new RequestJSON();
+            request.setSnapshot(snapshot);
+            response = wteService.getWikipediaResourcesByJSON(request);
+        }else {
+            Request request = new Request();
+            request.setWikipediaLinks(webLinks);
+            //Opción para guardar JSON y consumirlo despues (queue)
+            request.setJson(true);
+            response = wteService.getResources(request);
+        }
+        System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
+        System.out.println("getResponseCode: " + response.getResponseCode());
+
+        if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())){
+            resourceMap = response.getResourceHashMap();
+        }
+
+        return resourceMap;
+    }
+
+
+    /**
+     * @return
+     * @throws Exception
+     */
     public boolean extractionReport() throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
@@ -122,67 +200,11 @@ public class WikipediaExtractService {
         return res;
     }
 
-    public List<Source> getWikipediaTexts(List<WebLink> webLinks){
-        List<Source> sourceList = null;
-        Request request = new Request();
-        request.setWikipediaLinks(webLinks);
-        System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
-        System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
-        Response response = wteService.getTexts(request);
-        System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
-        if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())){
-            sourceList = response.getSources();
-        }
-        return sourceList;
-    }
-
-
-    /**
-     * @param sources
-     * @return
-     */
-    public void removeInvalidDocumentsProcedure(List<Source> sources){
-        boolean hasCodes = false;
-        boolean hasSections = false;
-
-        int countValid = 1;
-
-        System.out.println("-------------------- VALIDATION DOCUMENT PROCEDURE --------------------");
-        for (Source source : sources) {
-            for (Doc document : source.getDocList()) {
-                if (document.getCodeList().size() > 0) hasCodes = true;
-                if (document.getSectionList().size() > 0) hasSections = true;
-                if (hasCodes || hasSections) {
-                    document.setDiseaseArticle(true);
-                    countValid++;
-                    hasCodes = false;
-                    hasSections = false;
-                }
-                //System.out.println("Document(|" + document.getId() + " | " + document.getDate() + " | " + document.isDiseaseArticle() + " | " + document.getUrl().getUrl());
-            }
-            System.out.println("All Documents: " + source.getDocList().size());
-            System.out.println("Valid Documents: " + countValid);
-            System.out.println("Invalid Documents: " + (source.getDocList().size() - countValid));
-        }
-    }
-
-
-    public HashMap<String, Resource> getWikipediaResources(List<WebLink> webLinks){
-        HashMap<String, Resource> resourceMap = null;
-        Request request = new Request();
-        request.setWikipediaLinks(webLinks);
-        System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
-        System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
-        Response response = wteService.getResources(request);
-        System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
-        if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())){
-            resourceMap = response.getResourceHashMap();
-        }
-        return resourceMap;
-    }
-
 
     //================ GET DISEASE WEB LINKS FROM DBpedia ====================
+    /**
+     * @return
+     */
     public Album getAlbum(){
         RequestFather request = new RequestFather();
         Album album = null;
@@ -198,6 +220,10 @@ public class WikipediaExtractService {
     }
 
 
+    /**
+     * @param version
+     * @return
+     */
     public DBpediaResponse getDiseaseLinkListFromDBPedia(Date version){
         DBpediaResponse dBpediaResponse = null;
 
@@ -246,6 +272,37 @@ public class WikipediaExtractService {
             }
         }
         return dBpediaResponse;
+    }
+    //=========================================================================
+
+
+    /**
+     * @param sources
+     * @return
+     */
+    public void removeInvalidDocumentsProcedure(List<Source> sources){
+        boolean hasCodes = false;
+        boolean hasSections = false;
+
+        int countValid = 1;
+
+        System.out.println("-------------------- VALIDATION DOCUMENT PROCEDURE --------------------");
+        for (Source source : sources) {
+            for (Doc document : source.getDocList()) {
+                if (document.getCodeList().size() > 0) hasCodes = true;
+                if (document.getSectionList().size() > 0) hasSections = true;
+                if (hasCodes || hasSections) {
+                    document.setDiseaseArticle(true);
+                    countValid++;
+                    hasCodes = false;
+                    hasSections = false;
+                }
+                //System.out.println("Document(|" + document.getId() + " | " + document.getDate() + " | " + document.isDiseaseArticle() + " | " + document.getUrl().getUrl());
+            }
+            System.out.println("All Documents: " + source.getDocList().size());
+            System.out.println("Valid Documents: " + countValid);
+            System.out.println("Invalid Documents: " + (source.getDocList().size() - countValid));
+        }
     }
 
 

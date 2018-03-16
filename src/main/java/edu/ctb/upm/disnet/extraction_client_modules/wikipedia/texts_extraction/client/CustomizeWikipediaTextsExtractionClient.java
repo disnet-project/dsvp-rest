@@ -4,6 +4,7 @@ package edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.
 import edu.ctb.upm.disnet.configuration.FeignConfiguration;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.client.fallback.WikipediaTextsExtractionClientFallback;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.Request;
+import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.RequestJSON;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response.Response;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,12 @@ public interface CustomizeWikipediaTextsExtractionClient {
     @RequestMapping(value = "${my.service.client.wte.texts.path}", method = RequestMethod.POST)
     Response getWikipediaTexts(@RequestBody Request request);
 
-    @RequestMapping(value = "${my.service.client.wte.sources.path}", method = RequestMethod.POST)
+    @RequestMapping(value = "${my.service.client.wte.resources.path}", method = RequestMethod.POST)
     Response getWikipediaResources(@RequestBody Request request);
 
+    @RequestMapping(value = "${my.service.client.wte.texts.json.path}", method = RequestMethod.POST)
+    Response getWikipediaTextsByJSON(@RequestBody RequestJSON request);
+
+    @RequestMapping(value = "${my.service.client.wte.resources.json.path}", method = RequestMethod.POST)
+    Response getWikipediaResourcesByJSON(@RequestBody RequestJSON request);
 }

@@ -3,7 +3,6 @@ package edu.ctb.upm.disnet.model.wikipedia.document_structure;
 
 import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Code;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ import java.util.List;
 public class Doc {
 
     private int id;
-    private Date date;
+    private String date;
     private Link url;
     private boolean hasConnected;
     private boolean diseaseArticle;
@@ -37,11 +36,11 @@ public class Doc {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

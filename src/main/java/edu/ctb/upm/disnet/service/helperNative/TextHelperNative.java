@@ -93,8 +93,8 @@ public class TextHelperNative {
 
         //<editor-fold desc="INSERTAR URLS">
         List<String> urlList = urlHelperNative.getUrl( text.getUrlList(), textId );
-        for (String urlId:
-             urlList) {
+        for (String urlId: urlList) {
+            logger.info("Text_Url: textId({}) - urlId({})", textId, urlId);
             textService.insertNativeUrl( textId, urlId );
         }
         //</editor-fold>

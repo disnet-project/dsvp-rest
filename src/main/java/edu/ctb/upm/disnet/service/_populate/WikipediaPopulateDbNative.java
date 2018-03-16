@@ -95,7 +95,7 @@ public class WikipediaPopulateDbNative {
             System.out.println("Insert all sections ready!");
             System.out.println("Insert documents start!");
             //</editor-fold>
-            int docsCount = 1;
+            int docsCount = 1, invalidCount = 1;
             for (Doc document: source.getDocList()) {
                 //Solo inserta aquellos documentos que al menos tengan códigos o secciones
                 if (document.isDiseaseArticle()) {
@@ -129,8 +129,12 @@ public class WikipediaPopulateDbNative {
                     }// Secciones
                     //</editor-fold>
                     docsCount++;
+                }else{
+                    invalidCount++;
                 }
             }// Documentos
+            System.out.println("Inserted Documents: " + docsCount);
+            System.out.println("No inserted Documents(invalid): " + invalidCount);
         }// Fuentes "Sources"
         System.out.println("Populate end...");
         //extractionWikipedia.extractionReport();

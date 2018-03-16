@@ -1,6 +1,7 @@
 package edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.api_response;
 
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.Request;
+import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.RequestJSON;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response.Response;
 
 /**
@@ -17,4 +18,8 @@ public interface WikipediaTextsExtractionService {
     Response getTexts(Request request);
 
     Response getResources(Request request);
+
+    Response getWikipediaTextsByJSON( RequestJSON request);
+
+    Response getWikipediaResourcesByJSON( RequestJSON request);
 }

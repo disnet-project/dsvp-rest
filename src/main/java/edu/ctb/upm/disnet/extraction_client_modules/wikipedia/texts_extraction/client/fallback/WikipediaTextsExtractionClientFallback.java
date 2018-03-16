@@ -3,6 +3,7 @@ package edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.
 
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.client.WikipediaTextsExtractionClient;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.Request;
+import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.RequestJSON;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response.Response;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,16 @@ public class WikipediaTextsExtractionClientFallback implements WikipediaTextsExt
 
     @Override
     public Response getWikipediaResources(Request request) {
+        return new Response();
+    }
+
+    @Override
+    public Response getWikipediaTextsByJSON(RequestJSON request) {
+        return new Response();
+    }
+
+    @Override
+    public Response getWikipediaResourcesByJSON(RequestJSON request) {
         return new Response();
     }
 }

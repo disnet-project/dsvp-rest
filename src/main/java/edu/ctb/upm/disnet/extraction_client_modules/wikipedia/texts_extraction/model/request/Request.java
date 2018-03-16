@@ -13,6 +13,7 @@ public class Request {
     @NotNull(message = Constants.ERR_NO_PARAMETER)
     @Size(min = 1, message = Constants.ERR_EMPTY_PARAMETER)
     private List<edu.ctb.upm.disnet.model.WebLink> wikipediaLinks;
+    private boolean json;
 
     public List<edu.ctb.upm.disnet.model.WebLink> getWikipediaLinks() {
         return wikipediaLinks;
@@ -20,5 +21,13 @@ public class Request {
 
     public void setWikipediaLinks(List<edu.ctb.upm.disnet.model.WebLink> wikipediaLinks) {
         this.wikipediaLinks = wikipediaLinks;
+    }
+
+    public boolean isJson() {
+        return json;
+    }
+
+    public void setJson(boolean json) {
+        this.json = json;
     }
 }
