@@ -1,6 +1,6 @@
+/*
 package edu.ctb.upm.disnet.service.helperNative;
 
-/*
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ctb.upm.disnet.model.jpa.HasSymptom;

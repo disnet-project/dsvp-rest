@@ -1,4 +1,5 @@
 package edu.ctb.upm.disnet.model.jpa;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 

@@ -1,10 +1,10 @@
 package edu.ctb.upm.disnet.service.helperNative;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Resource;
-import edu.ctb.upm.disnet.service.ResourceService;
 import edu.ctb.upm.disnet.common.util.Common;
 import edu.ctb.upm.disnet.common.util.UniqueId;
+import edu.ctb.upm.disnet.model.common.document_structure.code.Resource;
+import edu.ctb.upm.disnet.service.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

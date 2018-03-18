@@ -2,11 +2,11 @@ package edu.ctb.upm.disnet.service.helperNative;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.disnet.common.util.Common;
-import edu.ctb.upm.disnet.common.util.UniqueId;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Link;
+import edu.ctb.upm.disnet.model.common.document_structure.Link;
 import edu.ctb.upm.disnet.model.jpa.Url;
 import edu.ctb.upm.disnet.service.UrlService;
+import edu.ctb.upm.disnet.common.util.Common;
+import edu.ctb.upm.disnet.common.util.UniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,24 +55,6 @@ public class UrlHelperNative {
 
 
     /**
-     * @param links
-     * @param id
-     * @return
-     * @throws JsonProcessingException
-     */
-    public List<String> getUrl(List<Link> links, String id) throws JsonProcessingException {
-        List<String> urls = new ArrayList<>();
-
-        for (Link link: links) {
-            String urlId = uniqueId.generateUrl( id, link.getId() );
-            urlService.insertNative( urlId, link.getUrl() );
-            urls.add( urlId );
-        }
-
-        return urls;
-    }
-
-    /**
      * @param link
      * @param id
      * @return
@@ -98,9 +80,24 @@ public class UrlHelperNative {
 
 
     /**
-     * @param url
+     * @param links
+     * @param id
      * @return
+     * @throws JsonProcessingException
      */
+    public List<String> getUrl(List<Link> links, String id) throws JsonProcessingException {
+        List<String> urls = new ArrayList<>();
+
+        for (Link link: links) {
+            String urlId = uniqueId.generateUrl( id, link.getId() );
+            urlService.insertNative( urlId, link.getUrl() );
+            urls.add( urlId );
+        }
+
+        return urls;
+    }
+
+
     public Url findUrl(String url){
         Url oUrl = urlService.findByName(url);
         if (oUrl != null) return oUrl;

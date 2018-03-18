@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
  * @project demo
- * @className Document
+ * @className Doc
  * @see
  */
 @Entity

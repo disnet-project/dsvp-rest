@@ -69,6 +69,9 @@ public class Constants {
     public static final String SOURCE_WIKIPEDIA = "wikipedia";
     public static final String SOURCE_WIKIPEDIA_CODE = "SO01";
 
+    public static final String SOURCE_PUBMED = "pubmed";
+    public static final String SOURCE_PUBMED_CODE = "SO02";
+
     /** Constantes para insertar en la base de datos */
 
     public static final String CONTENT_TYPE_PARA = "PARA";

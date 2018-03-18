@@ -6,11 +6,11 @@ import edu.ctb.upm.disnet.common.util.TimeProvider;
 import edu.ctb.upm.disnet.common.util.UniqueId;
 import edu.ctb.upm.disnet.constants.Constants;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.api_response.DiseaseAlbumResourceService;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Doc;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Section;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Source;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Resource;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.Text;
+import edu.ctb.upm.disnet.model.common.document_structure.Doc;
+import edu.ctb.upm.disnet.model.common.document_structure.Section;
+import edu.ctb.upm.disnet.model.common.document_structure.Source;
+import edu.ctb.upm.disnet.model.common.document_structure.code.Resource;
+import edu.ctb.upm.disnet.model.common.document_structure.text.Text;
 import edu.ctb.upm.disnet.service.helperNative.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +96,7 @@ public class WikipediaPopulateDbNative {
             System.out.println("Insert documents start!");
             //</editor-fold>
             int docsCount = 1, invalidCount = 1;
-            for (Doc document: source.getDocList()) {
+            for (Doc document: source.getDocuments()) {
                 //Solo inserta aquellos documentos que al menos tengan códigos o secciones
                 if (document.isDiseaseArticle()) {
                     String documentId = documentHelperNative.insert(sourceId, document, version);

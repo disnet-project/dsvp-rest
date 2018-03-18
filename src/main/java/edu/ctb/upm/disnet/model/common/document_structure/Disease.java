@@ -1,4 +1,4 @@
-package edu.ctb.upm.disnet.model.wikipedia.document_structure;
+package edu.ctb.upm.disnet.model.common.document_structure;
 
 import java.util.Objects;
 
@@ -14,6 +14,7 @@ public class Disease {
 
     private int id;
     private String name;
+    private String definition;
     private String cui;
 
 
@@ -32,6 +33,14 @@ public class Disease {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
     public String getCui() {

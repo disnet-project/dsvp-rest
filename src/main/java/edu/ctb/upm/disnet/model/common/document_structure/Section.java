@@ -1,7 +1,7 @@
-package edu.ctb.upm.disnet.model.wikipedia.document_structure;
+package edu.ctb.upm.disnet.model.common.document_structure;
 
 
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.Text;
+import edu.ctb.upm.disnet.model.common.document_structure.text.Text;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class Section {
     private String name;
     private String description;
 
+    private Integer textCount;
     private List<Text> textList;
 
 
@@ -47,6 +48,14 @@ public class Section {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getTextCount() {
+        return textCount;
+    }
+
+    public void setTextCount(Integer textCount) {
+        this.textCount = textCount;
     }
 
     public List<Text> getTextList() {

@@ -1,7 +1,6 @@
-package edu.ctb.upm.disnet.model.wikipedia.document_structure;
+package edu.ctb.upm.disnet.model.common.document_structure;
 
-
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Code;
+import edu.ctb.upm.disnet.model.common.document_structure.code.Code;
 
 import java.util.List;
 
@@ -23,7 +22,9 @@ public class Doc {
     private boolean diseaseArticle;
 
     private Disease disease;
+    private Integer sectionCount;
     private List<Section> sectionList;
+    private Integer codeCount;
     private List<Code> codeList;
 
 
@@ -52,6 +53,14 @@ public class Doc {
         this.url = url;
     }
 
+    public boolean isHasConnected() {
+        return hasConnected;
+    }
+
+    public void setHasConnected(boolean hasConnected) {
+        this.hasConnected = hasConnected;
+    }
+
     public boolean isDiseaseArticle() {
         return diseaseArticle;
     }
@@ -68,12 +77,28 @@ public class Doc {
         this.disease = disease;
     }
 
+    public Integer getSectionCount() {
+        return sectionCount;
+    }
+
+    public void setSectionCount(Integer sectionCount) {
+        this.sectionCount = sectionCount;
+    }
+
     public List<Section> getSectionList() {
         return sectionList;
     }
 
     public void setSectionList(List<Section> sectionList) {
         this.sectionList = sectionList;
+    }
+
+    public Integer getCodeCount() {
+        return codeCount;
+    }
+
+    public void setCodeCount(Integer codeCount) {
+        this.codeCount = codeCount;
     }
 
     public List<Code> getCodeList() {

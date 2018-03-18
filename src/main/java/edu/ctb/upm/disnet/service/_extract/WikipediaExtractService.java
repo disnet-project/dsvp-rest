@@ -19,15 +19,15 @@ import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.m
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.request.RequestJSON;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.texts_extraction.model.response.Response;
 import edu.ctb.upm.disnet.model.WebLink;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Doc;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Link;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Section;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.Source;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Code;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.code.Resource;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.List_;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.Paragraph;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.Text;
+import edu.ctb.upm.disnet.model.common.document_structure.Doc;
+import edu.ctb.upm.disnet.model.common.document_structure.Link;
+import edu.ctb.upm.disnet.model.common.document_structure.Section;
+import edu.ctb.upm.disnet.model.common.document_structure.Source;
+import edu.ctb.upm.disnet.model.common.document_structure.text.List_;
+import edu.ctb.upm.disnet.model.common.document_structure.text.Paragraph;
+import edu.ctb.upm.disnet.model.common.document_structure.text.Text;
+import edu.ctb.upm.disnet.model.common.document_structure.code.Code;
+import edu.ctb.upm.disnet.model.common.document_structure.code.Resource;
 import edu.ctb.upm.disnet.model.jpa.*;
 import edu.ctb.upm.disnet.model.response.DBpediaResponse;
 import edu.ctb.upm.disnet.service.DocumentService;
@@ -91,25 +91,25 @@ public class WikipediaExtractService {
             resourceHashMap = getWikipediaResources(dBpediaResponse.getLinks(), true, timeProvider.dateFormatyyyMMdd(version));
             sources = getWikipediaTexts(dBpediaResponse.getLinks(), true, timeProvider.dateFormatyyyMMdd(version));
 
-            if (resourceHashMap!=null) {
+            /*if (resourceHashMap!=null) {
                 resourceHashMap.toString();
             }
             if (sources!=null){
                 extractionReport(sources);
-            }
+            }*/
 
             if (sources!=null&&resourceHashMap!=null) {
                 //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
-                //System.out.println("No poblara...");
-                wikipediaPopulateDbNative.populateResource(resourceHashMap);
-                wikipediaPopulateDbNative.populateSemanticTypes();
-                wikipediaPopulateDbNative.populate(sources, version);
+                System.out.println("No poblara...");
+                //wikipediaPopulateDbNative.populateResource(resourceHashMap);
+                //wikipediaPopulateDbNative.populateSemanticTypes();
+                //wikipediaPopulateDbNative.populate(sources, version);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
-                confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
+                //confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
                 res = true;
             }else{
                 System.out.println("ERROR extract texts ans resources");
@@ -288,7 +288,7 @@ public class WikipediaExtractService {
 
         System.out.println("-------------------- VALIDATION DOCUMENT PROCEDURE --------------------");
         for (Source source : sources) {
-            for (Doc document : source.getDocList()) {
+            for (Doc document : source.getDocuments()) {
                 if (document.getCodeList().size() > 0) hasCodes = true;
                 if (document.getSectionList().size() > 0) hasSections = true;
                 if (hasCodes || hasSections) {
@@ -297,11 +297,11 @@ public class WikipediaExtractService {
                     hasCodes = false;
                     hasSections = false;
                 }
-                //System.out.println("Document(|" + document.getId() + " | " + document.getDate() + " | " + document.isDiseaseArticle() + " | " + document.getUrl().getUrl());
+                //System.out.println("Doc(|" + document.getId() + " | " + document.getDate() + " | " + document.isDiseaseArticle() + " | " + document.getUrl().getUrl());
             }
-            System.out.println("All Documents: " + source.getDocList().size());
+            System.out.println("All Documents: " + source.getDocuments().size());
             System.out.println("Valid Documents: " + countValid);
-            System.out.println("Invalid Documents: " + (source.getDocList().size() - countValid));
+            System.out.println("Invalid Documents: " + (source.getDocuments().size() - countValid));
         }
     }
 
@@ -325,8 +325,8 @@ public class WikipediaExtractService {
         for (Source source : sourceList) {
             System.out.println("\n");
             System.out.println("-------------------- SOURCE(" + source.getId() + "_" + source.getName() + ") --------------------");
-            for (Doc document: source.getDocList()) {
-                //System.out.println("Document(" + document.getId() + "_" + document.getDate() + ") => " + document.getUrl().getUrl());
+            for (Doc document: source.getDocuments()) {
+                //System.out.println("Doc(" + document.getId() + "_" + document.getDate() + ") => " + document.getUrl().getUrl());
                 //System.out.println("    Disease(" + document.getDisease().getId() + "_" + document.getDisease().getName() + ") ");
 
                 //System.out.println("    Codes list...:");
@@ -372,13 +372,13 @@ public class WikipediaExtractService {
                     hasCodes = false;
                     hasSections = false;
                 }
-                System.out.println("Document(|" + document.getId() + " | " + document.getDate() + " | " + document.isDiseaseArticle() + " | " + document.getUrl().getUrl());
+                System.out.println("Doc(|" + document.getId() + " | " + document.getDate() + " | " + document.isDiseaseArticle() + " | " + document.getUrl().getUrl());
 
             }
 
-            System.out.println("# de Documentos " + source.getDocList().size());
+            System.out.println("# de Documentos " + source.getDocuments().size());
             System.out.println("# de Documentos válidos " + countValid);
-            System.out.println("# de Documentos no válidos " + (source.getDocList().size() - countValid) );
+            System.out.println("# de Documentos no válidos " + (source.getDocuments().size() - countValid) );
 
         }
 

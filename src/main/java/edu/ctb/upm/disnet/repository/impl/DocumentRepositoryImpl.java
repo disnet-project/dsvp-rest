@@ -1,4 +1,5 @@
 package edu.ctb.upm.disnet.repository.impl;
+
 import edu.ctb.upm.disnet.model.jpa.Document;
 import edu.ctb.upm.disnet.model.jpa.DocumentPK;
 import edu.ctb.upm.disnet.repository.AbstractDao;
@@ -73,8 +74,8 @@ public class DocumentRepositoryImpl extends AbstractDao<DocumentPK, Document>
     public List<Document> findAllQuery() {
         return (List<Document>) getEntityManager()
                 .createNamedQuery("Document.findAll")
+//                .setMaxResults(10)
                 .setMaxResults(0)
-                //.setMaxResults(10)
                 .getResultList();
     }
 

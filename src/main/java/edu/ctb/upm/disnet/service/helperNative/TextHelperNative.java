@@ -2,12 +2,12 @@ package edu.ctb.upm.disnet.service.helperNative;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.disnet.common.util.Common;
-import edu.ctb.upm.disnet.common.util.UniqueId;
-import edu.ctb.upm.disnet.enums.ContentType;
-import edu.ctb.upm.disnet.model.wikipedia.document_structure.text.*;
+import edu.ctb.upm.disnet.model.common.document_structure.text.*;
 import edu.ctb.upm.disnet.service.HasTextService;
 import edu.ctb.upm.disnet.service.TextService;
+import edu.ctb.upm.disnet.enums.ContentType;
+import edu.ctb.upm.disnet.common.util.Common;
+import edu.ctb.upm.disnet.common.util.UniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,8 +93,8 @@ public class TextHelperNative {
 
         //<editor-fold desc="INSERTAR URLS">
         List<String> urlList = urlHelperNative.getUrl( text.getUrlList(), textId );
-        for (String urlId: urlList) {
-            logger.info("Text_Url: textId({}) - urlId({})", textId, urlId);
+        for (String urlId:
+             urlList) {
             textService.insertNativeUrl( textId, urlId );
         }
         //</editor-fold>

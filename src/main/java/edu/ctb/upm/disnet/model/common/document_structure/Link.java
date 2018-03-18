@@ -1,4 +1,5 @@
-package edu.ctb.upm.disnet.model.wikipedia.document_structure;
+package edu.ctb.upm.disnet.model.common.document_structure;
+
 import java.util.Objects;
 
 /**
@@ -15,6 +16,16 @@ public class Link {
     private int id;
     private String url;
     private String description;
+    private Source source;
+
+
+    public Link() {
+    }
+
+    public Link(String url, Source source) {
+        this.url = url;
+        this.source = source;
+    }
 
 
 
@@ -40,6 +51,14 @@ public class Link {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
     }
 
     @Override
