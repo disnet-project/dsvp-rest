@@ -79,7 +79,7 @@ public class WikipediaExtractService {
      * @return
      * @throws Exception
      */
-    public boolean extract() throws Exception {
+    public boolean extract(String snapshot, boolean json) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
         Date version = timeProvider.getSqlDate();
@@ -88,8 +88,8 @@ public class WikipediaExtractService {
         DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version);
 
         if (dBpediaResponse!=null) {
-            resourceHashMap = getWikipediaResources(dBpediaResponse.getLinks(), true, timeProvider.dateFormatyyyMMdd(version));
-            sources = getWikipediaTexts(dBpediaResponse.getLinks(), true, timeProvider.dateFormatyyyMMdd(version));
+            resourceHashMap = getWikipediaResources(dBpediaResponse.getLinks(), json, timeProvider.dateFormatyyyMMdd(version));
+            sources = getWikipediaTexts(dBpediaResponse.getLinks(), json, timeProvider.dateFormatyyyMMdd(version));
 
             /*if (resourceHashMap!=null) {
                 resourceHashMap.toString();
@@ -102,14 +102,14 @@ public class WikipediaExtractService {
                 //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
-                System.out.println("No poblara...");
-                //wikipediaPopulateDbNative.populateResource(resourceHashMap);
-                //wikipediaPopulateDbNative.populateSemanticTypes();
-                //wikipediaPopulateDbNative.populate(sources, version);
+                //System.out.println("No poblara...");
+                wikipediaPopulateDbNative.populateResource(resourceHashMap);
+                wikipediaPopulateDbNative.populateSemanticTypes();
+                wikipediaPopulateDbNative.populate(sources, version);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
-                //confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
+                confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
                 res = true;
             }else{
                 System.out.println("ERROR extract texts ans resources");

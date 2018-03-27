@@ -1,10 +1,16 @@
 package edu.ctb.upm.disnet.controller;
 
 import edu.ctb.upm.disnet.service._extract.WikipediaExtractService;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by gerardo on 05/07/2017.
@@ -16,17 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
  * @see
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("${my.service.rest.request.mapping.retrieval.general.url}")
 public class ExtractionController {
 
 
     @Autowired
     private WikipediaExtractService extractService;
 
-    @RequestMapping(path = { "/extract/wikipedia" }, //_wikipedia extraction
-            method = RequestMethod.GET)
-    public String extract() throws Exception {
-        extractService.extract();
+    @RequestMapping(path = { "${my.service.rest.request.mapping.wikipedia.retrieval.texts.path}" }, //_wikipedia extraction
+            method = RequestMethod.GET,
+            params = {"snapshot"})
+    public String extract(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
+                          @RequestParam(value = "json", required = false, defaultValue = "true") boolean json) throws Exception {
+        extractService.extract(snapshot, json);
 /*
         String g ="http://en.wikipedia.org/wiki/Odonto–tricho–ungual–digital–palmar_syndrome";
         String m = "http://en.wikipedia.org/wiki/Bannayan–Riley–Ruvalcaba_syndrome";
