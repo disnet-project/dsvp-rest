@@ -102,10 +102,10 @@ public class WikipediaExtractService {
                 //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
-                //System.out.println("No poblara...");
-                wikipediaPopulateDbNative.populateResource(resourceHashMap);
-                wikipediaPopulateDbNative.populateSemanticTypes();
-                wikipediaPopulateDbNative.populate(sources, version);
+                System.out.println("No poblara...");
+                //wikipediaPopulateDbNative.populateResource(resourceHashMap);
+                //wikipediaPopulateDbNative.populateSemanticTypes();
+                //wikipediaPopulateDbNative.populate(sources, version);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
@@ -260,6 +260,7 @@ public class WikipediaExtractService {
                 conf.setNumberDiseases(album.getNumberDiseases());
                 conf.setSource(Constants.SOURCE_WIKIPEDIA_CODE);
                 conf.setServiceCode(constants.SERVICE_DISALBUM_CODE);
+                conf.setUseDiseaseSafeList(response.isUseDiseaseSafeList());
                 List<String> requestList = new ArrayList<String>(){{
                     add(constants.SERVICE_DISALBUM_PATH_LAST);
                     add(constants.SERVICE_DISALBUM_PATH_GET);
