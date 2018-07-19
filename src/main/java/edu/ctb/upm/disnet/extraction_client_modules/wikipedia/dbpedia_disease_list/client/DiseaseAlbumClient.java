@@ -3,6 +3,7 @@ package edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_l
 
 import edu.ctb.upm.disnet.configuration.FeignConfiguration;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.client.fallback.DiseaseAlbumClientFallback;
+import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.request.RequestAlbum;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.request.RequestFather;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.request.RequestGDLL;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.response.ResponseGDLL;
@@ -34,5 +35,8 @@ public interface DiseaseAlbumClient {
 
     @RequestMapping(value = "${my.service.client.disease_album.path.get}", method = RequestMethod.POST)
     ResponseGDLL getDiseaseLinkList(@RequestBody RequestGDLL request);
+
+    @RequestMapping(value = "${my.service.client.disease_album.path.get.one}", method = RequestMethod.POST)
+    ResponseLA getSpecifictDiseaseAlbum(@RequestBody RequestAlbum request);
 
 }

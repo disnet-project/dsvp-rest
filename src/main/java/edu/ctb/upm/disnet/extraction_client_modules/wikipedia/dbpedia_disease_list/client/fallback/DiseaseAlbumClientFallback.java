@@ -2,6 +2,7 @@ package edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_l
 
 
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.client.DiseaseAlbumClient;
+import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.request.RequestAlbum;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.request.RequestFather;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.request.RequestGDLL;
 import edu.ctb.upm.disnet.extraction_client_modules.wikipedia.dbpedia_disease_list.model.response.ResponseGDLL;
@@ -29,5 +30,8 @@ public class DiseaseAlbumClientFallback implements DiseaseAlbumClient {
     public ResponseGDLL getDiseaseLinkList(RequestGDLL request) {
         return new ResponseGDLL();
     }
+
+    @Override
+    public ResponseLA getSpecifictDiseaseAlbum(RequestAlbum request){return new ResponseLA();}
 }
 
