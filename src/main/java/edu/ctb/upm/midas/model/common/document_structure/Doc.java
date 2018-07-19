@@ -2,6 +2,7 @@ package edu.ctb.upm.midas.model.common.document_structure;
 
 import edu.ctb.upm.midas.model.common.document_structure.code.Code;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,8 +17,9 @@ import java.util.List;
 public class Doc {
 
     private int id;
-    private String date;
+    private Date date;
     private Link url;
+    private List<Link> urlList;
     private boolean hasConnected;
     private boolean diseaseArticle;
 
@@ -37,11 +39,11 @@ public class Doc {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -53,20 +55,12 @@ public class Doc {
         this.url = url;
     }
 
-    public boolean isHasConnected() {
-        return hasConnected;
+    public List<Link> getUrlList() {
+        return urlList;
     }
 
-    public void setHasConnected(boolean hasConnected) {
-        this.hasConnected = hasConnected;
-    }
-
-    public boolean isDiseaseArticle() {
-        return diseaseArticle;
-    }
-
-    public void setDiseaseArticle(boolean diseaseArticle) {
-        this.diseaseArticle = diseaseArticle;
+    public void setUrlList(List<Link> urlList) {
+        this.urlList = urlList;
     }
 
     public Disease getDisease() {
@@ -77,14 +71,6 @@ public class Doc {
         this.disease = disease;
     }
 
-    public Integer getSectionCount() {
-        return sectionCount;
-    }
-
-    public void setSectionCount(Integer sectionCount) {
-        this.sectionCount = sectionCount;
-    }
-
     public List<Section> getSectionList() {
         return sectionList;
     }
@@ -93,20 +79,44 @@ public class Doc {
         this.sectionList = sectionList;
     }
 
-    public Integer getCodeCount() {
-        return codeCount;
-    }
-
-    public void setCodeCount(Integer codeCount) {
-        this.codeCount = codeCount;
-    }
-
     public List<Code> getCodeList() {
         return codeList;
     }
 
     public void setCodeList(List<Code> codeList) {
         this.codeList = codeList;
+    }
+
+    public boolean isDiseaseArticle() {
+        return diseaseArticle;
+    }
+
+    public void setDiseaseArticle(boolean diseaseArticle) {
+        this.diseaseArticle = diseaseArticle;
+    }
+
+    public boolean isHasConnected() {
+        return hasConnected;
+    }
+
+    public void setHasConnected(boolean hasConnected) {
+        this.hasConnected = hasConnected;
+    }
+
+    public Integer getSectionCount() {
+        return sectionCount;
+    }
+
+    public void setSectionCount(Integer sectionCount) {
+        this.sectionCount = sectionCount;
+    }
+
+    public Integer getCodeCount() {
+        return codeCount;
+    }
+
+    public void setCodeCount(Integer codeCount) {
+        this.codeCount = codeCount;
     }
 
 }

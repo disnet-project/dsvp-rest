@@ -72,6 +72,13 @@ public class Constants {
     public static final String SOURCE_PUBMED = "pubmed";
     public static final String SOURCE_PUBMED_CODE = "SO02";
 
+    public static final String SOURCE_MAYOCLINIC = "mayoclinic";
+    public static final String SOURCE_MAYOCLINIC_CODE = "SO03";
+
+    public static final String ABSTRACT_SECTION = "abstract";
+
+    public static final String MESH_RESOURCE_NAME = "MeSH";
+
     /** Constantes para insertar en la base de datos */
 
     public static final String CONTENT_TYPE_PARA = "PARA";

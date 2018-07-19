@@ -1,5 +1,4 @@
 package edu.ctb.upm.midas.model.common.document_structure;
-
 import java.util.Objects;
 
 /**
@@ -17,7 +16,6 @@ public class Link {
     private String url;
     private String description;
     private Source source;
-
 
     public Link() {
     }
@@ -53,14 +51,6 @@ public class Link {
         this.description = description;
     }
 
-    public Source getSource() {
-        return source;
-    }
-
-    public void setSource(Source source) {
-        this.source = source;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,5 +62,15 @@ public class Link {
     @Override
     public int hashCode() {
         return Objects.hash(getUrl());
+    }
+
+    @Override
+    public String toString() {
+        return "Link{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", description='" + description + '\'' +
+                ", source=" + source +
+                '}';
     }
 }

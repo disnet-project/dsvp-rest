@@ -1,15 +1,16 @@
 package edu.ctb.upm.midas.service.jpa.helperNative;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.midas.common.util.Common;
-import edu.ctb.upm.midas.common.util.UniqueId;
 import edu.ctb.upm.midas.model.common.document_structure.code.Resource;
 import edu.ctb.upm.midas.service.jpa.ResourceService;
+import edu.ctb.upm.midas.common.util.Common;
+import edu.ctb.upm.midas.common.util.UniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class ResourceHelperNative {
      * @return
      * @throws Exception
      */
+    @Transactional
     public List<edu.ctb.upm.midas.model.jpa.Resource> insertIfExist(Map<String, Resource> resourceMap) throws Exception{
 
         Map<String, Resource> resourceMapOrdered = new TreeMap(resourceMap);
@@ -69,6 +71,14 @@ public class ResourceHelperNative {
             }
         }
         return resources;
+    }
+
+    public int insertIfExist(String name){
+        int resourceId = resourceService.findIdByNameQuery(name.trim());
+        if (resourceId <= 0){
+            resourceId = resourceService.insertNative(name.trim());
+        }
+        return resourceId;
     }
 
 

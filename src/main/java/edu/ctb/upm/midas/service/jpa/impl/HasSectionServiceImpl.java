@@ -1,6 +1,4 @@
 package edu.ctb.upm.midas.service.jpa.impl;
-
-
 import edu.ctb.upm.midas.model.jpa.HasSection;
 import edu.ctb.upm.midas.model.jpa.HasSectionPK;
 import edu.ctb.upm.midas.repository.jpa.HasSectionRepository;

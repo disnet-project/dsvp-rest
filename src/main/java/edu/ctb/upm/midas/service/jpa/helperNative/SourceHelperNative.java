@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by gerardo on 12/06/2017.
@@ -42,6 +43,7 @@ public class SourceHelperNative {
      * @return
      * @throws Exception
      */
+    @Transactional
     public String insertIfExist(Source source) throws Exception{
 
         edu.ctb.upm.midas.model.jpa.Source sourceEntity = sourceService.findByName( source.getName() );
@@ -51,8 +53,10 @@ public class SourceHelperNative {
         }else{
             String sourceId = getLastId();
             sourceService.insertNative( sourceId, source.getName() );
-            String urlId = urlHelperNative.getUrl( source.getUrl(), sourceId );
-            if ( !urlId.equals("") ) sourceService.insertNativeUrl( sourceId, urlId );
+            if(source.getUrl()!=null) {
+                String urlId = urlHelperNative.getUrl(source.getUrl(), sourceId);
+                if (!urlId.equals("")) sourceService.insertNativeUrl(sourceId, urlId);
+            }
 
             return sourceId;
         }

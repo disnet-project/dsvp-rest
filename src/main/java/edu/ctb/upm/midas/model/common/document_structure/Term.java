@@ -1,6 +1,5 @@
 package edu.ctb.upm.midas.model.common.document_structure;
 
-
 import edu.ctb.upm.midas.model.common.document_structure.code.Resource;
 
 /**

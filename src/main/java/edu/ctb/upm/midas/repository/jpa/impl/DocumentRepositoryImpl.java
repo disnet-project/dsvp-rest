@@ -1,5 +1,4 @@
 package edu.ctb.upm.midas.repository.jpa.impl;
-
 import edu.ctb.upm.midas.model.jpa.Document;
 import edu.ctb.upm.midas.model.jpa.DocumentPK;
 import edu.ctb.upm.midas.repository.jpa.AbstractDao;
@@ -67,6 +66,19 @@ public class DocumentRepositoryImpl extends AbstractDao<DocumentPK, Document>
         if (CollectionUtils.isNotEmpty(documentList))
             document = documentList.get(0);
         return document;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Date findLastVersionNative() {
+        Date version = null;
+        List<Date> versionList = (List<Date>) getEntityManager()
+                .createNamedQuery("Document.findLastVersionNative")
+                .setMaxResults(1)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(versionList))
+            version = versionList.get(0);
+        return version;
     }
 
     @SuppressWarnings("unchecked")

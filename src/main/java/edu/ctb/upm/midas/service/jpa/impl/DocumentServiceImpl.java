@@ -1,5 +1,4 @@
 package edu.ctb.upm.midas.service.jpa.impl;
-
 import edu.ctb.upm.midas.model.jpa.Document;
 import edu.ctb.upm.midas.model.jpa.DocumentPK;
 import edu.ctb.upm.midas.repository.jpa.DocumentRepository;
@@ -33,6 +32,12 @@ public class DocumentServiceImpl implements DocumentService {
         /*if(document!=null)
             Hibernate.initialize(document.getCodeList());*/
         return document;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public Date findLastVersionNative() {
+        return daoDocument.findLastVersionNative();
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)

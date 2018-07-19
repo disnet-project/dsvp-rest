@@ -1,6 +1,5 @@
 package edu.ctb.upm.midas.model.common.document_structure;
 
-
 import edu.ctb.upm.midas.model.common.document_structure.text.Text;
 
 import java.util.List;
@@ -64,6 +63,18 @@ public class Section {
 
     public void setTextList(List<Text> textList) {
         this.textList = textList;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Section{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", textCount=" + textCount +
+                ", textList=" + textList +
+                '}';
     }
 
 }

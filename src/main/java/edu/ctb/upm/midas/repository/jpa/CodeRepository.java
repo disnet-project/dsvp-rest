@@ -48,5 +48,5 @@ public interface CodeRepository {
     Code update(Code code);
 
     int updateByIdQuery(Code code);
-    
+
 }

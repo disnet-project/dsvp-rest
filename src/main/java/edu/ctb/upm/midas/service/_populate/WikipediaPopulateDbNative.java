@@ -108,7 +108,7 @@ public class WikipediaPopulateDbNative {
                     //</editor-fold>
 
                     //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
-                    codeHelperNative.insertIfExist(document.getCodeList(), documentId, version);
+                    codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
                     //</editor-fold>
 
                     //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
@@ -120,7 +120,7 @@ public class WikipediaPopulateDbNative {
                         int textCount = 0;
                         for (Text text : section.getTextList()) {
                             //<editor-fold desc="INSERTAR TEXTO">
-                            textHelperNative.insert(text, sectionId, documentId, version);
+                            textHelperNative.insert(text, sectionId, documentId, version, Constants.BLANKS);
                             //</editor-fold>
 
                             textCount++;

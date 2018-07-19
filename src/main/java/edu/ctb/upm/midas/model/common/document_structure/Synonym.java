@@ -1,5 +1,4 @@
 package edu.ctb.upm.midas.model.common.document_structure;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.ctb.upm.midas.model.common.document_structure.code.Code;
 

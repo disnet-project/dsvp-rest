@@ -1,5 +1,4 @@
 package edu.ctb.upm.midas.repository.jpa.impl;
-
 import edu.ctb.upm.midas.model.jpa.Code;
 import edu.ctb.upm.midas.model.jpa.CodePK;
 import edu.ctb.upm.midas.repository.jpa.AbstractDao;

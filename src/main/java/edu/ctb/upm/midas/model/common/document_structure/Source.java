@@ -23,7 +23,6 @@ public class Source {
     private List<Doc> documents;
     private TreeMap<String, String> sectionMap;
 
-
     public Source() {
     }
 
