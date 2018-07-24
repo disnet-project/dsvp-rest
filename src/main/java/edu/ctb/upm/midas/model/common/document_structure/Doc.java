@@ -1,6 +1,7 @@
 package edu.ctb.upm.midas.model.common.document_structure;
 
 import edu.ctb.upm.midas.model.common.document_structure.code.Code;
+import edu.ctb.upm.midas.model.extraction.pubmed.Disease;
 
 import java.util.Date;
 import java.util.List;

@@ -2,7 +2,7 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.google.gson.Gson;
-//import edu.upm.midas.constants.Constants;
+//import edu.ctb.upm.midas.constants.Constants;
 //import edu.upm.midas.data.extraction.model.Doc;
 //import edu.upm.midas.data.extraction.model.Source;
 //import edu.upm.midas.data.extraction.model.code.Code;
@@ -12,7 +12,7 @@
 //import edu.upm.midas.data.extraction.sources.pubmed.pubMedTextExtractionApiResponse.PubMedTextExtractionResourceService;
 //import edu.upm.midas.data.extraction.sources.wikipedia.service.ExtractionWikipedia;
 //import edu.ctb.upm.midas.service.jpa.helperNative.*;
-//import edu.upm.midas.enums.StatusHttpEnum;
+//import edu.ctb.upm.midas.enums.StatusHttpEnum;
 //import edu.upm.midas.utilsservice.Common;
 //import edu.upm.midas.utilsservice.UniqueId;
 //import edu.upm.midas.utilsservice.UtilDate;

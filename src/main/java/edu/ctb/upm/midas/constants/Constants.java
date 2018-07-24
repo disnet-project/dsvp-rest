@@ -50,6 +50,16 @@ public class Constants {
     public static final String VERSION_PROJECT = "1.0";
 
     public static final String TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncmFyZG9sYWdhckBob3RtYWlsLmNvbSIsImF1ZCI6IndlYiIsIm5hbWUiOiJHZXJhcmRvIExhZ3VuZXMiLCJ1c2VyIjp0cnVlLCJpYXQiOjE1MDk2MTQyNjh9.uVhDgfLrAgdnj02Hsbgfj9tkVlfni89i0hKVYW31eHApCHpheikK9ae1MhbzRhiyUcFGMKwtiyVgff5NCMY3PA";
+    public static final String EXTRACTION_WIKIPEDIA_FOLDER = "tmp/wikipedia/";
+    public static final String PM_RETRIEVAL_HISTORY_FOLDER = "tmp/pubmed/";
+    public static final String PM_RETRIEVAL_FILE_NAME = "_pubmed_retrieval";
+    public static final String WIKIPEDIA_RESOURCE_FILE_NAME = "_wikipedia_resource";
+    public static final String WIKIPEDIA_SEMTYPE_FILE_NAME = "_wikipedia_semtype";
+    public static final String WIKIPEDIA_RETRIEVAL_FILE_NAME = "_wikipedia_retrieval";
+    public static final String WIKIPEDIA_DISEASE_LIST_FILE_NAME = "_wikipedia_disease_list";
+
+    public static final String DOT_JSON = ".json";
+    public static final String DOT_XML = ".xml";
 
     public static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
 
@@ -61,7 +71,22 @@ public class Constants {
         add("dsyn");
         add("fndg");
         add("lbpr");
-        add("lbtr"); }};
+        add("lbtr");
+
+        add("inpr");//todas las siguientes para encontrar enfermedades mentales
+        add("menp");
+        add("mobd");
+        add("patf");
+
+//        add("fngs"); encuentra familias de hongos, eliminar
+        add("cgab");//para encontrar Coma
+
+//        add("clna");
+
+//        add("qlco");
+//        add("qnco");
+//        add("hcpp");
+    }};
 
     /**
      * Fuentes de extracción
@@ -163,9 +188,20 @@ public class Constants {
     /**
      * Constantes para la validación de conceptos (metamap y proceso de validación de terminos)
      */
+    public static final String METAMAP_FOLDER = "tmp/mm/";
+    public static final String METAMAP_FILE_NAME = "_metamap_filter";
+    public static final String TVP_RETRIEVAL_HISTORY_FOLDER = "tmp/tvp/";
+    public static final String TVP_RETRIEVAL_FILE_NAME = "_tvp_validation";
+    public static final String PM_RETRIEVAL_DOCUMENT_FILE_NAME = "_document_pubmed_retrieval";
+    public static final String PM_RETRIEVAL_DISEASE_LIST_FILE_NAME = "_disease_list_pubmed_retrieval";
+
+
+    /**
+     * Constantes para la validación de conceptos (metamap y proceso de validación de terminos)
+     */
 
     public static final String CONSULT_SOURCE_ALL = "all";
-    public static final String CONSULT_VERSION_LAST = "last";
+    public static final String CONSULT_LAST_SNAPSHOT = "last";
 
     /**
      * Fecha por default
@@ -665,8 +701,8 @@ public class Constants {
 
     public final static String CHAR_SEPARATOR = "!";
 
-    public final static String VALIDATED_FOLDER = "cnv_data/filter_and_validation/validated/";
-    public final static String NO_VALIDATED_FOLDER = "cnv_data/filter_and_validation/not_validated/";
+    public final static String VALIDATED_FOLDER = "cnv_data/filter/validated/";
+    public final static String NO_VALIDATED_FOLDER = "cnv_data/filter/not_validated/";
     public final static String VALIDATION_FINDINGS_FILE = "vte_data/results/allFindings.fd";
     public final static String DISEASES_FINDINGS_FOLDER = "cnv_data/diseases_findings/";
     public final static String DISEASES_URLS_FILE = "cnv_data/diseases.lst";

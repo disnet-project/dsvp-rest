@@ -5,7 +5,7 @@ import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.common.util.UniqueId;
 import edu.ctb.upm.midas.constants.Constants;
-import edu.ctb.upm.midas.extraction_client_modules.wikipedia.dbpedia_disease_list.api_response.DiseaseAlbumResourceService;
+import edu.ctb.upm.midas.client_modules.extraction.wikipedia.disease_list.api_response.DiseaseAlbumResourceService;
 import edu.ctb.upm.midas.model.common.document_structure.Doc;
 import edu.ctb.upm.midas.model.common.document_structure.Section;
 import edu.ctb.upm.midas.model.common.document_structure.Source;

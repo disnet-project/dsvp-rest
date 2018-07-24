@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ctb.upm.midas.model.common.document_structure.text.*;
 import edu.ctb.upm.midas.service.jpa.HasTextService;
 import edu.ctb.upm.midas.service.jpa.TextService;
-import edu.upm.midas.enums.ContentType;
+import edu.ctb.upm.midas.enums.ContentType;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.UniqueId;
 import org.slf4j.Logger;
@@ -126,17 +126,18 @@ public class TextHelperNative {
         String text_;
         //System.out.println();
 
-        if(text instanceof Paragraph || text instanceof Text){
+//        if(text instanceof Paragraph/* || text instanceof Text*/){
             if (text instanceof Paragraph) {
                 //System.out.println(((Paragraph) text).getTitle() + " =>" + ((Paragraph) text).getText());
                 text_ = (!(text.getTitle().equals("")) ? (text.getTitle() + " => " + ((Paragraph) text).getText()) : ((Paragraph) text).getText());
                 textService.insertNative(textId, ContentType.PARA.getClave(), text_.trim());
-            }else{
-                //System.out.println((text.getTitle() + " =>" + text.getText()));
-                text_ = text.getText();
-                textService.insertNative(textId, ContentType.PARA.getClave(), text_.trim());
             }
-        }
+//            else{
+//                //System.out.println((text.getTitle() + " =>" + text.getText()));
+//                text_ = text.getText();
+//                textService.insertNative(textId, ContentType.PARA.getClave(), text_.trim());
+//            }
+//        }
 
         //<editor-fold desc="INSERTAR URLS">
         if (text.getUrlList()!=null) {

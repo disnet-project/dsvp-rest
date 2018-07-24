@@ -95,7 +95,7 @@ public class DiseaseHelperNative {
      * @throws JsonProcessingException
      */
     @Transactional
-    public String insertIfExistPubMedArticles(Doc document, String documentId, Date version, String sourceName) throws IOException {
+    public String insertIfExistPubMedArticles(edu.ctb.upm.midas.model.extraction.pubmed.Doc document, String documentId, Date version, String sourceName) throws IOException {
         String diseaseName = document.getDisease().getName();
 
 //        Disease diseaseEntity = findDiseaseBySeveralWays(documentId, document.getDisease()/*, null*/);
@@ -129,7 +129,7 @@ public class DiseaseHelperNative {
     }
 
 
-    private void insertSynonyms(edu.ctb.upm.midas.model.common.document_structure.Disease disease, String diseaseId, String sourceName) throws JsonProcessingException {
+    private void insertSynonyms(edu.ctb.upm.midas.model.extraction.pubmed.Disease disease, String diseaseId, String sourceName) throws JsonProcessingException {
         //Buscar sinonimo
         edu.ctb.upm.midas.model.jpa.Synonym synonym = null;
         //Si existen sinonimos

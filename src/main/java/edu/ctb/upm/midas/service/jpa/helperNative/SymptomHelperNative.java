@@ -7,7 +7,7 @@ import edu.ctb.upm.midas.model.jpa.HasSymptomPK;
 import edu.ctb.upm.midas.model.jpa.Symptom;
 import edu.ctb.upm.midas.service.jpa.HasSymptomService;
 import edu.ctb.upm.midas.service.jpa.SymptomService;
-import edu.upm.midas.data.validation.metamap.model.response.Concept;
+import edu.ctb.upm.midas.model.filter.metamap.response.Concept;
 import edu.ctb.upm.midas.common.util.Common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

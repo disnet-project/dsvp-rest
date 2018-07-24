@@ -2,7 +2,7 @@ package edu.ctb.upm.midas.service.jpa.helperNative;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ctb.upm.midas.model.common.document_structure.Doc;
-import edu.ctb.upm.midas.model.pumed.PubMedDoc;
+import edu.ctb.upm.midas.model.extraction.pubmed.PubMedDoc;
 import edu.ctb.upm.midas.model.common.document_structure.Term;
 import edu.ctb.upm.midas.model.jpa.*;
 import edu.ctb.upm.midas.service.jpa.*;
@@ -83,7 +83,7 @@ public class DocumentHelperNative {
     }
 
     @Transactional
-    public String insertPubMedArticles(String sourceId, Doc document, Date version) throws JsonProcessingException {
+    public String insertPubMedArticles(String sourceId, edu.ctb.upm.midas.model.extraction.pubmed.Doc document, Date version) throws JsonProcessingException {
         String documentId = uniqueId.generateDocument( sourceId, document.getId() );
         //Document existDocument = documentService.findById(new DocumentPK(documentId, utilDate.convertUtilDateToSQLDate(version)));
         Document existDocument = documentService.findById(new DocumentPK(documentId, utilDate.convertUtilDateToSQLDate(version) ));
@@ -118,7 +118,7 @@ public class DocumentHelperNative {
 
 
     @Transactional
-    public String insertCodeMeSHPubMedArticles(String sourceId, Doc document, Date version) throws JsonProcessingException {
+    public String insertCodeMeSHPubMedArticles(String sourceId, edu.ctb.upm.midas.model.extraction.pubmed.Doc document, Date version) throws JsonProcessingException {
         String documentId = uniqueId.generateDocument( sourceId, document.getId() );
         Document existDocument = documentService.findById(new DocumentPK(documentId, utilDate.convertUtilDateToSQLDate(version) ));
         if (existDocument==null) {
@@ -130,7 +130,7 @@ public class DocumentHelperNative {
 
 
     @Transactional
-    public String insertPubMedArticles_2(String sourceId, Doc document, Date version) throws JsonProcessingException {
+    public String insertPubMedArticles_2(String sourceId, edu.ctb.upm.midas.model.extraction.pubmed.Doc document, Date version) throws JsonProcessingException {
         String documentId = uniqueId.generateDocument( sourceId, document.getId() );
 
         insertPapers(document, documentId, version);
@@ -138,7 +138,7 @@ public class DocumentHelperNative {
     }
 
 
-    private void insertPapers(Doc document, String documentId, Date version) throws JsonProcessingException {
+    private void insertPapers(edu.ctb.upm.midas.model.extraction.pubmed.Doc document, String documentId, Date version) throws JsonProcessingException {
         //Recorrer lista de papers, si existen
         if (document.getPaperList()!=null){
             for (PubMedDoc paper: document.getPaperList()) {
