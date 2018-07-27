@@ -1,5 +1,8 @@
 package edu.ctb.upm.midas.common.util;
 
+import edu.ctb.upm.midas.model.common.document_structure.text.List_;
+import edu.ctb.upm.midas.model.common.document_structure.text.Paragraph;
+import edu.ctb.upm.midas.model.common.document_structure.text.Text;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
@@ -86,11 +89,22 @@ public class Common {
         elementsList.addAll(linkedHashSet);
     }
 
-
-
     public boolean itsFound(String originalStr, String findStr){
 //        System.out.println("RECIBE itsFound: ORI:" + originalStr + " | FIND: " + findStr);
         return originalStr.trim().indexOf(findStr.trim()) != -1;// Retorna true si ha encontrado la subcadena en la cadena
+    }
+
+
+    public Text getTypeText(Text text){
+        Text typeText = null;
+        if (!isEmpty(text.getText())) {
+//            System.out.println("PARA");
+            typeText = new Paragraph(text.getId(), text.getTextOrder(), text.getTitle(), text.getText());
+        } else {
+//            System.out.println("LIST");
+            typeText = new List_(text.getId(), text.getTextOrder(), text.getTitle(), text.getBulletList());
+        }
+        return typeText;
     }
 
 

@@ -217,7 +217,7 @@
 //            System.out.println("No inserted Documents(invalid): " + invalidCount);
 //        }// Fuentes "Sources"
 //        System.out.println("Populate end...");
-//        //extractionWikipedia.extractionReport();
+//        //extractionWikipedia.printReport();
 //
 //    }
 //
@@ -341,12 +341,12 @@
 //
 //    public void onlyExtract(List<XmlLink> externalDiseaseLinkList) throws Exception {
 //        //extractionWikipedia.wikipediaExtract(null);
-//        extractionWikipedia.extractionReport(externalDiseaseLinkList);
+//        extractionWikipedia.printReport(externalDiseaseLinkList);
 //    }
 //
 //
 //    public void testExtract() throws Exception {
-//        extractionWikipedia.extractionReport(null);
+//        extractionWikipedia.printReport(null);
 //    }
 //
 //

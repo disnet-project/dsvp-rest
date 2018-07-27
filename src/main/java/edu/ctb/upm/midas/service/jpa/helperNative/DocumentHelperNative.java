@@ -1,14 +1,15 @@
 package edu.ctb.upm.midas.service.jpa.helperNative;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.ctb.upm.midas.common.util.Common;
+import edu.ctb.upm.midas.common.util.TimeProvider;
+import edu.ctb.upm.midas.common.util.UniqueId;
 import edu.ctb.upm.midas.model.common.document_structure.Doc;
-import edu.ctb.upm.midas.model.extraction.pubmed.PubMedDoc;
+import edu.ctb.upm.midas.model.common.document_structure.Link;
 import edu.ctb.upm.midas.model.common.document_structure.Term;
+import edu.ctb.upm.midas.model.extraction.pubmed.PubMedDoc;
 import edu.ctb.upm.midas.model.jpa.*;
 import edu.ctb.upm.midas.service.jpa.*;
-import edu.ctb.upm.midas.common.util.Common;
-import edu.ctb.upm.midas.common.util.UniqueId;
-import edu.ctb.upm.midas.common.util.TimeProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,13 @@ public class DocumentHelperNative {
     ObjectMapper objectMapper;
 
 
+    /**
+     * @param sourceId
+     * @param document
+     * @param version
+     * @return
+     * @throws JsonProcessingException
+     */
     public String insert(String sourceId, Doc document, Date version) throws JsonProcessingException {
         String documentId = uniqueId.generateDocument( sourceId, document.getId() );
         //Buscar si la enfermedad de la que habla este documento ya se encuentra insertada
@@ -69,17 +77,41 @@ public class DocumentHelperNative {
         //Cambio para la siguiente version 2018-01-15
         if ( documentService.insertNative( documentId, version ) > 0 ) {
             String docId = documentHelperNative.getDocumentId( documentId, version );
-            Url url = urlHelperNative.findUrl(document.getUrl().getUrl());
-            if (url!=null){
-                documentService.insertNativeUrl( documentId, version, url.getUrlId() );
-            }else {
-                String urlId = urlHelperNative.getSimpleUrlId(document.getUrl(), document.getId());
-                documentService.insertNativeUrl(documentId, version, urlId);
-            }
+            //Inserta la URL del documento si existe
+            if (document.getUrl()!=null) insertURL(document, version, documentId, "");
+            //Inserta más de una URL para un documento, (e.g. para los documentos MayoClinic)
+            if (document.getUrlList()!=null) insertURLs(document, version, documentId);
+            //Inserta la relación entre un documento y su fuente
             documentService.insertNativeHasSource( documentId, version, sourceId );
             return documentId;
         }else
             return "";
+    }
+
+
+    /**
+     * @param document
+     * @param version
+     * @param documentId
+     * @param documentLink
+     * @throws JsonProcessingException
+     */
+    public void insertURL(Doc document, Date version, String documentId, String documentLink) throws JsonProcessingException {
+        Link documentURL = new Link( (common.isEmpty(documentLink))?document.getUrl().getUrl():documentLink );
+        Url url = urlHelperNative.findUrl(documentURL.getUrl());
+        if (url!=null){
+            documentService.insertNativeUrl( documentId, version, url.getUrlId() );
+        }else {
+            String urlId = urlHelperNative.getSimpleUrlId(documentURL, document.getId());
+            documentService.insertNativeUrl(documentId, version, urlId);
+        }
+    }
+
+
+    public void insertURLs(Doc document, Date version, String documentId) throws JsonProcessingException {
+        for (Link link: document.getUrlList()) {
+               insertURL(document, version, documentId, link.getUrl());
+        }
     }
 
     @Transactional

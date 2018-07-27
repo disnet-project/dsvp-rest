@@ -1,11 +1,8 @@
 package edu.ctb.upm.midas.service._populate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.TimeProvider;
-import edu.ctb.upm.midas.common.util.UniqueId;
 import edu.ctb.upm.midas.constants.Constants;
-import edu.ctb.upm.midas.client_modules.extraction.wikipedia.disease_list.api_response.DiseaseAlbumResourceService;
 import edu.ctb.upm.midas.model.common.document_structure.Doc;
 import edu.ctb.upm.midas.model.common.document_structure.Section;
 import edu.ctb.upm.midas.model.common.document_structure.Source;
@@ -18,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +30,9 @@ import java.util.List;
  * @see
  */
 @Service
-public class WikipediaPopulateDbNative {
+public class MayoClinicPopulateDbNative {
 
-    private static final Logger logger = LoggerFactory.getLogger(WikipediaPopulateDbNative.class);
+    private static final Logger logger = LoggerFactory.getLogger(MayoClinicPopulateDbNative.class);
 
     @Autowired
     ObjectMapper objectMapper;
@@ -65,16 +63,6 @@ public class WikipediaPopulateDbNative {
     @Autowired
     private SemanticTypeHelperNative semanticTypeHelperNative;
 
-    @Autowired
-    private UniqueId uniqueId;
-    @Autowired
-    private Constants constants;
-    @Autowired
-    private Common common;
-
-    @Autowired
-    private DiseaseAlbumResourceService diseaseAlbumResource;
-
 
     
     /**
@@ -88,7 +76,6 @@ public class WikipediaPopulateDbNative {
         for (Source source: sourceList) {
             String sourceId = sourceHelperNative.insertIfExist( source );
             System.out.println("Source: " + sourceId + " - " + source.getName());
-
             //<editor-fold desc="PERSISTIR TODAS LAS SECCIONES">
             System.out.println("Insert all sections, if exists...");
             sectionHelperNative.insertIfExist( source.getSectionMap() );
@@ -96,49 +83,61 @@ public class WikipediaPopulateDbNative {
             System.out.println("Insert documents start!");
             //</editor-fold>
             int docsCount = 1, invalidCount = 1;
+            //<editor-fold desc="PERSISTIR TODOS LOS DATOS DE LOS DOCUMENTOS DISNET">
             for (Doc document: source.getDocuments()) {
-                //Solo inserta aquellos documentos que al menos tengan códigos o secciones
-                if (document.isDiseaseArticle()) {
-                    String documentId = documentHelperNative.insert(sourceId, document, version);
-
-                    System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
-
-                    //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
-                    String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
-                    //</editor-fold>
-
-                    //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
-                    codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
-                    //</editor-fold>
-
-                    //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
-                    for (Section section : document.getSectionList()) {
-                        //<editor-fold desc="PERSISTIR has_section">
-                        String sectionId = hasSectionHelperNative.insert(documentId, version, section);
-                        //</editor-fold>
-
-                        int textCount = 0;
-                        for (Text text : section.getTextList()) {
-                            //<editor-fold desc="INSERTAR TEXTO">
-                            textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
-                            //</editor-fold>
-
-                            textCount++;
-                        }// Textos
-
-                    }// Secciones
-                    //</editor-fold>
-                    docsCount++;
-                }else{
-                    invalidCount++;
-                }
+                insertDocumentDatas(document, sourceId, version, source, docsCount, isJSONRequest);
+                docsCount++;
             }// Documentos
+            //</editor-fold>
             System.out.println("Inserted Documents: " + docsCount);
             System.out.println("No inserted Documents(invalid): " + invalidCount);
         }// Fuentes "Sources"
         System.out.println("Populate end...");
         //extractionWikipedia.printReport();
 
+    }
+
+
+    @Transactional
+    public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
+        //Solo inserta aquellos documentos que al menos tengan códigos o secciones
+        String documentId = documentHelperNative.insert(sourceId, document, version);
+
+        //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
+        String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
+        //</editor-fold>
+
+        //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
+        if (document.getCodeList()!=null)
+            codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
+        //</editor-fold>
+
+        //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
+        if (document.getSectionList()!=null) {
+            for (Section section : document.getSectionList()) {
+                //Si la sección no tiene textos no se inserta en la relación has_section
+                if (section.getTextList()!=null) {
+                    //<editor-fold desc="PERSISTIR has_section">
+                    //inserta la sección para ese documento
+                    String sectionId = hasSectionHelperNative.insert(documentId, version, section);
+                    //</editor-fold>
+
+                    //Validar si hay textos
+                    int textCount = 0;
+                    for (Text text : section.getTextList()) {
+                        //<editor-fold desc="INSERTAR TEXTO">
+                        textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
+                        //</editor-fold>
+
+                        textCount++;
+                    }// Textos
+                }
+
+            }// Secciones
+        }
+        //</editor-fold>
+
+        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId + "(" + diseaseId + ")");
     }
 
 

@@ -78,6 +78,8 @@ public class DiseaseHelperNative {
             String diseaseId = getDiseaseId();
             diseaseService.insertNative( diseaseId, diseaseName, "" );
             diseaseService.insertNativeHasDisease( documentId, version, diseaseId );
+            //Insertar sinonimos y sus códigos
+            insertSynonyms(document.getDisease(), diseaseId, "");
             return diseaseId;
         }else{
             //System.out.println("HasDisease: "+ documentId + " | " + version + " | " + diseaseEntity.getDiseaseId() );
@@ -146,8 +148,7 @@ public class DiseaseHelperNative {
                         //busca si existe ya la relación disease synonym
                         DiseaseSynonym diseaseSynonym = diseaseSynonymService.findById(new DiseaseSynonymPK(diseaseId, synonymId));
                         //si no existe la inserta
-                        if (diseaseSynonym==null)
-                            diseaseSynonymService.insertNative(diseaseId, synonymId);
+                        if (diseaseSynonym==null) diseaseSynonymService.insertNative(diseaseId, synonymId);
 
                         //inserta los codigos del sinonimo, si existen
                         if (syn.getCodes()!=null){

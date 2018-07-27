@@ -23,7 +23,18 @@ public class Text {
 
     private List<Link> urlList;
 
+    //chapuza en lo que encuentro una mejor solución
+    private String text;
+    private List<String> bulletList;
 
+    public Text() {
+    }
+
+    public Text(int id, String title, int textOrder) {
+        this.id = id;
+        this.title = title;
+        this.textOrder = textOrder;
+    }
 
     public int getId() {
         return id;
@@ -57,4 +68,31 @@ public class Text {
         this.urlList = urlList;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public List<String> getBulletList() {
+        return bulletList;
+    }
+
+    public void setBulletList(List<String> bulletList) {
+        this.bulletList = bulletList;
+    }
+
+    @Override
+    public String toString() {
+        return "Text{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", textOrder=" + textOrder +
+                ", urlList=" + urlList +
+                ", text='" + text + '\'' +
+                ", bulletList=" + bulletList +
+                '}';
+    }
 }

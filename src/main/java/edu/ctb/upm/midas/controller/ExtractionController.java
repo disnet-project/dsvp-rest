@@ -1,5 +1,6 @@
 package edu.ctb.upm.midas.controller;
 
+import edu.ctb.upm.midas.service._extract.MayoClinicExtractService;
 import edu.ctb.upm.midas.service._extract.WikipediaExtractService;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -27,50 +28,43 @@ public class ExtractionController {
 
 
     @Autowired
-    private WikipediaExtractService extractService;
+    private WikipediaExtractService wikipediaExtractService;
+    @Autowired
+    private MayoClinicExtractService mayoClinicExtractService;
 
     @RequestMapping(path = { "${my.service.rest.request.mapping.wikipedia.retrieval.texts.path}" }, //_wikipedia extraction
             method = RequestMethod.GET,
             params = {"snapshot"})
     public String extract(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
                           @RequestParam(value = "json", required = false, defaultValue = "true") boolean json) throws Exception {
-        extractService.extract(snapshot, json);
-/*
-        String g ="http://en.wikipedia.org/wiki/Odonto–tricho–ungual–digital–palmar_syndrome";
-        String m = "http://en.wikipedia.org/wiki/Bannayan–Riley–Ruvalcaba_syndrome";
-        System.out.println(g + " | " + m);
-        g = StringEscapeUtils.escapeJava(g);
-        m = common.replaceSpecialCharactersToUnicode(m);
-        System.out.println(g + " | " + m);
-        System.out.println(common.replaceUnicodeToSpecialCharacters(g) + " | " + common.replaceUnicodeToSpecialCharacters(m));
-        String t = "http://en.wikipedia.org/wiki/Bannayan\\u00E2\\u20AC\\u201CRiley\\u00E2\\u20AC\\u201CRuvalcaba_syndrome";
-        System.out.println(t.replace("\\", "\\\\"));
-        System.out.println(common.replaceUnicodeToSpecialCharacters(t));
-*/
-
-/*
-        String s = "en._wikipedia.org/wiki/Yush\u014D_disease-Δ";
-        System.out.println(s);
-        s = common.replaceUnicodeToSpecialCharacters(s);
-        System.out.println(s);
-        System.out.println(common.replaceSpecialCharactersToUnicode(s));
-        diseaseService.insertNative("glg3", s, "");
-
-*/
-/*
-        for (String s:
-        Constants.URLS) {
-            System.out.println(common.replaceUnicodeToSpecialCharacters(s));
-        }
-*/
-
+        wikipediaExtractService.extract(snapshot, json);
         return "Successful extraction and insertion in a DB!";
     }
 
     @RequestMapping(path = { "/wikipedia/report" }, //wikipedia extraction
             method = RequestMethod.GET)
     public void extractOnly() throws Exception {
-        extractService.onlyExtract();
+        wikipediaExtractService.onlyExtract();
+    }
+
+
+    @RequestMapping(path = { "${my.service.rest.request.mapping.mayoclinic.retrieval.texts.path}" }, //_wikipedia extraction
+            method = RequestMethod.GET,
+            params = {"snapshot", "json"})
+    public String mayoClinicExtract(
+            @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
+            @RequestParam(value = "json", required = false, defaultValue = "true") boolean json) throws Exception {
+        mayoClinicExtractService.extract(snapshot, json);
+        return "Successful extraction and insertion in a DB!";
+    }
+
+
+    @RequestMapping(path = { "/mayoclinic/report" }, //wikipedia extraction
+            method = RequestMethod.GET,
+            params = {"snapshot", "json"})
+    public void mayoClinicReport(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
+                                 @RequestParam(value = "json", required = false, defaultValue = "true") boolean json) throws Exception {
+        mayoClinicExtractService.printReport(snapshot, json);
     }
 
 

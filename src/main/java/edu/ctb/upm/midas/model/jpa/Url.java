@@ -52,7 +52,7 @@ import java.util.Objects;
 
         @NamedNativeQuery(
                 name = "Url.insertNative",
-                query = "INSERT INTO url (url_id, url) "
+                query = "INSERT IGNORE INTO url (url_id, url) "
                         + "VALUES (:urlId, :url)"
         )
 })
@@ -159,4 +159,12 @@ public class Url {
         this.paperUrlsByUrlId = paperUrlsByUrlId;
     }
 
+
+    @Override
+    public String toString() {
+        return "Url{" +
+                "urlId='" + urlId + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

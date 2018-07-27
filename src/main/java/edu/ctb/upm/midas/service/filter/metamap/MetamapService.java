@@ -947,7 +947,7 @@ public class MetamapService {
             System.out.println("Error to read or convert JSON!...");
         }
 
-        /*for (edu.upm.midas.data.validation.metamap.model.response.Text text: resp.getTexts()) {
+        /*for (edu.upm.midas.data.validation.metamap.model.response.Text text: resp.retrieveTexts()) {
             System.out.println("TextId: " + text.getId() + " | Concepts: " + text.getConcepts().toString());
         }*/
 

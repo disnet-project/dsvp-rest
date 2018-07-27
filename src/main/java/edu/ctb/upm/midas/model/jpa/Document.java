@@ -56,7 +56,7 @@ import java.util.Objects;
         ),
         @NamedNativeQuery(
                 name = "DocumentUrl.insertNative",
-                query = "INSERT INTO document_url (document_id, date, url_id) "
+                query = "INSERT IGNORE INTO document_url (document_id, date, url_id) "
                         + "VALUES (:documentId, :date, :urlId)"
         ),
 

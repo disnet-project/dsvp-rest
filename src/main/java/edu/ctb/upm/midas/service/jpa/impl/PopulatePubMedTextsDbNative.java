@@ -191,20 +191,20 @@
 ////                }
 //
 //
-//                //insertAllDataOfDocument(document, sourceId, version, source, docsCount);
+//                //insertDocumentDatas(document, sourceId, version, source, docsCount);
 //                docsCount++;
 //            }// Documentos
 ////            fileWriter.close();
 //            System.out.println("Inserted Documents: " + docsCount);
 //        }// Fuente "Source"
 //        System.out.println("Populate end...");
-//        //extractionWikipedia.extractionReport();
+//        //extractionWikipedia.printReport();
 //
 //    }
 //
 //
 //    @Transactional
-//    public void insertAllDataOfDocument(Doc document, String sourceId, Date version, Source source, int docsCount) throws IOException {
+//    public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount) throws IOException {
 //        //Solo inserta aquellos documentos que al menos tengan códigos o secciones
 //        String documentId = documentHelperNative.insertPubMedArticles(sourceId, document, version);
 //        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
@@ -295,7 +295,7 @@
 //            System.out.println("Error to read or convert JSON!...");
 //        }
 //
-//        /*for (edu.upm.midas.data.validation.metamap.model.response.Text text: resp.getTexts()) {
+//        /*for (edu.upm.midas.data.validation.metamap.model.response.Text text: resp.retrieveTexts()) {
 //            System.out.println("TextId: " + text.getId() + " | Concepts: " + text.getConcepts().toString());
 //        }*/
 //        //System.out.println("source: "+source);

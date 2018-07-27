@@ -13,6 +13,15 @@ import java.util.List;
  */
 public class List_ extends Text {
 
+    public List_() {
+    }
+
+    public List_(int id, int textOrder, String title, List<String> bulletList) {
+        super(id, title, textOrder);
+        this.bulletList = bulletList;
+
+    }
+
     private List<String> bulletList;//Texto al final de cuentas
 
 

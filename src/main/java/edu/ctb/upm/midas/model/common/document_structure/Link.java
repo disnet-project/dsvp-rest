@@ -25,7 +25,9 @@ public class Link {
         this.source = source;
     }
 
-
+    public Link(String url) {
+        this.url = url;
+    }
 
     public int getId() {
         return id;

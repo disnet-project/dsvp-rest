@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
  * @project dgsvp-rest
- * @className WikipediaTextsExtractionServiceImpl
+ * @className MayoClinicTextsExtractionServiceImpl
  * @see
  */
 @Service

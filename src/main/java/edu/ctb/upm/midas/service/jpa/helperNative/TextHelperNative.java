@@ -58,9 +58,15 @@ public class TextHelperNative {
      * @throws JsonProcessingException
      */
     @Transactional
-    public String insert(Text text, String sectionId, String documentId, Date version, String paperId) throws JsonProcessingException {
+    public String insert(Text text, String sectionId, String documentId, Date version, boolean isJSONRequest) throws JsonProcessingException {
+        //Verifica que la clase Text sea del tipo adecuado
+        //El problema viene cuando se obtienen objetos por medio de JSONs almacenados y se leen,
+        //estos archivos no se encuentran serializados adecuadamente con respecto a los tipos de textos
+        //que pueden ser Paragraph, List_ o Table
+        //Cuando se lee en vivo el JSON sin almacenarlo previamente no exites este inconveniente
+        if (isJSONRequest) text = common.getTypeText(text);
         //System.out.println(text+" - "+ sectionId+" - "+ documentId +" - "+ version);
-        String textId = getTextId( documentId, version, sectionId, text.getId(), paperId);
+        String textId = getTextId( documentId, version, sectionId, text.getId(), "");
         String text_;
         //System.out.println();
 

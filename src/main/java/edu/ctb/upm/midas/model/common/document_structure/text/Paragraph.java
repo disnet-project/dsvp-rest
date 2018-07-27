@@ -10,6 +10,15 @@ package edu.ctb.upm.midas.model.common.document_structure.text;
  */
 public class Paragraph extends Text {
 
+    public Paragraph() {
+    }
+
+    public Paragraph(int id, int textOrder, String title, String text) {
+        super(id, title, textOrder);
+        this.text = text;
+
+    }
+
     private String text;
 
 

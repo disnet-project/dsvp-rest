@@ -89,14 +89,14 @@ public class WikipediaExtractService {
         DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version);
 
         if (dBpediaResponse!=null) {
-            resourceHashMap = getWikipediaResources(dBpediaResponse.getLinks(), json, timeProvider.dateFormatyyyMMdd(version));
-            sources = getWikipediaTexts(dBpediaResponse.getLinks(), json, timeProvider.dateFormatyyyMMdd(version));
+            resourceHashMap = retrieveResources(dBpediaResponse.getLinks(), timeProvider.dateFormatyyyMMdd(version), json);
+            sources = retrieveTexts(dBpediaResponse.getLinks(), timeProvider.dateFormatyyyMMdd(version), json);
 
             /*if (resourceHashMap!=null) {
                 resourceHashMap.toString();
             }
             if (sources!=null){
-                extractionReport(sources);
+                printReport(sources);
             }*/
 
             if (sources!=null&&resourceHashMap!=null) {
@@ -106,7 +106,7 @@ public class WikipediaExtractService {
                 System.out.println("No poblara...");
                 wikipediaPopulateDbNative.populateResource(resourceHashMap);
                 wikipediaPopulateDbNative.populateSemanticTypes();
-                wikipediaPopulateDbNative.populate(sources, version);
+                wikipediaPopulateDbNative.populate(sources, version, json);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
@@ -128,7 +128,7 @@ public class WikipediaExtractService {
      * @param webLinks
      * @return
      */
-    public List<Source> getWikipediaTexts(List<WebLink> webLinks, boolean isJSONRequest, String snapshot){
+    public List<Source> retrieveTexts(List<WebLink> webLinks, String snapshot, boolean isJSONRequest){
         System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
         System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
 
@@ -159,7 +159,7 @@ public class WikipediaExtractService {
      * @param webLinks
      * @return
      */
-    public HashMap<String, Resource> getWikipediaResources(List<WebLink> webLinks, boolean isJSONRequest, String snapshot){
+    public HashMap<String, Resource> retrieveResources(List<WebLink> webLinks, String snapshot, boolean isJSONRequest){
         System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
         System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
 
@@ -191,11 +191,12 @@ public class WikipediaExtractService {
      * @return
      * @throws Exception
      */
-    public boolean extractionReport() throws Exception {
+    public boolean extractionReport(List<WebLink> webLinks, String snapshot, boolean isJSONRequest) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
         Date version = timeProvider.getSqlDate();
-        //populateDbNative.onlyExtract();
+        List<Source> sources = retrieveTexts(webLinks, snapshot, isJSONRequest);
+        printReport(sources, isJSONRequest);
         System.out.println("Inicio:" + inicio + " | Termino: " + timeProvider.getTime());
 
         return res;
@@ -341,7 +342,7 @@ public class WikipediaExtractService {
      *
      * @throws Exception
      */
-    public void extractionReport(List<Source> sourceList) throws Exception {
+    public void printReport(List<Source> sourceList, boolean isJSONRequest) throws Exception {
 
         List<Integer> countCharacteresList = new ArrayList<>();
         long time_start, time_end;
@@ -370,6 +371,7 @@ public class WikipediaExtractService {
                     //System.out.println("    Section(" + section.getId() + ") " + section.getName() );
 
                     for (Text text : section.getTextList()) {
+                        if (isJSONRequest) text = common.getTypeText(text);
                         //System.out.println("    ------------ TEXT(" + text.getTitle() + ") -----------");
                         //System.out.println("        Text_" + text.getTextOrder() + "(" + text.getId() + ") (" + text.getClass() + ")" );
 

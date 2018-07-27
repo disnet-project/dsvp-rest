@@ -1,8 +1,8 @@
-package edu.ctb.upm.midas.client_modules.extraction.wikipedia.texts_extraction.api_response;
+package edu.ctb.upm.midas.client_modules.extraction.mayoclinic.texts_extraction.api_response;
 
-import edu.ctb.upm.midas.model.extraction.wikipedia.texts_extraction.request.Request;
 import edu.ctb.upm.midas.model.extraction.common.request.RequestJSON;
 import edu.ctb.upm.midas.model.extraction.common.response.Response;
+import edu.ctb.upm.midas.model.extraction.common.request.Request;
 
 /**
  * Created by gerardo on 12/02/2018.
@@ -13,13 +13,13 @@ import edu.ctb.upm.midas.model.extraction.common.response.Response;
  * @className MayoClinicTextsExtractionService
  * @see
  */
-public interface WikipediaTextsExtractionService {
+public interface MayoClinicTextsExtractionService {
 
     Response getTexts(Request request);
 
     Response getResources(Request request);
 
-    Response getWikipediaTextsByJSON( RequestJSON request);
+    Response getTextsByJSON(RequestJSON request);
 
-    Response getWikipediaResourcesByJSON( RequestJSON request);
+    Response getResourcesByJSON(RequestJSON request);
 }
