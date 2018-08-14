@@ -447,6 +447,40 @@ public class MetamapService {
     }
 
 
+    public void insertInBatchMedicalTerms(Response response, Date version, Gson gson){
+        List<edu.ctb.upm.midas.model.filter.metamap.response.Text> textList = response.getTextList();
+        if (textList.size()>0) {
+            System.out.println("Texts Size request..." + textList.size());
+            System.out.println("Filter Texts Size response..." + textList.size());
+
+            System.out.println("Insert symptoms starting...");
+            String queryHead = "INSERT IGNORE INTO has_symptom (text_id, cui, validated, matched_words, positional_info) VALUES ";
+            int count = 1;//VALIDAR
+            for (edu.ctb.upm.midas.model.filter.metamap.response.Text text : textList) {
+                System.out.println(count + ". to (" + textList.size() + ") TEXT_ID: " + text.getId() + " | CONCEPTS(" + text.getConcepts().size() + "): ");
+                List<Concept> noRepeatedConcepts = removeRepetedConcepts(text.getConcepts());
+
+                int countSymptoms = 1;
+                for (edu.ctb.upm.midas.model.filter.metamap.response.Concept concept : text.getConcepts()) {
+                    System.out.println("Concept{ cui: " + concept.getCui() + " name: " + concept.getName() + " semTypes:" + concept.getSemanticTypes().toString() + "}");
+//                    symptomHelperNative.insertIfExist(concept, text.getId());//text.getId()
+                    countSymptoms++;
+                }
+                count++;
+            }
+            System.out.println("Insert symptoms ready!...");
+            //</editor-fold>
+
+            System.out.println("Insert configuration...");
+            String configurationJson = gson.toJson(response.getConfiguration());
+            configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+            System.out.println("Insert configuration ready!...");
+        } else {
+            System.out.println("Texts Size Different: request: " + response.getTextList().size() + " | json: " + textList.size());
+        }
+    }
+
+
     /**
      *
      * @param consult
@@ -655,6 +689,7 @@ public class MetamapService {
         }
 
     }
+
 
     public boolean contains(final List<Text> texts, String textId){
         return texts.stream()

@@ -1,5 +1,7 @@
 package edu.ctb.upm.midas.service._extract;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import edu.ctb.upm.midas.client_modules.extraction.mayoclinic.texts_extraction.api_response.MayoClinicTextsExtractionService;
 import edu.ctb.upm.midas.client_modules.extraction.wikipedia.disease_list.api_response.DiseaseAlbumResourceService;
 import edu.ctb.upm.midas.common.util.Common;
@@ -60,16 +62,17 @@ public class MayoClinicExtractService {
      * @return
      * @throws Exception
      */
-    public boolean extract(String snapshot, boolean json) throws Exception {
+    public boolean extract(String snapshot_, boolean json) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
-        Date version = timeProvider.getSqlDate();
-        Response response = retrieveTexts(json, timeProvider.dateFormatyyyMMdd(version));
+        Date snapshot = timeProvider.getSqlDate();
+        Response response = retrieveTexts(json, timeProvider.dateFormatyyyMMdd(snapshot));
+//        Response response = retrieveTexts(json, snapshot);
 
         if (response!=null) {
             if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())) {
                 if (response.getSources() != null) {
-                    mayoclinicPopulateDbNative.populate(response.getSources(), version, json);
+                    mayoclinicPopulateDbNative.populate(response.getSources(), snapshot, json);
                 } else {
                     //Source vacío
                 }

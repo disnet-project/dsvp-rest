@@ -75,6 +75,15 @@ public class WikipediaExtractService {
     @Autowired
     private DocumentService documentService;
 
+    private String snapshot;
+
+    public String getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(String snapshot) {
+        this.snapshot = snapshot;
+    }
 
     /**
      * @return
@@ -84,6 +93,7 @@ public class WikipediaExtractService {
         boolean res = false;
         String inicio = timeProvider.getTime();
         Date version = timeProvider.getSqlDate();
+        this.snapshot = timeProvider.dateFormatyyyMMdd(version);
         List<Source> sources = null;
         HashMap<String, Resource> resourceHashMap = null;
         DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version);
@@ -110,7 +120,7 @@ public class WikipediaExtractService {
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String configurationJson = gson.toJson(dBpediaResponse.getConfig());
-//                confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
+                confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE + " - " + constants.SERVICE_DISALBUM_NAME, configurationJson);
                 res = true;
             }else{
                 System.out.println("ERROR extract texts ans resources");

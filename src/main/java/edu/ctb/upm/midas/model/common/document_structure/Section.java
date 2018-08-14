@@ -22,6 +22,8 @@ public class Section {
 
     private Integer textCount;
     private List<Text> textList;
+    private String update;
+
 
 
 
@@ -65,15 +67,24 @@ public class Section {
         this.textList = textList;
     }
 
+    public String getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(String update) {
+        this.update = update;
+    }
 
     @Override
     public String toString() {
         return "Section{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", update=" + update +
                 ", description='" + description + '\'' +
                 ", textCount=" + textCount +
                 ", textList=" + textList +
+
                 '}';
     }
 
