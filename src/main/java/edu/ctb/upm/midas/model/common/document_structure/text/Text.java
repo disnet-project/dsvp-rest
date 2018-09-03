@@ -26,14 +26,16 @@ public class Text {
     //chapuza en lo que encuentro una mejor solución
     private String text;
     private List<String> bulletList;
+    private List<String> trList;
 
     public Text() {
     }
 
-    public Text(int id, String title, int textOrder) {
+    public Text(int id, String title, int textOrder, List<Link> urlList) {
         this.id = id;
         this.title = title;
         this.textOrder = textOrder;
+        this.urlList = urlList;
     }
 
     public int getId() {
@@ -84,6 +86,14 @@ public class Text {
         this.bulletList = bulletList;
     }
 
+    public List<String> getTrList() {
+        return trList;
+    }
+
+    public void setTrList(List<String> trList) {
+        this.trList = trList;
+    }
+
     @Override
     public String toString() {
         return "Text{" +
@@ -92,7 +102,8 @@ public class Text {
                 ", textOrder=" + textOrder +
                 ", urlList=" + urlList +
                 ", text='" + text + '\'' +
-                ", bulletList=" + bulletList +
+//                ", bulletList=" + bulletList +
+//                ", trList=" + trList +
                 '}';
     }
 }

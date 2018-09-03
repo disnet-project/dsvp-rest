@@ -69,7 +69,7 @@ public class TvpService {
 
         String fileName = consult.getSnapshot() + "_updates_has_symptom.txt";
         String path = Constants.TVP_RETRIEVAL_HISTORY_FOLDER + fileName;
-        FileWriter fileWriter = new FileWriter(path);
+//        FileWriter fileWriter = new FileWriter(path);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         TvpConfiguration tvpConfiguration = new TvpConfiguration();
@@ -98,7 +98,7 @@ public class TvpService {
         //VERDADERO Y NO FUNCIONA AHORA, NO SE PORQUE
         Response response = tvpResource.getValidateSymptoms( request );
         //CONSUMIR UN JSON
-        //Response response = readTVPValidationJSON(consult.getSnapshot());
+//        Response response = readTVPValidationJSON(consult);
         System.out.println("Authorization: "+ response.isAuthorized());
 
 
@@ -176,10 +176,10 @@ public class TvpService {
      * @return
      * @throws Exception
      */
-    public Response readTVPValidationJSON(String snapshot) throws Exception {
+    public Response readTVPValidationJSON(Consult consult) throws Exception {
         Response response = null;
         Gson gson = new Gson();
-        String fileName = snapshot + Constants.TVP_RETRIEVAL_FILE_NAME + Constants.DOT_JSON;
+        String fileName = consult.getSnapshot() + Constants.UNDER_SCORE + consult.getSource() + Constants.TVP_RETRIEVAL_FILE_NAME + Constants.DOT_JSON;
         String path = Constants.TVP_RETRIEVAL_HISTORY_FOLDER + fileName;
         System.out.println("Read JSON!..." + path);
 

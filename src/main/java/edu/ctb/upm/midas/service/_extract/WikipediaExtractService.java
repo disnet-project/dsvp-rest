@@ -92,7 +92,7 @@ public class WikipediaExtractService {
     public boolean extract(String snapshot, boolean json) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
-        Date version = timeProvider.getSqlDate();
+        Date version = (json)?timeProvider.stringToDate(snapshot):timeProvider.getSqlDate();
         this.snapshot = timeProvider.dateFormatyyyMMdd(version);
         List<Source> sources = null;
         HashMap<String, Resource> resourceHashMap = null;
@@ -114,8 +114,8 @@ public class WikipediaExtractService {
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
                 System.out.println("No poblara...");
-                wikipediaPopulateDbNative.populateResource(resourceHashMap);
-                wikipediaPopulateDbNative.populateSemanticTypes();
+//                wikipediaPopulateDbNative.populateResource(resourceHashMap);
+//                wikipediaPopulateDbNative.populateSemanticTypes();
                 wikipediaPopulateDbNative.populate(sources, version, json);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -142,17 +142,21 @@ public class WikipediaExtractService {
         System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
         System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
 
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
         List<Source> sourceList = null;
         Response response;
         if (isJSONRequest){
             RequestJSON request = new RequestJSON();
             request.setSnapshot(snapshot);
             response = wteService.getWikipediaTextsByJSON(request);
+//            System.out.println(gson.toJson(response));
         }else {
             Request request = new Request();
             request.setWikipediaLinks(webLinks);
             //Opción para guardar JSON y consumirlo despues (queue)
             request.setJson(true);
+            request.setSnapshot(snapshot);
             response = wteService.getTexts(request);
         }
         System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
@@ -173,6 +177,8 @@ public class WikipediaExtractService {
         System.out.println("Start Connection with WIKIPEDIA TEXT EXTRACTION API REST...");
         System.out.println("Get all texts from Wikipedia disease articles... please wait, this process can take from minutes or hours... ");
 
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
         HashMap<String, Resource> resourceMap = null;
         Response response;
         if (isJSONRequest){
@@ -184,8 +190,10 @@ public class WikipediaExtractService {
             request.setWikipediaLinks(webLinks);
             //Opción para guardar JSON y consumirlo despues (queue)
             request.setJson(true);
+            request.setSnapshot(snapshot);
             response = wteService.getResources(request);
         }
+//        System.out.println(gson.toJson(response));
         System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
         System.out.println("getResponseCode: " + response.getResponseCode());
 
@@ -245,7 +253,8 @@ public class WikipediaExtractService {
         request.setToken(Constants.TOKEN);
         System.out.println("Start Connection_ with GET DISEASE ALBUM API REST...");
         System.out.println("Get Album Information... please wait, this process can take from minutes... ");
-        ResponseLA response = diseaseAlbumResource.getDiseaseAlbum(request);System.out.println(response.getAlbum().getAlbumId());
+        ResponseLA response = diseaseAlbumResource.getDiseaseAlbum(request);
+        System.out.println(response.getAlbum().getAlbumId() + " - " + response.getAlbum().getDate());
         System.out.println("Authorization: "+ response.isAuthorized());
         System.out.println("End Connection_ with GET DISEASE ALBUM API REST...");
         if (response.isAuthorized())
@@ -266,6 +275,7 @@ public class WikipediaExtractService {
         while(true){
             album = getLastAlbum();
 //            album = getSpecifictAlbum(date.dateFormatyyyMMdd(version));
+            System.out.println(timeProvider.dateFormatyyyMMdd(album.getDate()) + " == " + timeProvider.dateFormatyyyMMdd(version));
             if (timeProvider.dateFormatyyyMMdd(album.getDate()).equals(timeProvider.dateFormatyyyMMdd(version))) break;
             System.out.println("Wait (1 hour = 3600000 mls) another disease list request");
             Thread.sleep(3600000);

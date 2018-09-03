@@ -34,7 +34,9 @@ public class WikipediaTextsExtractionServiceImpl implements WikipediaTextsExtrac
 
     @Override
     public Response getWikipediaTextsByJSON(RequestJSON request) {
-        return wteServiceClient.getWikipediaTextsByJSON(request);
+        Response response = wteServiceClient.getWikipediaTextsByJSON(request);
+        System.out.println(response);
+        return response;
     }
 
     @Override

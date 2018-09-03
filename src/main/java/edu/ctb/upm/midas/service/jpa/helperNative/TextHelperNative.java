@@ -90,11 +90,11 @@ public class TextHelperNative {
             text_ = (!text.getTitle().equals(""))?text.getTitle() + " => "+ textList:textList;
             textService.insertNative( textId, ContentType.LIST.getClave(), text_.trim() );
         } else if (text instanceof Table){
-            //System.out.println(((Table) text).getTrList().toString());
+//            System.out.println(((Table) text).getTrList().toString());
             String textList = "";
-            List<Tr> trList = ( (Table) text ).getTrList();
-            for (Tr oTr: trList) {
-                textList += oTr.getTd() + " ";
+            List<String> trList = ( (Table) text ).getTrList();
+            for (String tr: trList) {
+                textList += tr + " ";
             }
             text_ = (!text.getTitle().equals(""))?text.getTitle() + " => "+ textList:textList;
             textService.insertNative( textId, ContentType.TABLE.getClave(), text_.trim() );

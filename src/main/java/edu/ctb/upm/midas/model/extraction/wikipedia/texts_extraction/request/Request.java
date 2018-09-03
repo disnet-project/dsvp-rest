@@ -13,7 +13,17 @@ public class Request {
     @NotNull(message = Constants.ERR_NO_PARAMETER)
     @Size(min = 1, message = Constants.ERR_EMPTY_PARAMETER)
     private List<edu.ctb.upm.midas.model.WebLink> wikipediaLinks;
+    private String snapshot;
     private boolean json;
+
+    public Request() {
+    }
+
+    public Request(List<edu.ctb.upm.midas.model.WebLink> wikipediaLinks, String snapshot, boolean json) {
+        this.wikipediaLinks = wikipediaLinks;
+        this.snapshot = snapshot;
+        this.json = json;
+    }
 
     public List<edu.ctb.upm.midas.model.WebLink> getWikipediaLinks() {
         return wikipediaLinks;
@@ -29,5 +39,13 @@ public class Request {
 
     public void setJson(boolean json) {
         this.json = json;
+    }
+
+    public String getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(String snapshot) {
+        this.snapshot = snapshot;
     }
 }

@@ -36,7 +36,7 @@ public class ExtractionController {
             method = RequestMethod.GET,
             params = {"snapshot"})
     public String extract(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
-                          @RequestParam(value = "json", required = false, defaultValue = "true") boolean json) throws Exception {
+                          @RequestParam(value = "json", required = false, defaultValue = "false") boolean json) throws Exception {
         wikipediaExtractService.extract(snapshot, json);
         return "Successful extraction and insertion in a DB!";
     }

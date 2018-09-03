@@ -128,11 +128,12 @@ public class FilterController {
 
 
     @RequestMapping(path = { "/tvp" }, //Term Validation Procedure
-            method = RequestMethod.GET)
-    public String tvpValidation() throws Exception {
+            method = RequestMethod.GET,
+            params = {"source", "snapshot"})
+    public String tvpValidation(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source,
+                                @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot) throws Exception {
 
-        Consult consult = new Consult("_wikipedia",
-                "2018-02-01");
+        Consult consult = new Consult(source, snapshot);
 
         String inicio = utilDate.getTime();
         tvpService.filter( consult );

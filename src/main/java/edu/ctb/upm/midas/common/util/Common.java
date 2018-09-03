@@ -2,6 +2,7 @@ package edu.ctb.upm.midas.common.util;
 
 import edu.ctb.upm.midas.model.common.document_structure.text.List_;
 import edu.ctb.upm.midas.model.common.document_structure.text.Paragraph;
+import edu.ctb.upm.midas.model.common.document_structure.text.Table;
 import edu.ctb.upm.midas.model.common.document_structure.text.Text;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Service;
@@ -96,13 +97,18 @@ public class Common {
 
 
     public Text getTypeText(Text text){
+//        System.out.println(text);
         Text typeText = null;
         if (!isEmpty(text.getText())) {
 //            System.out.println("PARA");
-            typeText = new Paragraph(text.getId(), text.getTextOrder(), text.getTitle(), text.getText());
+            typeText = new Paragraph(text.getId(), text.getTextOrder(), text.getTitle(), text.getUrlList(), text.getText());
         } else {
 //            System.out.println("LIST");
-            typeText = new List_(text.getId(), text.getTextOrder(), text.getTitle(), text.getBulletList());
+            if (text.getBulletList()!=null) {
+                typeText = new List_(text.getId(), text.getTextOrder(), text.getTitle(), text.getUrlList(), text.getBulletList());
+            }else{
+                typeText = new Table(text.getId(), text.getTextOrder(), text.getTitle(), text.getUrlList(), text.getTrList());
+            }
         }
         return typeText;
     }

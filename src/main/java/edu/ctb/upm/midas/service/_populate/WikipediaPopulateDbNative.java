@@ -91,7 +91,7 @@ public class WikipediaPopulateDbNative {
 
             //<editor-fold desc="PERSISTIR TODAS LAS SECCIONES">
             System.out.println("Insert all sections, if exists...");
-            sectionHelperNative.insertIfExist( source.getSectionMap() );
+//            sectionHelperNative.insertIfExist( source.getSectionMap() );
             System.out.println("Insert all sections ready!");
             System.out.println("Insert documents start!");
             //</editor-fold>
@@ -104,11 +104,11 @@ public class WikipediaPopulateDbNative {
                     System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
 
                     //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
-                    String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
+//                    String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
                     //</editor-fold>
 
                     //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
-                    codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
+//                    codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
                     //</editor-fold>
 
                     //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
@@ -119,6 +119,7 @@ public class WikipediaPopulateDbNative {
 
                         int textCount = 0;
                         for (Text text : section.getTextList()) {
+                            System.out.println("Have texts...");
                             //<editor-fold desc="INSERTAR TEXTO">
                             textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
                             //</editor-fold>

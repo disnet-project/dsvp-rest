@@ -62,17 +62,18 @@ public class MayoClinicExtractService {
      * @return
      * @throws Exception
      */
-    public boolean extract(String snapshot_, boolean json) throws Exception {
+    public boolean extract(String snapshot, boolean json) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
-        Date snapshot = timeProvider.getSqlDate();
-        Response response = retrieveTexts(json, timeProvider.dateFormatyyyMMdd(snapshot));
-//        Response response = retrieveTexts(json, snapshot);
+//        Date snapshot = timeProvider.getSqlDate();
+//        Response response = retrieveTexts(json, timeProvider.dateFormatyyyMMdd(snapshot));
+        Response response = retrieveTexts(json, snapshot);
 
         if (response!=null) {
             if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())) {
                 if (response.getSources() != null) {
-                    mayoclinicPopulateDbNative.populate(response.getSources(), snapshot, json);
+//                    mayoclinicPopulateDbNative.populate(response.getSources(), snapshot, json);
+                    mayoclinicPopulateDbNative.populate(response.getSources(), timeProvider.stringToDate(snapshot), json);
                 } else {
                     //Source vacío
                 }

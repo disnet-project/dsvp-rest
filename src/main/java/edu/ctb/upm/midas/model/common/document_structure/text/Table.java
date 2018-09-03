@@ -1,5 +1,7 @@
 package edu.ctb.upm.midas.model.common.document_structure.text;
 
+import edu.ctb.upm.midas.model.common.document_structure.Link;
+
 import java.util.List;
 
 /**
@@ -13,14 +15,25 @@ import java.util.List;
  */
 public class Table extends Text {
 
-    private List<Tr> trList;
+
+    private List<String> trList;
+
+    public Table() {
+    }
+
+    public Table(int id, int textOrder, String title, List<Link> urlList, List<String> trList) {
+        super(id, title, textOrder, urlList);
+        this.trList = trList;
+    }
 
 
-    public List<Tr> getTrList() {
+
+
+    public List<String> getTrList() {
         return trList;
     }
 
-    public void setTrList(List<Tr> trList) {
+    public void setTrList(List<String> trList) {
         this.trList = trList;
     }
 }

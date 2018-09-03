@@ -1,4 +1,9 @@
 package edu.ctb.upm.midas.model.common.document_structure.text;
+
+import edu.ctb.upm.midas.model.common.document_structure.Link;
+
+import java.util.List;
+
 /**
  * Created by gerardo on 4/4/17.
  *
@@ -13,8 +18,8 @@ public class Paragraph extends Text {
     public Paragraph() {
     }
 
-    public Paragraph(int id, int textOrder, String title, String text) {
-        super(id, title, textOrder);
+    public Paragraph(int id, int textOrder, String title, List<Link> urlList, String text) {
+        super(id, title, textOrder, urlList);
         this.text = text;
 
     }

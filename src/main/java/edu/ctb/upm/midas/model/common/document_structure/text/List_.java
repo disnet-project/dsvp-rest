@@ -1,5 +1,7 @@
 package edu.ctb.upm.midas.model.common.document_structure.text;
 
+import edu.ctb.upm.midas.model.common.document_structure.Link;
+
 import java.util.List;
 
 /**
@@ -16,8 +18,8 @@ public class List_ extends Text {
     public List_() {
     }
 
-    public List_(int id, int textOrder, String title, List<String> bulletList) {
-        super(id, title, textOrder);
+    public List_(int id, int textOrder, String title, List<Link> urlList, List<String> bulletList) {
+        super(id, title, textOrder, urlList);
         this.bulletList = bulletList;
 
     }
