@@ -75,19 +75,18 @@ public class DocumentHelperNative {
         //Buscar por source, version y nombre de enfermedad. Si encuentra un documento, entonces no
         //insertar nuevo documento, ni nada relacionado con el (enfermedad, textos y códigos)
         //Cambio para la siguiente version 2018-01-15
-//        if ( documentService.insertNative( documentId, version ) > 0 ) {
-//            String docId = documentHelperNative.getDocumentId( documentId, version );
-//            //Inserta la URL del documento si existe
-//            if (document.getUrl()!=null) insertURL(document, version, documentId, "");
-//            //Inserta más de una URL para un documento, (e.g. para los documentos MayoClinic)
-//            if (document.getUrlList()!=null) insertURLs(document, version, documentId);
-//            //Inserta la relación entre un documento y su fuente
-//            documentService.insertNativeHasSource( documentId, version, sourceId );
-//            return documentId;
-//        }else
-//            return "";
-
-        return documentId;
+        if ( documentService.insertNative( documentId, version ) > 0 ) {
+            String docId = documentHelperNative.getDocumentId( documentId, version );
+            //Inserta la URL del documento si existe
+            if (document.getUrl()!=null) insertURL(document, version, documentId, "");
+            //Inserta más de una URL para un documento, (e.g. para los documentos MayoClinic)
+            if (document.getUrlList()!=null) insertURLs(document, version, documentId);
+            //Inserta la relación entre un documento y su fuente
+            documentService.insertNativeHasSource( documentId, version, sourceId );
+            return documentId;
+        }else
+            return "";
+//        return documentId;
     }
 
 
