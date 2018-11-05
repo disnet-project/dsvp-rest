@@ -109,7 +109,7 @@ public class TextHelperNative {
             }
         }
         //</editor-fold>
-        //System.out.println(documentId+"|"+ version+"|"+ sectionId+"|"+ textId +"|"+ text.getTextOrder());
+        System.out.println(documentId+"|"+ version+"|"+ sectionId+"|"+ textId +"|"+ text.getTextOrder());
         hasTextService.insertNative( documentId, version, sectionId, textId, text.getTextOrder() );
 
         return textId;

@@ -96,9 +96,9 @@ public class TvpService {
         System.out.println( "Validating symptoms... please wait, this process can take from minutes to hours... " );
 
         //VERDADERO Y NO FUNCIONA AHORA, NO SE PORQUE
-        Response response = tvpResource.getValidateSymptoms( request );
+//        Response response = tvpResource.getValidateSymptoms( request );
         //CONSUMIR UN JSON
-//        Response response = readTVPValidationJSON(consult);
+        Response response = readTVPValidationJSON(consult);
         System.out.println("Authorization: "+ response.isAuthorized());
 
 

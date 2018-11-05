@@ -126,6 +126,7 @@ public class MayoClinicPopulateDbNative {
                     int textCount = 0;
                     for (Text text : section.getTextList()) {
                         //<editor-fold desc="INSERTAR TEXTO">
+//                        System.out.println("Insertar textos");
                         textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
                         //</editor-fold>
 
@@ -137,7 +138,8 @@ public class MayoClinicPopulateDbNative {
         }
         //</editor-fold>
 
-        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId + "(" + diseaseId + ")");
+//        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId + "(" + diseaseId + ")");
+        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
     }
 
 

@@ -113,9 +113,9 @@ public class WikipediaExtractService {
                 //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
-                System.out.println("No poblara...");
-//                wikipediaPopulateDbNative.populateResource(resourceHashMap);
-//                wikipediaPopulateDbNative.populateSemanticTypes();
+//                System.out.println("No poblara...");
+                wikipediaPopulateDbNative.populateResource(resourceHashMap);
+                wikipediaPopulateDbNative.populateSemanticTypes();
                 wikipediaPopulateDbNative.populate(sources, version, json);
                 //Insertar la configuración por la que se esta creando la lista
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
