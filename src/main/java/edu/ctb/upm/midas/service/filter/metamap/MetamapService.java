@@ -131,7 +131,7 @@ public class MetamapService {
 
             if (response.isAuthorized()) {
                 System.out.println("save metamap reponse...");
-                writeJSONFile(gson.toJson(response), consult /*utilDate.dateFormatyyyMMdd(version) utilDate.getNowFormatyyyyMMdd(), consult.getSource()*/);
+                writeJSONFile(gson.toJson(response), consult /*utilDate.dateFormatyyyyMMdd(version) utilDate.getNowFormatyyyyMMdd(), consult.getSource()*/);
                 System.out.println("Insert symptoms starting...");
                 System.out.println(request.getTextList().size());
                 int count = 1;//VALIDAR
@@ -432,8 +432,8 @@ public class MetamapService {
                 System.out.println("save metamap reponse...");
                 ProcessedText processedText = new ProcessedText();
                 processedText.setTexts(response.getTextList());
-//                writeJSONFile(gson.toJson(processedText), utilDate.dateFormatyyyMMdd(version));
-//                writeJSONFile(gson.toJson(response), consult /*utilDate.dateFormatyyyMMdd(version) utilDate.getNowFormatyyyyMMdd()*/);//response => cambio para almacenar la configuración con la cual se ejecuto metamap
+//                writeJSONFile(gson.toJson(processedText), utilDate.dateFormatyyyyMMdd(version));
+//                writeJSONFile(gson.toJson(response), consult /*utilDate.dateFormatyyyyMMdd(version) utilDate.getNowFormatyyyyMMdd()*/);//response => cambio para almacenar la configuración con la cual se ejecuto metamap
                 System.out.println("save metamap ready...");
 
                 System.out.println("Insert configuration...");
@@ -839,7 +839,6 @@ public class MetamapService {
 //        System.out.println("Insert configuration...");
 //        String configurationJson = gson.toJson(metamapConf);
 //        configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
-//        System.out.println("Insert configuration ready!...");
 
     }
 

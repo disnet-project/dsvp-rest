@@ -11,6 +11,8 @@ public class Disease {
     private String sourceId;
     private String sourceName;
     private String url;
+    private boolean partlyIrrelevant;
+    private boolean totallyIrrelevant;
 
 
     public String getDiseaseId() {
@@ -67,5 +69,21 @@ public class Disease {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isPartlyIrrelevant() {
+        return partlyIrrelevant;
+    }
+
+    public void setPartlyIrrelevant(boolean partlyIrrelevant) {
+        this.partlyIrrelevant = partlyIrrelevant;
+    }
+
+    public boolean isTotallyIrrelevant() {
+        return totallyIrrelevant;
+    }
+
+    public void setTotallyIrrelevant(boolean totallyIrrelevant) {
+        this.totallyIrrelevant = totallyIrrelevant;
     }
 }

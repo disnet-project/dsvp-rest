@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.ctb.upm.midas.client_modules.filter.tvp.api_response.impl.TvpResourceServiceImpl;
-import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.model.filter.common.Consult;
 import edu.ctb.upm.midas.model.filter.common.component.ConsultHelper;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -56,9 +54,6 @@ public class TvpService {
     private ConfigurationHelper configurationHelper;
     @Autowired
     private Constants constants;
-    @Autowired
-    private TimeProvider utilDate;
-
 
 
     /**
@@ -95,10 +90,14 @@ public class TvpService {
         System.out.println( "Connection_ with TVP API..." );
         System.out.println( "Validating symptoms... please wait, this process can take from minutes to hours... " );
 
-        //VERDADERO Y NO FUNCIONA AHORA, NO SE PORQUE
-//        Response response = tvpResource.getValidateSymptoms( request );
+        Response response;
+
         //CONSUMIR UN JSON
-        Response response = readTVPValidationJSON(consult);
+        if (consult.isJson()){
+            response = readTVPValidationJSON(consult);
+        }else{
+            response = tvpResource.getValidateSymptoms( request );
+        }
         System.out.println("Authorization: "+ response.isAuthorized());
 
 
@@ -135,6 +134,10 @@ public class TvpService {
     }
 
 
+    /**
+     * @param responseSymptoms
+     * @return
+     */
     public List<Concept> getConceptList(List<ResponseSymptom> responseSymptoms){
         List<Concept> concepts = new ArrayList<Concept>();
         for (ResponseSymptom symptom: responseSymptoms) {
@@ -147,6 +150,10 @@ public class TvpService {
     }
 
 
+    /**
+     * @param elements
+     * @return
+     */
     public List<Concept> removeRepetedConcepts(List<Concept> elements){
         List<Concept> resList = elements;
         Set<Concept> linkedHashSet = new LinkedHashSet<>();
@@ -157,6 +164,11 @@ public class TvpService {
     }
 
 
+    /**
+     * @param cui
+     * @param matchNLPList
+     * @return
+     */
     public MatchNLP exist(String cui, List<MatchNLP> matchNLPList){
         for (MatchNLP matchNLP: matchNLPList) {
             if (matchNLP.getConcept().getCui().equals( cui )){
@@ -166,13 +178,18 @@ public class TvpService {
         return null;
     }
 
+
+    /**
+     * @param concepts
+     * @throws JsonProcessingException
+     */
     public void printConcepstJSON(List<Concept> concepts) throws JsonProcessingException {
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(concepts));
     }
 
 
     /**
-     * @param snapshot
+     * @param consult
      * @return
      * @throws Exception
      */

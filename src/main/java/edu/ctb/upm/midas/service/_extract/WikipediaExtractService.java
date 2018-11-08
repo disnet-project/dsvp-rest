@@ -2,13 +2,13 @@ package edu.ctb.upm.midas.service._extract;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import edu.ctb.upm.midas.client_modules.extraction.wikipedia.disease_list.api_response.DiseaseAlbumResourceService;
+import edu.ctb.upm.midas.client_modules.extraction.wikipedia.texts_extraction.api_response.WikipediaTextsExtractionService;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.common.util.UniqueId;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.enums.StatusHttpEnum;
-import edu.ctb.upm.midas.client_modules.extraction.wikipedia.disease_list.api_response.DiseaseAlbumResourceService;
-import edu.ctb.upm.midas.client_modules.extraction.wikipedia.texts_extraction.api_response.WikipediaTextsExtractionService;
 import edu.ctb.upm.midas.model.WebLink;
 import edu.ctb.upm.midas.model.common.document_structure.Doc;
 import edu.ctb.upm.midas.model.common.document_structure.Link;
@@ -19,18 +19,17 @@ import edu.ctb.upm.midas.model.common.document_structure.code.Resource;
 import edu.ctb.upm.midas.model.common.document_structure.text.List_;
 import edu.ctb.upm.midas.model.common.document_structure.text.Paragraph;
 import edu.ctb.upm.midas.model.common.document_structure.text.Text;
-import edu.ctb.upm.midas.model.jpa.Document;
-import edu.ctb.upm.midas.model.jpa.DocumentUrl;
-import edu.ctb.upm.midas.model.jpa.HasDisease;
-import edu.ctb.upm.midas.model.jpa.Url;
-import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.response.ConfigurationDBpediaDiseaseList;
+import edu.ctb.upm.midas.model.extraction.common.request.RequestJSON;
+import edu.ctb.upm.midas.model.extraction.common.response.Response;
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.request.RequestAlbum;
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.request.RequestFather;
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.request.RequestGDLL;
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.response.*;
 import edu.ctb.upm.midas.model.extraction.wikipedia.texts_extraction.request.Request;
-import edu.ctb.upm.midas.model.extraction.common.request.RequestJSON;
-import edu.ctb.upm.midas.model.extraction.common.response.Response;
+import edu.ctb.upm.midas.model.jpa.Document;
+import edu.ctb.upm.midas.model.jpa.DocumentUrl;
+import edu.ctb.upm.midas.model.jpa.HasDisease;
+import edu.ctb.upm.midas.model.jpa.Url;
 import edu.ctb.upm.midas.service._populate.WikipediaPopulateDbNative;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
 import edu.ctb.upm.midas.service.jpa.helperNative.ConfigurationHelper;
@@ -86,6 +85,8 @@ public class WikipediaExtractService {
     }
 
     /**
+     * @param snapshot
+     * @param json
      * @return
      * @throws Exception
      */
@@ -93,14 +94,15 @@ public class WikipediaExtractService {
         boolean res = false;
         String inicio = timeProvider.getTime();
         Date version = (json)?timeProvider.stringToDate(snapshot):timeProvider.getSqlDate();
-        this.snapshot = timeProvider.dateFormatyyyMMdd(version);
+        this.snapshot = timeProvider.dateFormatyyyyMMdd(version);
         List<Source> sources = null;
         HashMap<String, Resource> resourceHashMap = null;
         DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version);
+        System.out.println("snapshot="+timeProvider.dateFormatyyyyMMdd(version)+", json="+json);
 
         if (dBpediaResponse!=null) {
-            resourceHashMap = retrieveResources(dBpediaResponse.getLinks(), timeProvider.dateFormatyyyMMdd(version), json);
-            sources = retrieveTexts(dBpediaResponse.getLinks(), timeProvider.dateFormatyyyMMdd(version), json);
+            resourceHashMap = retrieveResources(dBpediaResponse.getLinks(), timeProvider.dateFormatyyyyMMdd(version), json);
+            sources = retrieveTexts(dBpediaResponse.getLinks(), timeProvider.dateFormatyyyyMMdd(version), json);
 
             /*if (resourceHashMap!=null) {
                 resourceHashMap.toString();
@@ -113,7 +115,7 @@ public class WikipediaExtractService {
                 //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
                 // datos de wikipedia no se encontraron códigos, ni secciones con textos
                 removeInvalidDocumentsProcedure(sources);
-//                System.out.println("No poblara...");
+                //System.out.println("No poblara...");
                 wikipediaPopulateDbNative.populateResource(resourceHashMap);
                 wikipediaPopulateDbNative.populateSemanticTypes();
                 wikipediaPopulateDbNative.populate(sources, version, json);
@@ -160,7 +162,7 @@ public class WikipediaExtractService {
             response = wteService.getTexts(request);
         }
         System.out.println("End Connection with WIKIPEDIA TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
-        System.out.println("getResponseCode: " + response.getResponseCode());
+        System.out.println("getResponseCode: " + response.getResponseCode() + " => "+ response.getResponseMessage());
         if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())){
             sourceList = response.getSources();
         }
@@ -264,20 +266,21 @@ public class WikipediaExtractService {
 
 
     /**
-     * @param version
+     * @param snapshot
      * @return
+     * @throws InterruptedException
      */
-    public DBpediaResponse getDiseaseLinkListFromDBPedia(Date version) throws InterruptedException {
+    public DBpediaResponse getDiseaseLinkListFromDBPedia(Date snapshot) throws InterruptedException {
         DBpediaResponse dBpediaResponse = null;
 
         //Se obtiene el identificador de lista de enfermedades recuperadas desde DBpedia "Album de enfermedades"
         Album album = null;
         while(true){
             album = getLastAlbum();
-//            album = getSpecifictAlbum(date.dateFormatyyyMMdd(version));
-            System.out.println(timeProvider.dateFormatyyyMMdd(album.getDate()) + " == " + timeProvider.dateFormatyyyMMdd(version));
-            if (timeProvider.dateFormatyyyMMdd(album.getDate()).equals(timeProvider.dateFormatyyyMMdd(version))) break;
-            System.out.println("Wait (1 hour = 3600000 mls) another disease list request");
+//            album = getSpecifictAlbum(date.dateFormatyyyyMMdd(version));
+            System.out.println(timeProvider.dateFormatyyyyMMdd(album.getDate()) + " == " + timeProvider.dateFormatyyyyMMdd(snapshot));
+            if (timeProvider.dateFormatyyyyMMdd(album.getDate()).equals(timeProvider.dateFormatyyyyMMdd(snapshot))) break;
+            System.out.println("Wait (1 hour = 3600000 mls) for another disease list request");
             Thread.sleep(3600000);
         }
         if (album != null) {
@@ -296,17 +299,19 @@ public class WikipediaExtractService {
             System.out.println("End Connection_ with GET DISEASE ALBUM API REST..." + response.getDiseases().size());
             if (response.isAuthorized()) {
                 int count = 1;
-                for (Disease disease : response.getDiseases()) {
+                for (Disease disease: response.getDiseases()) {
                     WebLink webLink = new WebLink();
                     webLink.setId(count);
                     webLink.setUrl(common.replaceUnicodeToSpecialCharacters(disease.getUrl()));
+                    webLink.setRelevant(isRelevant(disease));
+                    System.out.println(webLink);
                     webLinkList.add(webLink);
                     count++;
                 }
                 //Validar que el source tenga información
                 ConfigurationDBpediaDiseaseList conf = new ConfigurationDBpediaDiseaseList();
                 conf.setAlbumId(album.getAlbumId());
-                conf.setVersion( timeProvider.dateFormatyyyMMdd(album.getDate()) );
+                conf.setVersion( timeProvider.dateFormatyyyyMMdd(album.getDate()) );
                 conf.setNumberDiseases(album.getNumberDiseases());
                 conf.setSource(Constants.SOURCE_WIKIPEDIA_CODE);
                 conf.setServiceCode(constants.SERVICE_DISALBUM_CODE);
@@ -323,6 +328,31 @@ public class WikipediaExtractService {
             }
         }
         return dBpediaResponse;
+    }
+
+
+    /**
+     * Método que se encarga de marcar como relevante una enfermedad
+     *
+     * Recibe una enfermedad y verifica los parámetros de irrelevancia para
+     * calcular la relevancia
+     *
+     * Parcialmente irrelevante | Totalmente irrelevante = RELEVANTE
+     * FALSE(0)                   FALSE(0)               = TRUE(1)
+     * FALSE(0)                   TRUE(1)                = FALSE(0)
+     * TRUE(1)                    FALSE(0)               = TRUE(1)
+     * TRUE(1)                    TRUE(0)                = FALSE(0)
+     *
+     * @param disease
+     * @return
+     */
+    public boolean isRelevant(Disease disease){
+        boolean isRelevant = false;
+        if ((disease.isPartlyIrrelevant()==false && disease.isTotallyIrrelevant()==false)
+                || (disease.isPartlyIrrelevant() && disease.isTotallyIrrelevant()==false))
+            isRelevant = true;
+        if (disease.isTotallyIrrelevant()) isRelevant = false;
+        return isRelevant;
     }
     //================= GET DISEASE WEB LINKS FROM DBpedia =====================
 
@@ -342,9 +372,10 @@ public class WikipediaExtractService {
             for (Doc document : source.getDocuments()) {
                 if (document.getCodeList().size() > 0) hasCodes = true;
                 if (document.getSectionList().size() > 0) hasSections = true;
-                if (hasCodes || hasSections) {
+                if (hasCodes || hasSections) {//AGREGAR ACTUALIZACIÓN para que no considere artículos de una lista de artículos detectados
                     document.setDiseaseArticle(true);
                     countValid++;
+                    //Reinicia los valores
                     hasCodes = false;
                     hasSections = false;
                 }

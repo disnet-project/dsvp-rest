@@ -15,6 +15,7 @@ public class WebLink {
     private Integer id;
     private String url;
     private String consult;
+    private boolean relevant;
 
 
     public Integer getId() {
@@ -41,6 +42,14 @@ public class WebLink {
         this.consult = consult;
     }
 
+    public boolean isRelevant() {
+        return relevant;
+    }
+
+    public void setRelevant(boolean relevant) {
+        this.relevant = relevant;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,6 +68,8 @@ public class WebLink {
         return "WebLink{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
+//                ", consult='" + consult + '\'' +
+                ", relevant=" + relevant +
                 '}';
     }
 }

@@ -24,7 +24,7 @@ public class TimeProvider {
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Date getSqlDate(){
-//        return new Date(118, 7, 15);
+//        return new Date(118, 9, 15);
         return new Date(new java.util.Date().getTime());
     }
 
@@ -36,7 +36,7 @@ public class TimeProvider {
         return String.format(new java.util.Date().toString(), dtf);
     }
 
-    public String dateFormatyyyMMdd(java.util.Date date){
+    public String dateFormatyyyyMMdd(java.util.Date date){
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 

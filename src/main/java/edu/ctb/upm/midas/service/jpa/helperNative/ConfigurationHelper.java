@@ -35,7 +35,7 @@ public class ConfigurationHelper {
 
 
     public void insert(String source, Date version, String tool, String json){
-        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyMMdd(version));
+        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyyMMdd(version));
         //System.out.println(source +" | " + version +" | "+ tool +" | "+ json);
 //        String sourceId = (source.equals(Constants.SOURCE_WIKIPEDIA)?Constants.SOURCE_WIKIPEDIA_CODE:Constants.SOURCE_PUBMED);
         String sourceId = sourceService.findByNameNative(source);
@@ -45,7 +45,7 @@ public class ConfigurationHelper {
 
 
     public void insert(String source, String sourceId, Date version, String tool, String json){
-        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyMMdd(version));
+        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyyMMdd(version));
         //System.out.println(source +" | " + sourceId +" | " + version +" | "+ tool +" | "+ json);
         confService.insertNative(configurationId, sourceId, version, tool, json);
         System.out.println("Insert configuration ready!...");

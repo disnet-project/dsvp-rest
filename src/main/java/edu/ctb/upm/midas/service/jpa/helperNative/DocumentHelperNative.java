@@ -290,7 +290,7 @@ public class DocumentHelperNative {
      * @return
      */
     public String getDocumentId(String documentId, Date version){
-        return documentId + ".V" + utilDate.dateFormatyyyMMdd(version);
+        return documentId + ".V" + utilDate.dateFormatyyyyMMdd(version);
     }
 
     public Date getLastVersion(){

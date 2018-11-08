@@ -21,6 +21,19 @@ public class Consult {
     // snapshot: 1) fecha específica (ej. "2017-06-15"); 2) "last" (última versión)
     private String snapshot;
     private Date date;
+    private boolean json;
+
+    public Consult(String source, String snapshot, boolean json) throws ParseException {
+        this.source = source;
+        this.snapshot = snapshot;
+        this.json = json;
+        if ( !this.snapshot.equals( Constants.CONSULT_LAST_SNAPSHOT) ){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            this.date = sdf.parse(snapshot);
+        }else {
+            this.date = null;
+        }
+    }
 
     public Consult(String source, String snapshot) throws ParseException {
         this.source = source;
@@ -57,12 +70,21 @@ public class Consult {
         this.date = date;
     }
 
+    public boolean isJson() {
+        return json;
+    }
+
+    public void setJson(boolean json) {
+        this.json = json;
+    }
+
     @Override
     public String toString() {
         return "Consult{" +
                 "source='" + source + '\'' +
                 ", snapshot='" + snapshot + '\'' +
                 ", date=" + date +
+                ", json=" + json +
                 '}';
     }
 }

@@ -129,11 +129,12 @@ public class FilterController {
 
     @RequestMapping(path = { "/tvp" }, //Term Validation Procedure
             method = RequestMethod.GET,
-            params = {"source", "snapshot"})
+            params = {"source", "snapshot", "json"})
     public String tvpValidation(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source,
-                                @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot) throws Exception {
+                                @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
+                                @RequestParam(value = "json") @Valid @NotBlank @NotNull @NotEmpty boolean json) throws Exception {
 
-        Consult consult = new Consult(source, snapshot);
+        Consult consult = new Consult(source, snapshot, json);
 
         String inicio = utilDate.getTime();
         tvpService.filter( consult );

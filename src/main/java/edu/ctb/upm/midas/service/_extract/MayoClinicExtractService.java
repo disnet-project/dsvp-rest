@@ -1,7 +1,5 @@
 package edu.ctb.upm.midas.service._extract;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import edu.ctb.upm.midas.client_modules.extraction.mayoclinic.texts_extraction.api_response.MayoClinicTextsExtractionService;
 import edu.ctb.upm.midas.client_modules.extraction.wikipedia.disease_list.api_response.DiseaseAlbumResourceService;
 import edu.ctb.upm.midas.common.util.Common;
@@ -66,7 +64,7 @@ public class MayoClinicExtractService {
         boolean res = false;
         String inicio = timeProvider.getTime();
 //        Date snapshot = timeProvider.getSqlDate();
-//        Response response = retrieveTexts(json, timeProvider.dateFormatyyyMMdd(snapshot));
+//        Response response = retrieveTexts(json, timeProvider.dateFormatyyyyMMdd(snapshot));
         Response response = retrieveTexts(json, snapshot);
 
         if (response!=null) {

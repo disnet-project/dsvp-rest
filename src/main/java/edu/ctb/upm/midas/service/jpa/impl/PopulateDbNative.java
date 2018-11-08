@@ -287,8 +287,8 @@
 //        Album album = null;
 //        while(true){
 //            album = getLastAlbum();
-////            album = getSpacifictAlbum(date.dateFormatyyyMMdd(version));
-//            if (date.dateFormatyyyMMdd(album.getDate()).equals(date.dateFormatyyyMMdd(version))) break;
+////            album = getSpacifictAlbum(date.dateFormatyyyyMMdd(version));
+//            if (date.dateFormatyyyyMMdd(album.getDate()).equals(date.dateFormatyyyyMMdd(version))) break;
 //            System.out.println("Wait (1 hour = 3600000 mls) another disease list request");
 //            Thread.sleep(3600000);
 //        }
@@ -319,7 +319,7 @@
 //                //Validar que el source tenga información
 //                ConfigurationDiseaseAlbum conf = new ConfigurationDiseaseAlbum();
 //                conf.setAlbumId(album.getAlbumId());
-//                conf.setVersion( date.dateFormatyyyMMdd(album.getDate()) );
+//                conf.setVersion( date.dateFormatyyyyMMdd(album.getDate()) );
 //                conf.setNumberDiseases(album.getNumberDiseases());
 //                conf.setSource(Constants.SOURCE_WIKIPEDIA_CODE);
 //                conf.setServiceCode(constants.SERVICE_DIALIST_CODE);

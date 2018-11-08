@@ -75,7 +75,7 @@ import java.util.Objects;
         ),
         @NamedNativeQuery(
                 name = "HasDisease.insertNative",
-                query = "INSERT INTO has_disease (document_id, date, disease_id) "
+                query = "INSERT IGNORE INTO has_disease (document_id, date, disease_id) "
                         + "VALUES (:documentId, :date, :diseaseId)"
         ),
 
