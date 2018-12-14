@@ -40,6 +40,7 @@ public class Common {
         }
     }
 
+
     public String cutString(String str) {
         return str = str.substring(0, str.length()-2);
     }
@@ -54,6 +55,7 @@ public class Common {
     public String cutStringPerformance(int cutStart, int cutFinal, String str) {
         return str = str.substring(cutStart, str.length() - cutFinal);
     }
+
 
     public String cutString(int cutStart, int cutFinal, String str) {
         return str = str.substring(cutStart, cutFinal);
@@ -73,14 +75,15 @@ public class Common {
 
     }
 
+
     public String getUnicode(char character){
         return "\\u" + Integer.toHexString(character | 0x10000).substring(1);
     }
 
+
     public String replaceSpecialCharactersToUnicode(String text){
         return StringEscapeUtils.escapeJava(text);
     }
-
 
 
     public void removeRepetedElementsList(List<String> elementsList){
@@ -89,6 +92,7 @@ public class Common {
         elementsList.clear();
         elementsList.addAll(linkedHashSet);
     }
+
 
     public boolean itsFound(String originalStr, String findStr){
 //        System.out.println("RECIBE itsFound: ORI:" + originalStr + " | FIND: " + findStr);
