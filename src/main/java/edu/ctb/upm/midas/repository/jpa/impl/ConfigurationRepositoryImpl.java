@@ -71,13 +71,13 @@ public class ConfigurationRepositoryImpl extends AbstractDao<String, Configurati
     }
 
     @Override
-    public int insertNative(String configurationId, String sourceId, Date version, String tool, String configuration) {
+    public int insertNative(String configurationId, String sourceId, Date snapshot, String toolId, String configuration) {
         return getEntityManager()
                 .createNamedQuery("Configuration.insertNative")
                 .setParameter("conf_id", configurationId)
                 .setParameter("source_id", sourceId)
-                .setParameter("version", version)
-                .setParameter("tool", tool)
+                .setParameter("snapshot", snapshot)
+                .setParameter("tool_id", toolId)
                 .setParameter("configuration", configuration)
                 .executeUpdate();
     }

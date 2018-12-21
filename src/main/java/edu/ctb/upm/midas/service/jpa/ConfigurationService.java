@@ -35,7 +35,7 @@ public interface ConfigurationService {
 
     void persist(Configuration configuration);
 
-    int insertNative(String configurationId, String sourceId, Date version, String tool, String configuration);
+    int insertNative(String configurationId, String sourceId, Date snapshot, String toolId, String configuration);
 
     boolean deleteById(String configurationId);
 

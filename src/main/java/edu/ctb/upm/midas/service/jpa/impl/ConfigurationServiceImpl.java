@@ -87,8 +87,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Transactional(propagation= Propagation.REQUIRED)
     @Override
-    public int insertNative(String configurationId, String sourceId, Date version, String tool, String configuration) {
-        return daoConf.insertNative(configurationId, sourceId, version, tool, configuration);
+    public int insertNative(String configurationId, String sourceId, Date snapshot, String toolId, String configuration) {
+        return daoConf.insertNative(configurationId, sourceId, snapshot, toolId, configuration);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

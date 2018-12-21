@@ -269,16 +269,6 @@ the patient and reported as a subjective observation.
         //</editor-fold>
 
         //PHEN|Phenomena Metamap group
-        add("lbpr");//lbpr|T059|Laboratory Procedure (YES)
-        //<editor-fold desc="Description">
-        /*
-            DEF: A procedure, method, or technique used to determine the composition,
-quantity, or concentration of a specimen, and which is carried out in a clinical
-laboratory.  Included here are procedures which measure the times and rates of
-reactions.
-            EX: Blood Protein Electrophoresis; Crystallography; Radioimmunoassay
-        */
-        //</editor-fold>
         add("lbtr");//lbtr|T034|Laboratory or Test Result (YES)
         //<editor-fold desc="Description">
         /*
@@ -325,6 +315,10 @@ reactions.
             EX: Blood Protein Electrophoresis; Crystallography; Radioimmunoassay
         */
         //</editor-fold>
+
+        //CONC|Concepts & Ideas Metamap group
+//        add("inpr");//inpr|T170|Intellectual Product (YES)
+
 
 
 

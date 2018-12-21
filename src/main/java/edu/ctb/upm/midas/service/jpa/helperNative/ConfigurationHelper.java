@@ -34,20 +34,20 @@ public class ConfigurationHelper {
     private TimeProvider utilDate;
 
 
-    public void insert(String source, Date version, String tool, String json){
-        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyyMMdd(version));
+    public void insert(String source, Date snapshot, String toolId, String json){
+        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyyMMdd(snapshot));
         //System.out.println(source +" | " + version +" | "+ tool +" | "+ json);
 //        String sourceId = (source.equals(Constants.SOURCE_WIKIPEDIA)?Constants.SOURCE_WIKIPEDIA_CODE:Constants.SOURCE_PUBMED);
         String sourceId = sourceService.findByNameNative(source);
-        confService.insertNative(configurationId, sourceId, version, tool, json);
+        confService.insertNative(configurationId, sourceId, snapshot, toolId, json);
         System.out.println("Insert configuration ready!...");
     }
 
 
-    public void insert(String source, String sourceId, Date version, String tool, String json){
-        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyyMMdd(version));
+    public void insert(String source, String sourceId, Date snapshot, String toolId, String json){
+        String configurationId = uniqueId.generateConfiguration(source, utilDate.dateFormatyyyyMMdd(snapshot));
         //System.out.println(source +" | " + sourceId +" | " + version +" | "+ tool +" | "+ json);
-        confService.insertNative(configurationId, sourceId, version, tool, json);
+        confService.insertNative(configurationId, sourceId, snapshot, toolId, json);
         System.out.println("Insert configuration ready!...");
     }
 }
