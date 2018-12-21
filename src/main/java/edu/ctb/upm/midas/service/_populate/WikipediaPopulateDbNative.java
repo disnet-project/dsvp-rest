@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -99,36 +100,7 @@ public class WikipediaPopulateDbNative {
             for (Doc document: source.getDocuments()) {
                 //Solo inserta aquellos documentos que al menos tengan códigos o secciones
                 if (document.isDiseaseArticle()) {
-                    String documentId = documentHelperNative.insert(sourceId, document, version);
-
-                    System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
-
-                    //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
-                    String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
-                    //</editor-fold>
-
-                    //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
-                    codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
-                    //</editor-fold>
-
-                    //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
-                    for (Section section : document.getSectionList()) {
-                        //<editor-fold desc="PERSISTIR has_section">
-                        String sectionId = hasSectionHelperNative.insert(documentId, version, section);
-                        //</editor-fold>
-
-                        int textCount = 0;
-                        for (Text text : section.getTextList()) {
-//                            System.out.println("Have texts...");
-                            //<editor-fold desc="INSERTAR TEXTO">
-                            textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
-                            //</editor-fold>
-
-                            textCount++;
-                        }// Textos
-
-                    }// Secciones
-                    //</editor-fold>
+                    insertDocumentDatas(document, sourceId, version, source, docsCount, isJSONRequest);
                     docsCount++;
                 }else{
                     invalidCount++;
@@ -140,6 +112,42 @@ public class WikipediaPopulateDbNative {
         System.out.println("Populate end...");
         //extractionWikipedia.printReport();
 
+    }
+
+
+    @Transactional
+    public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
+        String documentId = documentHelperNative.insert(sourceId, document, version);
+
+//        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
+
+        //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
+        String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
+        //</editor-fold>
+
+        //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
+        codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version);
+        //</editor-fold>
+
+        //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
+        for (Section section : document.getSectionList()) {
+            //<editor-fold desc="PERSISTIR has_section">
+            String sectionId = hasSectionHelperNative.insert(documentId, version, section);
+            //</editor-fold>
+
+            int textCount = 0;
+            for (Text text : section.getTextList()) {
+//                            System.out.println("Have texts...");
+                //<editor-fold desc="INSERTAR TEXTO">
+                textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
+                //</editor-fold>
+
+                textCount++;
+            }// Textos
+
+        }// Secciones
+        //</editor-fold>
+        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
     }
 
 
