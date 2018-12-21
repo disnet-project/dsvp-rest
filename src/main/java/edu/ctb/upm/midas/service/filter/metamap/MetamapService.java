@@ -156,7 +156,7 @@ public class MetamapService {
 
                 System.out.println("Insert configuration...");
                 String configurationJson = gson.toJson(request.getConfiguration());
-                configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+                configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE, configurationJson);
                 //System.out.println("Insert configuration ready!...");
             }else{
                 System.out.println("Authorization message: " + response.getAuthorizationMessage() + " | token: " + response.getToken());
@@ -223,7 +223,7 @@ public class MetamapService {
         if (!sourceId.isEmpty() && !version.toString().isEmpty()) {
             System.out.println("Insert configuration...");
             String configurationJson = gson.toJson(request.getConfiguration());
-            configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+            configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE, configurationJson);
             System.out.println("Insert configuration ready!...");
         }
 
@@ -342,7 +342,7 @@ public class MetamapService {
 
             System.out.println("Insert configuration...");
             String configurationJson = gson.toJson(request.getConfiguration());
-            configurationHelper.insert(consult.getSource(), sourceId, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+            configurationHelper.insert(consult.getSource(), sourceId, version, constants.SERVICE_METAMAP_CODE, configurationJson);
             //System.out.println("Insert configuration ready!...");
 
 
@@ -438,7 +438,7 @@ public class MetamapService {
 
                 System.out.println("Insert configuration...");
                 String configurationJson = gson.toJson(request.getConfiguration());
-                configurationHelper.insert(consult.getSource(), sourceId, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+                configurationHelper.insert(consult.getSource(), sourceId, version, constants.SERVICE_METAMAP_CODE, configurationJson);
             }else{
                 System.out.println("Authorization message: " + response.getAuthorizationMessage() + " | token: " + response.getToken());
             }
@@ -473,7 +473,7 @@ public class MetamapService {
 
             System.out.println("Insert configuration...");
             String configurationJson = gson.toJson(response.getConfiguration());
-            configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+            configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE, configurationJson);
             System.out.println("Insert configuration ready!...");
         } else {
             System.out.println("Texts Size Different: request: " + response.getTextList().size() + " | json: " + textList.size());
@@ -571,7 +571,7 @@ public class MetamapService {
 
                     System.out.println("Insert configuration...");
                     String configurationJson = gson.toJson(request.getConfiguration());
-                    configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+                    configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE, configurationJson);
                     System.out.println("Insert configuration ready!...");
                 } else {
                     System.out.println("Texts Size Different: request: " + request.getTextList().size() + " | json: " + textList.size());
@@ -681,7 +681,7 @@ public class MetamapService {
 
                     System.out.println("Insert configuration...");
                     String configurationJson = gson.toJson(request.getConfiguration());
-                    configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+                    configurationHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_METAMAP_CODE, configurationJson);
                     System.out.println("Insert configuration ready!...");
                     System.out.println("insertados: " + insertados + " noinsertados: " + noinsertados);
                 }
@@ -716,10 +716,10 @@ public class MetamapService {
         List<Symptom> symptoms = new ArrayList<>();
         List<HasSymptom> hasSymptoms = new ArrayList<>();
 
-        String fileNameHasSymptoms = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_has_symptom.txt";
-        String fileNameSemType = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_semantic_types.txt";
-        String fileNameSymptoms = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_symptoms.txt";
-        String fileHasSemTypes = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_has_semantic_types.txt";
+        String fileNameHasSymptoms = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_has_symptom.sql";
+        String fileNameSemType = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_semantic_types.sql";
+        String fileNameSymptoms = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_symptoms.sql";
+        String fileHasSemTypes = consult.getSnapshot() + "_" + consult.getSource() + "_inserts_has_semantic_types.sql";
         String pathHasSymptoms = Constants.METAMAP_FOLDER + fileNameHasSymptoms;
         String pathSemTypes = Constants.METAMAP_FOLDER + fileNameSemType;
         String pathSymptoms = Constants.METAMAP_FOLDER + fileNameSymptoms;
@@ -759,7 +759,7 @@ public class MetamapService {
                                 List<Concept> noRepeatedConcepts = removeRepetedConcepts(metamapText.getConcepts());
                                 conceptCount = createHasSymptom(metamapText.getConcepts(), noRepeatedConcepts, hasSymptoms, metamapText.getId(), conceptCount, countTotalHasSymptom, fileWriterHasSymptoms);
                                 for (Concept concept : metamapText.getConcepts()) {
-                                    if (!isInvalidatedSemanticType(concept.getSemanticTypes())) {//validar para no insertar "clna",     "qlco",     "hcpp"
+                                    /*if (!isInvalidatedSemanticType(concept.getSemanticTypes())) {//validar para no insertar "clna",     "qlco",     "hcpp"*/
                                         //Se crea un sintoma
                                         Symptom symptom = new Symptom(concept.getCui(), concept.getName(), concept.getSemanticTypes());
                                         //Se agrega a la lista
@@ -773,13 +773,14 @@ public class MetamapService {
                                         }
                                         //Se elimina el elemento de la lista principal para no contarlo y no agregarlo al hacer merge
                                         //metamapText.getConcepts().remove(concept);
-                                    }
+                                    /*}*/
                                 }
                                 //if (textCount == 50) break;
                                 textCount++;
                             }
                         }
                     }
+                    System.out.println("conceptCount: "+conceptCount+", countTotalHasSymptom: "+countTotalHasSymptom);
 //                    fileWriterHasSymptoms.write(Constants.COMMA_DOT);
                     fileWriterHasSymptoms.close();
                 } catch (Exception e) {
@@ -838,7 +839,7 @@ public class MetamapService {
         //insertar configuración
 //        System.out.println("Insert configuration...");
 //        String configurationJson = gson.toJson(metamapConf);
-//        configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_METAMAP_CODE + " - " + constants.SERVICE_METAMAP_NAME, configurationJson);
+//        configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_METAMAP_CODE, configurationJson);
 
     }
 
@@ -853,9 +854,10 @@ public class MetamapService {
 
 
     public int countHasSymptom(List<edu.ctb.upm.midas.model.filter.metamap.response.Text> textList){
-        int count = 0;
+        int count = 1;//1 para ajustar
         for (edu.ctb.upm.midas.model.filter.metamap.response.Text text: textList) {
-            count += text.getConcepts().size();
+//            List<Concept> noRepeatedConcepts = removeRepetedConcepts(text.getConcepts());
+            count += removeRepetedConcepts(text.getConcepts()).size();
         }
         return count;
     }
@@ -903,7 +905,8 @@ public class MetamapService {
         try {
             int countC = 1;
             for (Concept uniqueConcept : noRepeatedConcepts) {
-                if (!isInvalidatedSemanticType(uniqueConcept.getSemanticTypes())) {
+                conceptCount++;
+                /*if (!isInvalidatedSemanticType(uniqueConcept.getSemanticTypes())) {*/
                     HasSymptom hasSymptom = new HasSymptom(textId, uniqueConcept.getCui(), (byte) 0);
                     //System.out.println("ConceptUnique: " + uniqueConcept.getCui());
                     final int[] count = {1};
@@ -930,8 +933,8 @@ public class MetamapService {
                     hasSymptoms.add(hasSymptom);
                     fileWriter.write("('" + hasSymptom.getTextId() + "', '" + hasSymptom.getCui() + "', 0, \"" + hasSymptom.getMatchedWords() + "\", \"" + hasSymptom.getPositionalInfo() + "\")" + (conceptCount==countTotalHasSymptom?Constants.COMMA_DOT:Constants.COMMA+"\n"));
                     System.out.println(conceptCount + ". " + hasSymptom);
-                    conceptCount++;
-                }
+
+                /*}*/
             }
         }catch (Exception e){
             System.out.println("Mensaje de la excepción 2: " + e.getMessage());

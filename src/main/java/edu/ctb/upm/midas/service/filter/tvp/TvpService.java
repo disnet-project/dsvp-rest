@@ -125,7 +125,7 @@ public class TvpService {
             System.out.println("Start insert configuration...");
             tvpConfiguration.setValidatedNonRepetedTerms(validatedSymptoms);
             String configurationJson = gson.toJson(tvpConfiguration);
-            configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_TVP_CODE + " - " + constants.SERVICE_TVP_NAME, configurationJson);
+            configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_TVP_CODE, configurationJson);
             System.out.println("End insert configuration ready!...");
         }else{
             System.out.println("Authorization message: " + response.getAuthorizationMessage() + " | token: " + response.getToken());
