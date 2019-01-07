@@ -127,17 +127,39 @@ public class FilterController {
     }
 
 
+    /**
+     * @param source
+     * @param snapshot
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(path = { "/metamap/json/fast/batch" }, //Term Validation Procedure
+            method = RequestMethod.GET,
+            params = {"source", "snapshot"})
+    public String metamapFilterWithJSONBatch(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source,
+                                             @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot) throws Exception {
+
+        Consult consult = new Consult(source, snapshot);//"2018-04-15"
+        String inicio = utilDate.getTime();
+        metamapService.insertInBatch( consult );
+        System.out.println("Inicio:" + inicio + " | Termino: " +utilDate.getTime());
+
+        return "It has been successfully filtered with Metamap";
+    }
+
+
     @RequestMapping(path = { "/tvp" }, //Term Validation Procedure
             method = RequestMethod.GET,
             params = {"source", "snapshot", "json"})
-    public String tvpValidation(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source,
-                                @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
-                                @RequestParam(value = "json") @Valid @NotBlank @NotNull @NotEmpty boolean json) throws Exception {
+    public String tvpValidation(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source
+                                , @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot
+                                , @RequestParam(value = "json") @Valid @NotBlank @NotNull @NotEmpty boolean json
+                                , @RequestParam(value = "storage", required = false, defaultValue = "true") boolean storage) throws Exception {
 
         Consult consult = new Consult(source, snapshot, json);
 
         String inicio = utilDate.getTime();
-        tvpService.filter( consult );
+        tvpService.filter( consult, storage );
         System.out.println("Inicio:" + inicio + " | Termino: " +utilDate.getTime());
 
         return "It has been validated filtered with TVP";

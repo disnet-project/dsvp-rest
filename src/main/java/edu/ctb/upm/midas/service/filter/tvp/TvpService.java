@@ -60,7 +60,7 @@ public class TvpService {
      * @param consult
      * @throws Exception
      */
-    public void filter(Consult consult) throws Exception {
+    public void filter(Consult consult, boolean storage) throws Exception {
 
         String fileName = consult.getSnapshot() + "_updates_has_symptom.txt";
         String path = Constants.TVP_RETRIEVAL_HISTORY_FOLDER + fileName;
@@ -100,35 +100,39 @@ public class TvpService {
         }
         System.out.println("Authorization: "+ response.isAuthorized());
 
-
-        if (response.isAuthorized()) {
-            int validatedSymptoms = 0;
-            /* Actualizar entidad HasSymptom con CUI y textId */
-            System.out.println("Authorization: "+ response.getValidatedConcepts().size() + "|" + responseSymptoms.size());
-            for (MatchNLP matchNLP : response.getValidatedConcepts()) {//ResponseSymptom
-                //MatchNLP matchNLP = exist(symptom.getCui(), response.getValidatedConcepts());//antes matchNLPList
-                if (matchNLP.hasMatches()) {
-                    System.out.println(validatedSymptoms +" to "+response.getValidatedConcepts().size()+" Symptom validated! | " + matchNLP.getConcept().getCui() + "==" + matchNLP.getConcept().toString());
-                    hasSymptomService.updateValidatedNative(consult.getSnapshot(), sourceId, matchNLP.getConcept().getCui(), true);
+        if (storage) {
+            if (response.isAuthorized()) {
+                int validatedSymptoms = 0;
+                /* Actualizar entidad HasSymptom con CUI y textId */
+                System.out.println("Authorization: " + response.getValidatedConcepts().size() + "|" + responseSymptoms.size());
+                for (MatchNLP matchNLP : response.getValidatedConcepts()) {//ResponseSymptom
+                    //MatchNLP matchNLP = exist(symptom.getCui(), response.getValidatedConcepts());//antes matchNLPList
+                    if (matchNLP.hasMatches()) {
+                        System.out.println(validatedSymptoms + " to " + response.getValidatedConcepts().size() + " Symptom validated! | " + matchNLP.getConcept().getCui() + "==" + matchNLP.getConcept().toString());
+                        hasSymptomService.updateValidatedNative(consult.getSnapshot(), sourceId, matchNLP.getConcept().getCui(), true);
 //                    fileWriter.write("UPDATE has_symptom h " +
 //                            "SET h.validated = 1 " +
 //                            "WHERE h.text_id LIKE '%"+consult.getSnapshot()+"%' " +
 //                            "AND h.text_id LIKE '%"+sourceId+"%' " +
 //                            "AND h.cui = '"+matchNLP.getConcept().getCui()+"';\n");
-                    validatedSymptoms++;
-                    System.out.println("Update symptom in DB ready!");
-                } else {
-                    System.out.println("Symptom not found:" + matchNLP.getConcept().getCui());
+                        validatedSymptoms++;
+                        System.out.println("Update symptom in DB ready!");
+                    } else {
+                        System.out.println("Symptom not found:" + matchNLP.getConcept().getCui());
+                    }
                 }
-            }
 //            fileWriter.close();
-            System.out.println("Start insert configuration...");
-            tvpConfiguration.setValidatedNonRepetedTerms(validatedSymptoms);
-            String configurationJson = gson.toJson(tvpConfiguration);
-            configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_TVP_CODE, configurationJson);
-            System.out.println("End insert configuration ready!...");
-        }else{
-            System.out.println("Authorization message: " + response.getAuthorizationMessage() + " | token: " + response.getToken());
+                System.out.println("Start insert configuration...");
+                tvpConfiguration.setValidatedNonRepetedTerms(validatedSymptoms);
+                String configurationJson = gson.toJson(tvpConfiguration);
+                configurationHelper.insert(consult.getSource(), consult.getDate(), constants.SERVICE_TVP_CODE, configurationJson);
+                System.out.println("End insert configuration ready!...");
+            } else {
+                System.out.println("Authorization message: " + response.getAuthorizationMessage() + " | token: " + response.getToken());
+            }
+        }else{//NO SE INSERTARÁN DATOS
+            System.out.println("Datas no storage!...");
+            System.out.println("End Term Validation Procedure!...");
         }
 
     }
