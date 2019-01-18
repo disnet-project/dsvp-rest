@@ -53,10 +53,17 @@ public class SectionHelperNative {
 //            System.out.println("SEC: " + section.getKey() + "_" + section.getValue());
             if ( !exist(section.getKey()) ){
 //                System.out.println("SEC: NO EXISTE ");
-                String sectionId = getLastId();
-                sectionService.insertNative( sectionId, section.getKey(), section.getValue() );
+//                String sectionId = getLastId();
+//                sectionService.insertNative( sectionId, section.getKey(), section.getValue() );
+                insert(section.getKey(), section.getValue());
             }
         }
+    }
+
+
+    public void insert(String name, String description){
+        String trueSectionId = getLastId();
+        sectionService.insertNative( trueSectionId, name, description );
     }
 
 

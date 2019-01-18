@@ -64,7 +64,7 @@ import java.util.Objects;
 
         @NamedNativeQuery(
                 name = "Section.insertNative",
-                query = "INSERT INTO section (section_id, name, description) "
+                query = "INSERT IGNORE INTO section (section_id, name, description) "
                         + "VALUES (:sectionId, :name, :description)"
         ),
         @NamedNativeQuery(

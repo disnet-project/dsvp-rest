@@ -31,6 +31,8 @@ public class HasSectionHelperNative {
     @Autowired
     private SectionService sectionService;
     @Autowired
+    private SectionHelperNative sectionHelperNative;
+    @Autowired
     private UniqueId uniqueId;
     @Autowired
     private Common common;
@@ -50,8 +52,16 @@ public class HasSectionHelperNative {
     public String insert(String documentId, Date version, Section section){
         //Busca la sección que ya debe existir
         edu.ctb.upm.midas.model.jpa.Section existSection = sectionService.findByName( section.getName() );
-        //inserta la relación entre el documento y la sección (insert ignore)
-        hasSectionService.insertNative( documentId, version, existSection.getSectionId() );
+        if (existSection!=null) {
+            //inserta la relación entre el documento y la sección (insert ignore)
+            hasSectionService.insertNative(documentId, version, existSection.getSectionId());
+        }else{
+            //inserta la seccion si no existe
+            sectionHelperNative.insert(section.getName(), section.getDescription());
+            existSection = sectionService.findByName( section.getName() );
+            //inserta la relación entre el documento y la sección (insert ignore)
+            hasSectionService.insertNative(documentId, version, existSection.getSectionId());
+        }
         //retorna el id de la sección
         return existSection.getSectionId();
     }

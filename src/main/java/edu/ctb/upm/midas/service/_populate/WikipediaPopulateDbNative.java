@@ -118,6 +118,7 @@ public class WikipediaPopulateDbNative {
     @Transactional
     public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
         String documentId = documentHelperNative.insert(sourceId, document, version);
+        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
 
 //        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
 
@@ -147,7 +148,6 @@ public class WikipediaPopulateDbNative {
 
         }// Secciones
         //</editor-fold>
-        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
     }
 
 
