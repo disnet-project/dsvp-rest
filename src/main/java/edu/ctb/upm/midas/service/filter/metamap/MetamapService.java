@@ -230,9 +230,6 @@ public class MetamapService {
     }
 
 
-
-
-
     /**
      *
      * @param consult
@@ -707,6 +704,18 @@ public class MetamapService {
         return res;*/
     }
 
+    public void createMySQLInserts_TEST(Consult consult) throws Exception {
+        Response response = readMetamapResponseJSON(consult, false);
+        List<edu.ctb.upm.midas.model.filter.metamap.response.Text> textList = response.getTextList();
+        System.out.println("TextList: " + textList.size());
+        int count = 0;
+        for (edu.ctb.upm.midas.model.filter.metamap.response.Text text:textList) {
+            for (Concept concept: text.getConcepts()){
+                count = count + 1;
+            }
+        }
+        System.out.println("Número de conceptos: "+count);
+    }
 
     @Transactional
     public void createMySQLInserts(Consult consult) throws Exception {

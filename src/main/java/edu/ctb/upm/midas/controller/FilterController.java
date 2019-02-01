@@ -121,6 +121,7 @@ public class FilterController {
         Consult consult = new Consult(source, snapshot);//"2018-04-15"
         String inicio = utilDate.getTime();
         metamapService.createMySQLInserts( consult );
+//        metamapService.createMySQLInserts_TEST(consult);//for know text list size
         System.out.println("Inicio:" + inicio + " | Termino: " +utilDate.getTime());
 
         return "It has been successfully filtered with Metamap";
