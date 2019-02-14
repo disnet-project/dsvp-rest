@@ -186,7 +186,8 @@ import java.util.Objects;
                         fields = {
                                 @FieldResult(name = "diseaseId", column = "disease_id"),
                                 @FieldResult(name = "name", column = "name"),
-                                @FieldResult(name = "cui", column = "cui")
+                                @FieldResult(name = "cui", column = "cui"),
+                                @FieldResult(name = "relevant", column = "relevant")
                         }
                 )
         )
@@ -197,6 +198,7 @@ public class Disease {
     private String diseaseId;
     private String name;
     private String cui;
+    private Byte relevant;
     private List<HasDisease> hasDiseasesByDiseaseId;
     private List<DiseaseSynonym> diseaseSynonymsByDiseaseId;
 
@@ -228,6 +230,16 @@ public class Disease {
 
     public void setCui(String cui) {
         this.cui = cui;
+    }
+
+    @Basic
+    @Column(name = "relevant", nullable = true)
+    public Byte getRelevant() {
+        return relevant;
+    }
+
+    public void setRelevant(Byte relevant) {
+        this.relevant = relevant;
     }
 
     @Override

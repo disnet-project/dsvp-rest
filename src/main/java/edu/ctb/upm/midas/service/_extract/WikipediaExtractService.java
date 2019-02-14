@@ -337,11 +337,11 @@ public class WikipediaExtractService {
      * Recibe una enfermedad y verifica los parámetros de irrelevancia para
      * calcular la relevancia
      *
-     * Parcialmente irrelevante | Totalmente irrelevante = RELEVANTE
-     * FALSE(0)                   FALSE(0)               = TRUE(1)
+     * Parcialmente irrelevante | Totalmente irrelevante | RELEVANTE
+     * FALSE(0)                   FALSE(0)               = TRUE(1)  *
      * FALSE(0)                   TRUE(1)                = FALSE(0)
-     * TRUE(1)                    FALSE(0)               = TRUE(1)
-     * TRUE(1)                    TRUE(0)                = FALSE(0)
+     * TRUE(1)                    FALSE(0)               = TRUE(1)  *
+     * TRUE(1)                    TRUE(1)                = FALSE(0)
      *
      * @param disease
      * @return
