@@ -111,7 +111,7 @@ public class MayoClinicExtractService {
             request.setJson(true);
             response = mcteService.getTexts(request);
         }
-        System.out.println("End Connection with MAYOCLINIC TEXT EXTRACTION API REST... startTime:" + response.getStart_time() + "endTime: "+ response.getEnd_time());
+        System.out.println("End Connection with MAYOCLINIC TEXT EXTRACTION API REST... startTime: " + response.getStart_time() + " endTime: "+ response.getEnd_time());
         System.out.println("getResponseCode: " + response.getResponseCode());
 
         return response;
