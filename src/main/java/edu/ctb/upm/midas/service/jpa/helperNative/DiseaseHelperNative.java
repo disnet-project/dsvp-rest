@@ -72,7 +72,7 @@ public class DiseaseHelperNative {
         String diseaseName = document.getDisease().getName();
         String url = document.getUrl().getUrl();
 
-        Disease diseaseEntity = diseaseService.findByName( diseaseName );
+        Disease diseaseEntity = diseaseService.findByNameNative( diseaseName );
         //System.out.println(diseaseName+ "DIS: "+ diseaseEntity);
         if ( diseaseEntity == null ){
             String diseaseId = getDiseaseId();
@@ -101,7 +101,7 @@ public class DiseaseHelperNative {
         String diseaseName = document.getDisease().getName();
 
 //        Disease diseaseEntity = findDiseaseBySeveralWays(documentId, document.getDisease()/*, null*/);
-        Disease diseaseEntity = diseaseService.findByName(diseaseName);
+        Disease diseaseEntity = diseaseService.findByNameNative(diseaseName);
         //System.out.println(diseaseName+ "DIS: "+ diseaseEntity);
         //Si no encuentro la enfermedad, se inserta junto con sus sinonimos
         if ( diseaseEntity == null ){
@@ -203,7 +203,7 @@ public class DiseaseHelperNative {
 
 
     public Disease findDiseaseBySeveralWays(String documentId, edu.ctb.upm.midas.model.common.document_structure.Disease disease/*, FileWriter fileWriter*/) throws IOException {
-        Disease diseaseEntity = diseaseService.findByName(disease.getName());
+        Disease diseaseEntity = diseaseService.findByNameNative(disease.getName());
         if (diseaseEntity!=null){
             System.out.println(documentId + "Nombre encontrado (WikipediaDis:" + diseaseEntity + " | PubMedDis: "+disease+")");
         }else{
@@ -278,7 +278,7 @@ public class DiseaseHelperNative {
      * @return
      */
     public boolean exist(String diseaseName){
-        Disease disease = diseaseService.findByName( diseaseName );
+        Disease disease = diseaseService.findByNameNative( diseaseName );
         if( disease != null )
             return true;
         else

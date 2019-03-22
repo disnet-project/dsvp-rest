@@ -18,7 +18,7 @@ public interface DiseaseService {
 
     Disease findById(String diseaseId);
 
-    Disease findByName(String diseaseName);
+    Disease findByNameNative(String diseaseName);
 
     Disease findByNameNativeUnrestricted(String diseaseName);
 

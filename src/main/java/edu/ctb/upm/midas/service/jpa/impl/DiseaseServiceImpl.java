@@ -36,7 +36,7 @@ public class DiseaseServiceImpl implements DiseaseService {
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
-    public Disease findByName(String diseaseName) {
+    public Disease findByNameNative(String diseaseName) {
         Disease disease = null;
         Object[] oQuery = daoDisease.findByNameNative(diseaseName);
         if (oQuery != null){

@@ -100,7 +100,7 @@ public class WikipediaPopulateDbNative {
             for (Doc document: source.getDocuments()) {
                 //Solo inserta aquellos documentos que al menos tengan códigos o secciones
                 if (document.isDiseaseArticle()) {
-                    insertDocumentDatas(document, sourceId, version, source, docsCount, isJSONRequest);
+                    insertDocumentData(document, sourceId, version, source, docsCount, isJSONRequest);
                     docsCount++;
                 }else{
                     invalidCount++;
@@ -116,7 +116,7 @@ public class WikipediaPopulateDbNative {
 
 
     @Transactional
-    public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
+    public void insertDocumentData(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
         String documentId = documentHelperNative.insert(sourceId, document, version);
         System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
 

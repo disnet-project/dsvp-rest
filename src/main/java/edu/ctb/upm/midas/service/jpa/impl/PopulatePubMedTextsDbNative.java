@@ -191,7 +191,7 @@
 ////                }
 //
 //
-//                //insertDocumentDatas(document, sourceId, version, source, docsCount);
+//                //insertDocumentData(document, sourceId, version, source, docsCount);
 //                docsCount++;
 //            }// Documentos
 ////            fileWriter.close();
@@ -204,7 +204,7 @@
 //
 //
 //    @Transactional
-//    public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount) throws IOException {
+//    public void insertDocumentData(Doc document, String sourceId, Date version, Source source, int docsCount) throws IOException {
 //        //Solo inserta aquellos documentos que al menos tengan códigos o secciones
 //        String documentId = documentHelperNative.insertPubMedArticles(sourceId, document, version);
 //        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
