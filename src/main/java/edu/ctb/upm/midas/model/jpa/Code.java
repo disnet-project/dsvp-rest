@@ -62,6 +62,11 @@ import java.util.Objects;
                 name = "CodeUrl.insertNative",
                 query = "INSERT INTO code_url (code, resource_id, url_id) "
                         + "VALUES (:code, :resourceId, :urlId)"
+        ),
+        @NamedNativeQuery(
+                name = "CodeRetrievalMethod.insertNative",
+                query = "INSERT IGNORE INTO code_retrieval_method (code, resource_id, retrieval_method_id) "
+                        + "VALUES (:code, :resourceId, :retrievalMethodId)"
         )
 })
 

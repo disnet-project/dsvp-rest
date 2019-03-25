@@ -35,6 +35,8 @@ public interface CodeService {
 
     int insertNativeHasCode(String documentId, Date date, String code, int resourceId);
 
+    int insertNativeRetrievalMethod(String code, int resourceId, Integer retrievalMethodId);
+
     boolean updateFindFull(Code code, CodePK codePK);
 
     boolean updateFindPartial(Code code, CodePK codePK);

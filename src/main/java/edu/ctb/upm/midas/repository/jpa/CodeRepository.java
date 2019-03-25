@@ -41,6 +41,8 @@ public interface CodeRepository {
 
     int insertNativeHasCode(String documentId, Date date, String code, int resourceId);
 
+    int insertNativeRetrievalMethod(String code, int resourceId, Integer retrievalMethodId);
+
     boolean deleteById(CodePK codePK);
 
     void delete(Code code);

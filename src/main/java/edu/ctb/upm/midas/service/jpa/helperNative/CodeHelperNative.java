@@ -2,13 +2,12 @@ package edu.ctb.upm.midas.service.jpa.helperNative;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.ctb.upm.midas.model.common.document_structure.Source;
 import edu.ctb.upm.midas.model.common.document_structure.code.Code;
+import edu.ctb.upm.midas.model.jpa.RetrievalMethod;
 import edu.ctb.upm.midas.model.jpa.SynonymCode;
 import edu.ctb.upm.midas.model.jpa.SynonymCodePK;
-import edu.ctb.upm.midas.service.jpa.CodeService;
-import edu.ctb.upm.midas.service.jpa.ResourceService;
-import edu.ctb.upm.midas.service.jpa.SynonymCodeService;
-import edu.ctb.upm.midas.service.jpa.SynonymService;
+import edu.ctb.upm.midas.service.jpa.*;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.UniqueId;
 import org.slf4j.Logger;
@@ -48,6 +47,9 @@ public class CodeHelperNative {
     @Autowired
     private Common common;
 
+    @Autowired
+    private RetrievalMethodService retrievalMethodService;
+
     private static final Logger logger = LoggerFactory.getLogger(CodeHelperNative.class);
     @Autowired
     ObjectMapper objectMapper;
@@ -59,7 +61,7 @@ public class CodeHelperNative {
      * @param version
      * @throws JsonProcessingException
      */
-    public void insertIfExistByCodeList(List<Code> codeList, String documentId, Date version) throws JsonProcessingException {
+    public void insertIfExistByCodeList(List<Code> codeList, String documentId, Date version, Source source) throws JsonProcessingException {
         Object[] codeEntity;
 
         for (Code code: codeList) {
@@ -77,6 +79,16 @@ public class CodeHelperNative {
                 if (code.getLink()!=null) {
                     String urlId = urlHelperNative.getUrl(code.getLink(), getId(code.getCode(), resourceId));
                     codeService.insertNativeUrl(code.getCode(), resourceId, urlId);
+                }
+                /*
+                    insertar el método de obtención del código
+                    1: Regular Wikipedia code retrieval
+                    2: Regular PubMed code retrieval
+                    3: Uts Crosswalk codes retrieval
+                */
+                RetrievalMethod retrievalMethod = retrievalMethodService.findByNameNative(source.getName());
+                if (retrievalMethod != null){
+                    codeService.insertNativeRetrievalMethod(code.getCode(), resourceId, retrievalMethod.getRetrievalMethodId());
                 }
             }else{
                 //System.out.println("Document_id: " + documentId + " Version: " + version + " Code: " + codeEntity[0] + " ResourceName: " + codeEntity[1]);

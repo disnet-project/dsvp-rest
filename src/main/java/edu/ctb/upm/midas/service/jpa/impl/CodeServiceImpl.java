@@ -77,6 +77,11 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
+    public int insertNativeRetrievalMethod(String code, int resourceId, Integer retrievalMethodId) {
+        return daoCode.insertNativeRetrievalMethod(code, resourceId, retrievalMethodId);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean updateFindFull(Code code, CodePK codePK) {
         Code cod = daoCode.findById(codePK);
         if(cod!=null){

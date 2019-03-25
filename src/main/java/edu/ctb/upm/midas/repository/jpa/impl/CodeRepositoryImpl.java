@@ -151,6 +151,16 @@ public class CodeRepositoryImpl extends AbstractDao<CodePK, Code>
                 .executeUpdate();
     }
 
+    @Override
+    public int insertNativeRetrievalMethod(String code, int resourceId, Integer retrievalMethodId) {
+        return getEntityManager()
+                .createNamedQuery("CodeRetrievalMethod.insertNative")
+                .setParameter("code", code)
+                .setParameter("resourceId", resourceId)
+                .setParameter("retrievalMethodId", retrievalMethodId)
+                .executeUpdate();
+    }
+
     public boolean deleteById(CodePK codePK) {
         Code code = findById( codePK );
         if(code ==null)
