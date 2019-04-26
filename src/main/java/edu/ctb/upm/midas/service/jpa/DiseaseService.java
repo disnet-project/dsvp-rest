@@ -32,6 +32,8 @@ public interface DiseaseService {
 
     List<Object[]> findAllBySourceAndVersionNative(String sourceName, Date version);
 
+    List<Disease> findAllBySourceAndVersionNativeDiseases(String sourceName, Date version);
+
     Object[] findByIdAndSourceAndVersionNative(String diseaseId, String sourceName, Date version);
 
     Object[] findByCuiAndSourceAndVersionNative(String cui, String sourceName, Date version);

@@ -24,6 +24,10 @@ public interface CodeService {
     Code findByResourceIdQuery(int resourceId);
 
     Object[] findByIdNative(String code, int resourceId);
+
+    List<Code> findBySourceAndSnapshotAndDiseaseIdNative(String sourceName, Date snapshot, String diseaseId);
+
+    List<Code> findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative(String sourceName, Date snapshot, String diseaseId, String resourceName);
     
     List<Code> findAll();
 

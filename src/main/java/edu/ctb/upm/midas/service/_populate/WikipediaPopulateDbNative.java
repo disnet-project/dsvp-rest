@@ -123,11 +123,11 @@ public class WikipediaPopulateDbNative {
 //        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId);
 
         //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
-        String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
+        String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version, source);
         //</editor-fold>
 
         //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
-        codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version, source);
+        codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version, source.getName());
         //</editor-fold>
 
         //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">

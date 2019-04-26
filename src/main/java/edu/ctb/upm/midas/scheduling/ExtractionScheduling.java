@@ -71,7 +71,7 @@ public class ExtractionScheduling {
     public void extractionEveryFirstDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
-            wikipediaExtractService.extract("", false);
+            wikipediaExtractService.extract("", false, false);
             Consult consult = new Consult(Constants.SOURCE_WIKIPEDIA, wikipediaExtractService.getSnapshot());
             System.out.println("");
 //            System.out.println("==================");
@@ -109,7 +109,7 @@ public class ExtractionScheduling {
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
-            wikipediaExtractService.extract("", false);
+            wikipediaExtractService.extract("", false, false);
             Consult consult = new Consult(Constants.SOURCE_WIKIPEDIA, wikipediaExtractService.getSnapshot());
             System.out.println("");
 //            System.out.println("==================");

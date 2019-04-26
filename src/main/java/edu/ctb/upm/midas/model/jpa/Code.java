@@ -67,6 +67,41 @@ import java.util.Objects;
                 name = "CodeRetrievalMethod.insertNative",
                 query = "INSERT IGNORE INTO code_retrieval_method (code, resource_id, retrieval_method_id) "
                         + "VALUES (:code, :resourceId, :retrievalMethodId)"
+        ),
+        @NamedNativeQuery(
+                name = "Code.findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative",
+                query = "SELECT DISTINCT c.code, c.resource_id " +
+                        "FROM disease d\n" +
+                        "       INNER JOIN has_disease hd ON hd.disease_id = d.disease_id\n" +
+                        "       INNER JOIN document doc ON doc.document_id = hd.document_id AND doc.date = hd.date\n" +
+                        "  -- source\\n\n" +
+                        "       INNER JOIN has_source hs ON hs.document_id = doc.document_id AND hs.date = doc.date\n" +
+                        "       INNER JOIN source sce ON sce.source_id = hs.source_id\n" +
+                        "  -- codes\\n\n" +
+                        "       INNER JOIN has_code hc ON hc.document_id = doc.document_id AND hc.date = doc.date\n" +
+                        "       INNER JOIN code c ON c.code = hc.code AND c.resource_id = hc.resource_id\n" +
+                        "       INNER JOIN resource r ON r.resource_id = c.resource_id\n" +
+                        "WHERE sce.name = :source " +
+                        "  AND doc.date = :snapshot " +
+                        "  AND r.name = :resource " +
+                        "  AND d.disease_id = :diseaseId "
+        ),
+        @NamedNativeQuery(
+                name = "Code.findBySourceAndSnapshotAndDiseaseIdNative",
+                query = "SELECT DISTINCT c.code, c.resource_id " +
+                        "FROM disease d\n" +
+                        "       INNER JOIN has_disease hd ON hd.disease_id = d.disease_id\n" +
+                        "       INNER JOIN document doc ON doc.document_id = hd.document_id AND doc.date = hd.date\n" +
+                        "  -- source\\n\n" +
+                        "       INNER JOIN has_source hs ON hs.document_id = doc.document_id AND hs.date = doc.date\n" +
+                        "       INNER JOIN source sce ON sce.source_id = hs.source_id\n" +
+                        "  -- codes\\n\n" +
+                        "       INNER JOIN has_code hc ON hc.document_id = doc.document_id AND hc.date = doc.date\n" +
+                        "       INNER JOIN code c ON c.code = hc.code AND c.resource_id = hc.resource_id\n" +
+                        "       INNER JOIN resource r ON r.resource_id = c.resource_id\n" +
+                        "WHERE sce.name = :source " +
+                        "  AND doc.date = :snapshot " +
+                        "  AND d.disease_id = :diseaseId "
         )
 })
 
@@ -164,5 +199,11 @@ public class Code {
         this.synonymCodes = synonymCodes;
     }
 
-
+    @Override
+    public String toString() {
+        return "Code{" +
+                "code='" + code + '\'' +
+                ", resourceId=" + resourceId +
+                '}';
+    }
 }

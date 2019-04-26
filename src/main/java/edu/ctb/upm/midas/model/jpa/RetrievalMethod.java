@@ -37,7 +37,7 @@ import java.util.Objects;
         @NamedNativeQuery(
                 name = "RetrievalMethod.findByNameNative",
                 query = "SELECT r.retrieval_method_id, r.name, r.description "
-                        + "FROM retrieval_method r WHERE r.name LIKE :name",
+                        + "FROM retrieval_method r WHERE r.name LIKE :methodName ",
                 resultClass = RetrievalMethod.class
         ),
         @NamedNativeQuery(

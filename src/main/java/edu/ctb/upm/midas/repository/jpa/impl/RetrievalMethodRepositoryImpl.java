@@ -46,7 +46,7 @@ public class RetrievalMethodRepositoryImpl extends AbstractDao<Integer, Retrieva
         RetrievalMethod retrievalMethod = null;
         List<RetrievalMethod> retrievalMethodList = (List<RetrievalMethod>) getEntityManager()
                 .createNamedQuery("RetrievalMethod.findByNameNative")
-                .setParameter("name", "%" + name + "%")
+                .setParameter("methodName", '%' + name + '%')
 //                .setParameter("name", name)
                 .getResultList();
         if (CollectionUtils.isNotEmpty(retrievalMethodList))

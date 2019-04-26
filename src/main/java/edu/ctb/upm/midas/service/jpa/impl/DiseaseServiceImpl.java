@@ -103,6 +103,23 @@ public class DiseaseServiceImpl implements DiseaseService {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Disease> findAllBySourceAndVersionNativeDiseases(String sourceName, Date version) {
+        List<Disease> diseaseList = new ArrayList<>();
+        List<Object[]> objectDisease = daoDisease.findAllBySourceAndVersionNative(sourceName, version);
+        if (objectDisease!=null){
+            diseaseList = new ArrayList<>();
+            for (Object[] o: objectDisease) {
+                Disease disease = new Disease();
+                disease.setDiseaseId((String) o[0]);
+                disease.setName((String) o[1]);
+                diseaseList.add(disease);
+            }
+        }
+        return diseaseList;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     public Object[] findByIdAndSourceAndVersionNative(String diseaseId, String sourceName, Date version) {
         return daoDisease.findByIdAndSourceAndVersionNative(diseaseId, sourceName, version);
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +49,34 @@ public class CodeServiceImpl implements CodeService {
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     public Object[] findByIdNative(String code, int resourceId) {
         return daoCode.findByIdNative(code, resourceId);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Code> findBySourceAndSnapshotAndDiseaseIdNative(String sourceName, Date snapshot, String diseaseId) {
+        List<Code> codeList = new ArrayList<>();
+        List<Object[]> codesObj = daoCode.findBySourceAndSnapshotAndDiseaseIdNative(sourceName, snapshot, diseaseId);
+        for (Object[] o: codesObj) {
+            Code code = new Code();
+            code.setCode((String) o[0]);
+            code.setResourceId((int) o[1]);
+            codeList.add(code);
+//            System.out.println("entra" + code.toString() );
+        }
+        return codeList;
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Code> findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative(String sourceName, Date snapshot, String diseaseId, String resourceName) {
+        List<Code> codeList = new ArrayList<>();
+        List<Object[]> codesObj = daoCode.findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative(sourceName, snapshot, diseaseId, resourceName);
+        for (Object[] o: codesObj) {
+            Code code = new Code();
+            code.setCode((String) o[0]);
+            code.setResourceId((int) o[1]);
+            codeList.add(code);
+//            System.out.println("entra" + code.toString() );
+        }
+        return codeList;
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)

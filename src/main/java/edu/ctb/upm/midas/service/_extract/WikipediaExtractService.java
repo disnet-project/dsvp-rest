@@ -90,7 +90,7 @@ public class WikipediaExtractService {
      * @return
      * @throws Exception
      */
-    public boolean extract(String snapshot, boolean json) throws Exception {
+    public boolean extract(String snapshot, boolean json, boolean onlyTextRetrieval) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
         Date version = (json)?timeProvider.stringToDate(snapshot):timeProvider.getSqlDate();
@@ -110,22 +110,25 @@ public class WikipediaExtractService {
             if (sources!=null){
                 printReport(sources);
             }*/
-
-            if (sources!=null&&resourceHashMap!=null) {
-                //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
-                // datos de wikipedia no se encontraron códigos, ni secciones con textos
-                removeInvalidDocumentsProcedure(sources);
-                //System.out.println("No poblara...");
-                wikipediaPopulateDbNative.populateResource(resourceHashMap);
-                wikipediaPopulateDbNative.populateSemanticTypes();
-                wikipediaPopulateDbNative.populate(sources, version, json);
-                //Insertar la configuración por la que se esta creando la lista
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String configurationJson = gson.toJson(dBpediaResponse.getConfig());
-                confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE, configurationJson);
-                res = true;
+            if (!onlyTextRetrieval) {//si es true no pobla la base de datos
+                if (sources != null && resourceHashMap != null) {
+                    //Proceso que elimina aquellos documentos que durante el proceso de recuperación de
+                    // datos de wikipedia no se encontraron códigos, ni secciones con textos
+                    removeInvalidDocumentsProcedure(sources);
+                    //System.out.println("No poblara...");
+                    wikipediaPopulateDbNative.populateResource(resourceHashMap);
+                    wikipediaPopulateDbNative.populateSemanticTypes();
+                    wikipediaPopulateDbNative.populate(sources, version, json);
+                    //Insertar la configuración por la que se esta creando la lista
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String configurationJson = gson.toJson(dBpediaResponse.getConfig());
+                    confHelper.insert(Constants.SOURCE_WIKIPEDIA, version, constants.SERVICE_DISALBUM_CODE, configurationJson);
+                    res = true;
+                } else {
+                    System.out.println("ERROR extract texts ans resources");
+                }
             }else{
-                System.out.println("ERROR extract texts ans resources");
+                System.out.println("Only text retrieval");
             }
         }else{
             System.out.println("ERROR disease album");

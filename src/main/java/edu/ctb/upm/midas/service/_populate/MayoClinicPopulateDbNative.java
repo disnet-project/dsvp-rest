@@ -85,7 +85,7 @@ public class MayoClinicPopulateDbNative {
             int docsCount = 1, invalidCount = 1;
             //<editor-fold desc="PERSISTIR TODOS LOS DATOS DE LOS DOCUMENTOS DISNET">
             for (Doc document: source.getDocuments()) {
-                insertDocumentDatas(document, sourceId, version, source, docsCount, isJSONRequest);
+                insertDocumentData(document, sourceId, version, source, docsCount, isJSONRequest);
                 docsCount++;
             }// Documentos
             //</editor-fold>
@@ -99,17 +99,17 @@ public class MayoClinicPopulateDbNative {
 
 
     @Transactional
-    public void insertDocumentDatas(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
+    public void insertDocumentData(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
         //Solo inserta aquellos documentos que al menos tengan códigos o secciones
         String documentId = documentHelperNative.insert(sourceId, document, version);
 
         //<editor-fold desc="PERSISTIR ENFERMEDAD DEL DOCUMENTO">
-        String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version);
+        String diseaseId = diseaseHelperNative.insertIfExist(document, documentId, version, source);
         //</editor-fold>
 
         //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
         if (document.getCodeList()!=null)
-            codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version, source);
+            codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version, source.getName());
         //</editor-fold>
 
         //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">

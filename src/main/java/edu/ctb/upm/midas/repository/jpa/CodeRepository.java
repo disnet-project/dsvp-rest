@@ -31,6 +31,10 @@ public interface CodeRepository {
 
     Object[] findByIdNative(String code, int resourceId);
 
+    List<Object[]> findBySourceAndSnapshotAndDiseaseIdNative(String sourceName, Date snapshot, String diseaseId);
+
+    List<Object[]> findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative(String sourceName, Date snapshot, String diseaseId, String resourceName);
+
     List<Code> findAllQuery();
 
     void persist(Code code);

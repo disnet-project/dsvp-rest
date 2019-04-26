@@ -110,6 +110,39 @@ public class CodeRepositoryImpl extends AbstractDao<CodePK, Code>
 
     @SuppressWarnings("unchecked")
     @Override
+    public List<Object[]> findBySourceAndSnapshotAndDiseaseIdNative(String sourceName, Date snapshot, String diseaseId) {
+        List<Object[]> codes = null;
+        List<Object[]> codeList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Code.findBySourceAndSnapshotAndDiseaseIdNative")
+                .setParameter("source", sourceName)
+                .setParameter("snapshot", snapshot)
+                .setParameter("diseaseId", diseaseId)
+                .setMaxResults(0)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(codeList))
+            codes = codeList;
+        return codes;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Object[]> findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative(String sourceName, Date snapshot, String diseaseId, String resourceName) {
+        List<Object[]> codes = null;
+        List<Object[]> codeList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Code.findBySourceAndSnapshotAndDiseaseIdAndResourceNameNative")
+                .setParameter("source", sourceName)
+                .setParameter("snapshot", snapshot)
+                .setParameter("resource", resourceName)
+                .setParameter("diseaseId", diseaseId)
+                .setMaxResults(0)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(codeList))
+            codes = codeList;
+        return codes;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public List<Code> findAllQuery() {
         return (List<Code>) getEntityManager()
                 .createNamedQuery("Code.findAll")

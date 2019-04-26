@@ -68,7 +68,7 @@ public class DiseaseHelperNative {
      * @return
      * @throws JsonProcessingException
      */
-    public String insertIfExist(Doc document, String documentId, Date version) throws JsonProcessingException {
+    public String insertIfExist(Doc document, String documentId, Date version, edu.ctb.upm.midas.model.common.document_structure.Source source) throws JsonProcessingException {
         String diseaseName = document.getDisease().getName();
         String url = document.getUrl().getUrl();
 
@@ -79,7 +79,7 @@ public class DiseaseHelperNative {
             diseaseService.insertNative( diseaseId, diseaseName, "" );
             diseaseService.insertNativeHasDisease( documentId, version, diseaseId );
             //Insertar sinonimos y sus códigos
-            insertSynonyms(document.getDisease(), diseaseId, "");
+            insertSynonyms(document.getDisease(), diseaseId, "", source.getName());
             return diseaseId;
         }else{
             System.out.println("HasDisease: "+ documentId + " | " + version + " | " + diseaseEntity.getDiseaseId() );
@@ -97,7 +97,7 @@ public class DiseaseHelperNative {
      * @throws JsonProcessingException
      */
     @Transactional
-    public String insertIfExistPubMedArticles(edu.ctb.upm.midas.model.extraction.pubmed.Doc document, String documentId, Date version, String sourceName) throws IOException {
+    public String insertIfExistPubMedArticles(edu.ctb.upm.midas.model.extraction.pubmed.Doc document, String documentId, Date version, String sourceName, String searchParamCodeRetrievalMethod) throws IOException {
         String diseaseName = document.getDisease().getName();
 
 //        Disease diseaseEntity = findDiseaseBySeveralWays(documentId, document.getDisease()/*, null*/);
@@ -113,7 +113,7 @@ public class DiseaseHelperNative {
             //inserta la relacion entre disease y document
             diseaseService.insertNativeHasDisease( documentId, version, diseaseId );
             //Insertar sinonimos y sus códigos
-            insertSynonyms(document.getDisease(), diseaseId, sourceName);
+            insertSynonyms(document.getDisease(), diseaseId, sourceName, searchParamCodeRetrievalMethod);
             return diseaseId;
         }else{
             System.out.println(documentId + " | " + version  + " Nombre encontrado (WikipediaDis:" + diseaseEntity + " | PubMedDis: "+document.getDisease()+")");
@@ -125,13 +125,13 @@ public class DiseaseHelperNative {
                 diseaseService.insertNativeHasDisease(documentId, version, diseaseEntity.getDiseaseId());
             }
             //inserta sinonimos si no tiene
-            insertSynonyms(document.getDisease(), diseaseEntity.getDiseaseId(), sourceName);
+            insertSynonyms(document.getDisease(), diseaseEntity.getDiseaseId(), sourceName, searchParamCodeRetrievalMethod);
             return diseaseEntity.getDiseaseId();
         }
     }
 
 
-    private void insertSynonyms(edu.ctb.upm.midas.model.extraction.pubmed.Disease disease, String diseaseId, String sourceName) throws JsonProcessingException {
+    private void insertSynonyms(edu.ctb.upm.midas.model.extraction.pubmed.Disease disease, String diseaseId, String sourceName, String searchParamCodeRetrievalMethod) throws JsonProcessingException {
         //Buscar sinonimo
         edu.ctb.upm.midas.model.jpa.Synonym synonym = null;
         //Si existen sinonimos
@@ -153,7 +153,7 @@ public class DiseaseHelperNative {
                         //inserta los codigos del sinonimo, si existen
                         if (syn.getCodes()!=null){
                             //Busca si existe el código
-                            codeHelperNative.insertIfExistSynonymCode(syn.getCodes(), synonymId);
+                            codeHelperNative.insertIfExistSynonymCode(syn.getCodes(), synonymId, searchParamCodeRetrievalMethod);
                         }
 
                     }
@@ -190,7 +190,7 @@ public class DiseaseHelperNative {
                                 code.setCode(disease.getMeSHUI());
                                 code.setResource(resource);
                                 codes.add(code);
-                                codeHelperNative.insertIfExistSynonymCode(codes, synonymId);
+                                codeHelperNative.insertIfExistSynonymCode(codes, synonymId, searchParamCodeRetrievalMethod);
                             }
 
                         }

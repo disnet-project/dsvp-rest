@@ -1,6 +1,7 @@
 package edu.ctb.upm.midas.controller;
 
 import edu.ctb.upm.midas.service._extract.MayoClinicExtractService;
+import edu.ctb.upm.midas.service._extract.ReportTest;
 import edu.ctb.upm.midas.service._extract.WikipediaExtractService;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -31,13 +32,16 @@ public class ExtractionController {
     private WikipediaExtractService wikipediaExtractService;
     @Autowired
     private MayoClinicExtractService mayoClinicExtractService;
+    @Autowired
+    private ReportTest reportTest;
 
     @RequestMapping(path = { "${my.service.rest.request.mapping.wikipedia.retrieval.texts.path}" }, //_wikipedia extraction
             method = RequestMethod.GET,
-            params = {"snapshot"})
+            params = {"snapshot", "json", "onlyTextRetrieval"})
     public String extract(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
-                          @RequestParam(value = "json", required = false, defaultValue = "false") boolean json) throws Exception {
-        wikipediaExtractService.extract(snapshot, json);
+                          @RequestParam(value = "json", required = false, defaultValue = "false") boolean json,
+                          @RequestParam(value = "onlyTextRetrieval", required = false, defaultValue = "false") boolean onlyTextRetrieval) throws Exception {
+        wikipediaExtractService.extract(snapshot, json, onlyTextRetrieval);
         return "Successful extraction and insertion in a DB!";
     }
 
@@ -65,6 +69,13 @@ public class ExtractionController {
     public void mayoClinicReport(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
                                  @RequestParam(value = "json", required = false, defaultValue = "true") boolean json) throws Exception {
         mayoClinicExtractService.printReport(snapshot, json);
+    }
+
+
+    @RequestMapping(path = { "/codes/report" }, //wikipedia extraction
+            method = RequestMethod.GET)
+    public void codesReport() throws Exception {
+        reportTest.getDiseaseCodesInfo();
     }
 
 
