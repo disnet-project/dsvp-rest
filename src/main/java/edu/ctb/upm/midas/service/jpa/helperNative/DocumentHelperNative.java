@@ -91,6 +91,19 @@ public class DocumentHelperNative {
 
 
     /**
+     * @param sourceId
+     * @param document
+     * @param version
+     * @return
+     * @throws JsonProcessingException
+     */
+    public String createDocumentId(String sourceId, Doc document, Date version) throws JsonProcessingException {
+        String documentId = uniqueId.generateDocument( sourceId, document.getId() );
+        return documentId;
+    }
+
+
+    /**
      * @param document
      * @param version
      * @param documentId

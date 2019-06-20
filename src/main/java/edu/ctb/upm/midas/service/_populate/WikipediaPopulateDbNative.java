@@ -115,7 +115,6 @@ public class WikipediaPopulateDbNative {
     }
 
 
-    @Transactional
     public void insertDocumentData(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
         String documentId = documentHelperNative.insert(sourceId, document, version);
         System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
@@ -129,6 +128,31 @@ public class WikipediaPopulateDbNative {
         //<editor-fold desc="PERSISTIR CÓDIGOS DEL DOCUMENTO">
         codeHelperNative.insertIfExistByCodeList(document.getCodeList(), documentId, version, source.getName());
         //</editor-fold>
+
+        //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
+        for (Section section : document.getSectionList()) {
+            //<editor-fold desc="PERSISTIR has_section">
+            String sectionId = hasSectionHelperNative.insert(documentId, version, section);
+            //</editor-fold>
+
+            int textCount = 0;
+            for (Text text : section.getTextList()) {
+//                            System.out.println("Have texts...");
+                //<editor-fold desc="INSERTAR TEXTO">
+                textHelperNative.insert(text, sectionId, documentId, version, isJSONRequest);
+                //</editor-fold>
+
+                textCount++;
+            }// Textos
+
+        }// Secciones
+        //</editor-fold>
+    }
+
+
+    public void insertDocumentDataRestore(Doc document, String sourceId, Date version, Source source, int docsCount, boolean isJSONRequest) throws IOException {
+        String documentId = documentHelperNative.createDocumentId(sourceId, document, version);
+        System.out.println(docsCount + " Insert document: " + document.getDisease().getName() + "_" + documentId );
 
         //<editor-fold desc="RECORRIDO DE SECCIONES PARA ACCEDER A LOS TEXTOS">
         for (Section section : document.getSectionList()) {

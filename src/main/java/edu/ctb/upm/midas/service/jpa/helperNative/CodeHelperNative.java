@@ -65,7 +65,7 @@ public class CodeHelperNative {
         Code existCode;
 
         for (Code code: codeList) {
-            existCode = getCodeByCodeResource( code );
+            existCode = getCodeAndResourceIdByCodeAndResourceName( code );
 
             if ( existCode == null ){//validar el resourceId por si no existe
                 int resourceId = resourceService.findIdByNameQuery( code.getResource().getName() );
@@ -76,11 +76,11 @@ public class CodeHelperNative {
                 }
                 codeService.insertNative( code.getCode(), resourceId );
                 codeService.insertNativeHasCode( documentId, version, code.getCode(), resourceId );
+                insertRetrievalMethodCode(code.getCode(), resourceId, searchParamCodeRetrievalMethod);
                 if (code.getLink()!=null) {
                     String urlId = urlHelperNative.getUrl(code.getLink(), getId(code.getCode(), resourceId));
                     codeService.insertNativeUrl(code.getCode(), resourceId, urlId);
                 }
-                insertRetrievalMethodCode(code.getCode(), resourceId, searchParamCodeRetrievalMethod);
             }else{
                 //System.out.println("Document_id: " + documentId + " Version: " + version + " Code: " + codeEntity[0] + " ResourceName: " + codeEntity[1]);
                 codeService.insertNativeHasCode( documentId, version, existCode.getCode(), existCode.getResource().getId());
@@ -94,7 +94,7 @@ public class CodeHelperNative {
         Code existCode;
 
         if (code != null) {
-            existCode = getCodeByCodeResource( code );
+            existCode = getCodeAndResourceIdByCodeAndResourceName( code );
 
             if ( existCode == null ){//validar el resourceId por si no existe
                 int resourceId = resourceService.findIdByNameQuery( code.getResource().getName() );
@@ -124,7 +124,7 @@ public class CodeHelperNative {
 
         for (Code code: codeList) {
             if (code.getResource()!=null) {
-                existCode = getCodeByCodeResource(code);
+                existCode = getCodeAndResourceIdByCodeAndResourceName(code);
 
                 if (existCode == null) {//validar el resourceId por si no existe
                     int resourceId = resourceService.findIdByNameQuery(code.getResource().getName());
@@ -170,7 +170,9 @@ public class CodeHelperNative {
      */
     public void insertRetrievalMethodCode(String code, int resourceId, String searchParam){
         RetrievalMethod retrievalMethod = retrievalMethodService.findByNameNative(searchParam);
+//        System.out.println("retrievalMethod: " + retrievalMethod.toString());
         if (retrievalMethod != null){
+//            System.out.println("    code: "+ code +" | resourceId:"+ resourceId +" | retrievalMethodId:"+ retrievalMethod.getRetrievalMethodId());
             codeService.insertNativeRetrievalMethod(code, resourceId, retrievalMethod.getRetrievalMethodId());
         }
     }
@@ -181,7 +183,7 @@ public class CodeHelperNative {
      * @return
      */
     public boolean exist(Code cod){
-        Code code = getCodeByCodeResource( cod );
+        Code code = getCodeAndResourceIdByCodeAndResourceName( cod );
         if( code != null )
             return true;
         else
@@ -193,12 +195,16 @@ public class CodeHelperNative {
      * @param code
      * @return
      */
-    public Code getCodeByCodeResource(Code code){
+    public Code getCodeAndResourceIdByCodeAndResourceName(Code code){
 //        System.out.println("RESOURCE NAME A BUSCAR: " + code.getResource().getName());
         Resource existResource = resourceService.findByName( code.getResource().getName() );
         Object[] codeObject = codeService.findByIdNative(code.getCode(), existResource.getResourceId());
 //        (String) codeEntity[0], (int) codeEntity[1]
-        return new Code((String) codeObject[0], new edu.ctb.upm.midas.model.common.document_structure.code.Resource(existResource.getResourceId(), existResource.getName()));
+        Code existCode = null;
+        if (existResource!=null && codeObject!=null)
+            existCode = new Code((String) codeObject[0], new edu.ctb.upm.midas.model.common.document_structure.code.Resource(existResource.getResourceId(), existResource.getName()));
+
+        return existCode;
     }
 
 

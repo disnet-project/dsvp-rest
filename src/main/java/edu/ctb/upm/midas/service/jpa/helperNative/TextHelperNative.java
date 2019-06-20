@@ -57,7 +57,6 @@ public class TextHelperNative {
      * @return
      * @throws JsonProcessingException
      */
-    @Transactional
     public String insert(Text text, String sectionId, String documentId, Date version, boolean isJSONRequest) throws JsonProcessingException {
         //Verifica que la clase Text sea del tipo adecuado
         //El problema viene cuando se obtienen objetos por medio de JSONs almacenados y se leen,

@@ -97,7 +97,7 @@ public class WikipediaExtractService {
         this.snapshot = timeProvider.dateFormatyyyyMMdd(version);
         List<Source> sources = null;
         HashMap<String, Resource> resourceHashMap = null;
-        DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version);
+        DBpediaResponse dBpediaResponse = getDiseaseLinkListFromDBPedia(version, json);
         System.out.println("snapshot="+timeProvider.dateFormatyyyyMMdd(version)+", json="+json);
 
         if (dBpediaResponse!=null) {
@@ -273,14 +273,19 @@ public class WikipediaExtractService {
      * @return
      * @throws InterruptedException
      */
-    public DBpediaResponse getDiseaseLinkListFromDBPedia(Date snapshot) throws InterruptedException {
+    public DBpediaResponse getDiseaseLinkListFromDBPedia(Date snapshot, boolean json) throws InterruptedException {
         DBpediaResponse dBpediaResponse = null;
 
         //Se obtiene el identificador de lista de enfermedades recuperadas desde DBpedia "Album de enfermedades"
         Album album = null;
         while(true){
-            album = getLastAlbum();
-//            album = getSpecifictAlbum(date.dateFormatyyyyMMdd(version));
+            if (json){
+                album = getSpecifictAlbum(timeProvider.dateFormatyyyyMMdd(snapshot));
+                System.out.println("Specific disease album - snapshot: " + snapshot);
+            } else {
+                album = getLastAlbum();
+                System.out.println("Last disease album - snapshot: " + snapshot);
+            }
             System.out.println(timeProvider.dateFormatyyyyMMdd(album.getDate()) + " == " + timeProvider.dateFormatyyyyMMdd(snapshot));
             if (timeProvider.dateFormatyyyyMMdd(album.getDate()).equals(timeProvider.dateFormatyyyyMMdd(snapshot))) break;
             System.out.println("Wait (1 hour = 3600000 mls) for another disease list request");

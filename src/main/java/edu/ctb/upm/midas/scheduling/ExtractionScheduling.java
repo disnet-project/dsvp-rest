@@ -97,6 +97,13 @@ public class ExtractionScheduling {
     }
 
 
+    @Scheduled(cron = "0 0 0 2 * ?")
+    public void completeInsert() throws Exception {
+
+    }
+
+
+
     /**
      * Método para extraer una nueva lista de enfermedades desde DBPedia y almacenar en la
      * base de datos "addb".

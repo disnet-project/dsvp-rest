@@ -120,4 +120,13 @@ public class RetrievalMethod {
 
         return Objects.hash(retrievalMethodId, name, description);
     }
+
+    @Override
+    public String toString() {
+        return "RetrievalMethod{" +
+                "retrievalMethodId=" + retrievalMethodId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
