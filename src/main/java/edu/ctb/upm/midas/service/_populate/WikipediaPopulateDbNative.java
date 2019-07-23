@@ -100,7 +100,8 @@ public class WikipediaPopulateDbNative {
             for (Doc document: source.getDocuments()) {
                 //Solo inserta aquellos documentos que al menos tengan códigos o secciones
                 if (document.isDiseaseArticle()) {
-                    insertDocumentData(document, sourceId, version, source, docsCount, isJSONRequest);
+//                    insertDocumentData(document, sourceId, version, source, docsCount, isJSONRequest);
+                    insertDocumentDataRestore(document, sourceId, version, source, docsCount, isJSONRequest);
                     docsCount++;
                 }else{
                     invalidCount++;
