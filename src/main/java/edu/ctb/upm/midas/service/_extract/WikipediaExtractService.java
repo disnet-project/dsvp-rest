@@ -30,6 +30,7 @@ import edu.ctb.upm.midas.model.extraction.wikipedia.texts_extraction.request.Req
 import edu.ctb.upm.midas.model.jpa.*;
 import edu.ctb.upm.midas.service._populate.WikipediaPopulateDbNative;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
+import edu.ctb.upm.midas.service.jpa.SourceService;
 import edu.ctb.upm.midas.service.jpa.TextService;
 import edu.ctb.upm.midas.service.jpa.helperNative.ConfigurationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,8 @@ public class WikipediaExtractService {
 
     @Autowired
     private TextService textService;
+    @Autowired
+    private SourceService sourceService;
 
 
     /**
@@ -548,11 +551,36 @@ public class WikipediaExtractService {
     }
 
     public void test() throws ParseException {
-        String source = "wikipedia";
-        String sourceId = "SO01";
-        String snapshot = "2018-02-01";
-        List<Document> documentList = documentService.findAllBySourceIdAndSnapshot(timeProvider.stringToDate(snapshot), sourceId);
+//        String sourceName = "wikipedia";
+//        String sourceId = "SO01";
+//        String snapshot = "2018-02-01";
+        System.out.println("INICIA... ");
+        List<edu.ctb.upm.midas.model.jpa.Source> sources = sourceService.findAll();
 
+        for (edu.ctb.upm.midas.model.jpa.Source source:sources) {
+            List<Date> snapshots = sourceService.findAllSnapshotBySourceNative(source.getName());
+            for (Date snapshot:snapshots) {
+                if (snapshot!=timeProvider.stringToDate("2018-02-01")) break;
+                List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
+                int count = 1, total = texts.size();
+                for (Object[] text: texts) {
+                    String diseaseId = (String) text[0];
+                    String diseaseName = (String) text[1];
+                    Integer textOrder = (Integer) text[2];
+                    String contentType = (String) text[3];
+                    String textId = (String) text[4];
+                    Integer hasNoValME = (Integer) text[5];
+                    Integer hasValME = (Integer) text[6];
+                    String textString = (String) text[7];
+
+                    System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
+                    count++;
+                }
+            }
+        }
+
+        /*
+                List<Document> documentList = documentService.findAllBySourceIdAndSnapshot(timeProvider.stringToDate(snapshot), sourceId);
         String diseaseName = "";
         int count = 1, total = documentList.size();
         for (Document document: documentList) {
@@ -568,20 +596,21 @@ public class WikipediaExtractService {
                 for (HasSection hasSection : document.getHasSections()) {
                     for (HasText hasText : hasSection.getHasTexts()) {
                         edu.ctb.upm.midas.model.jpa.Text text = hasText.getTextByTextId();
-                        Integer validatedMedicalElementCount = textService.getValidatedOrNotDisnetConceptsCount(source, snapshot, disease.getDiseaseId(), true);
-                        Integer noValidatedMedicalElementCount = textService.getValidatedOrNotDisnetConceptsCount(source, snapshot, disease.getDiseaseId(), true);
+                        Integer validatedMedicalElementCount = textService.getDisnetConceptsCountInAText(source, snapshot, disease.getDiseaseId(), true);
+                        Integer noValidatedMedicalElementCount = textService.getDisnetConceptsCountInAText(source, snapshot, disease.getDiseaseId(), true);
                         int haveValidEM = 0;
                         int haveNoValidEM = 0;
 
                         if (validatedMedicalElementCount > 0) haveValidEM = 1;
                         if (noValidatedMedicalElementCount > 0) haveNoValidEM = 1;
 
-                        System.out.println(count + " de " + total + " => " + disease.getDiseaseId() + "," + disease.getName() + "," + hasText.getTextOrder() + "," + text.getTextId() + "," + "" + text.getContentType() + "," + countWordsInAText(text.getText(), text.getContentType()) + "," + haveNoValidEM + "," + noValidatedMedicalElementCount + "," + haveValidEM + "," + validatedMedicalElementCount  /*+ ",\"" + text.getText() + "\""*/);
+                        System.out.println(count + " de " + total + " => " + disease.getDiseaseId() + "," + disease.getName() + "," + hasText.getTextOrder() + "," + text.getTextId() + "," + "" + text.getContentType() + "," + countWordsInAText(text.getText(), text.getContentType()) + "," + haveNoValidEM + "," + noValidatedMedicalElementCount + "," + haveValidEM + "," + validatedMedicalElementCount  *//*+ ",\"" + text.getText() + "\""*//*);
                     }
                 }
                 count++;
             }
         }
+        */
     }
 
 }

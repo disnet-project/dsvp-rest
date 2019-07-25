@@ -6,6 +6,7 @@ import edu.ctb.upm.midas.repository.jpa.SourceRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,6 +104,20 @@ public class SourceRepositoryImpl extends AbstractDao<String, Source> implements
         if (CollectionUtils.isNotEmpty(listSource))
             source = listSource.get(0);
         return source;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Date> findAllSnapshotBySourceNative(String source) {
+        List<Date> snapshots = null;
+        List<Date> snapshotList = (List<Date>) getEntityManager()
+                .createNamedQuery("Source.findAllSnapshotBySourceNative")
+                .setParameter("name", source)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(snapshotList))
+            snapshots = snapshotList;
+        return snapshots;
     }
 
     @SuppressWarnings("unchecked")

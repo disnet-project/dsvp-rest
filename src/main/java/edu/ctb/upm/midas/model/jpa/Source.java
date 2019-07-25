@@ -75,6 +75,14 @@ import java.util.Objects;
                 name = "Source.findByNameNative",
                 query = "SELECT s.source_id "
                         + "FROM source s WHERE s.name = :name"
+        ),
+        @NamedNativeQuery(
+                name = "Source.findAllSnapshotBySourceNative",
+                query = "SELECT DISTINCT hs.date 'version' " +
+                        "FROM has_source hs " +
+                        "INNER JOIN source s ON s.source_id = hs.source_id " +
+                        "WHERE s.name = :name " +
+                        "ORDER BY hs.date ASC "
         )
 })
 

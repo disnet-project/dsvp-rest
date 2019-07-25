@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +58,11 @@ public class SourceServiceImpl implements SourceService {
     @Override
     public String findLastSourceIdQuery() {
         return daoSource.findLastSourceIdQuery();
+    }
+
+    @Override
+    public List<Date> findAllSnapshotBySourceNative(String source) {
+        return daoSource.findAllSnapshotBySourceNative( source );
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)

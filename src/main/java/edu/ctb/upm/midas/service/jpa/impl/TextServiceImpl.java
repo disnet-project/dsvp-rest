@@ -71,8 +71,13 @@ public class TextServiceImpl implements TextService {
     }
 
     @Override
-    public Integer getValidatedOrNotDisnetConceptsCount(String sourceName, String snapshot, String diseaseId, boolean validatedMedicalElement) {
-        return daoText.getValidatedOrNotDisnetConceptsCount(sourceName, snapshot, diseaseId, validatedMedicalElement);
+    public List<Object[]> findTextWithDetails(String source, Date snapshot, String textId) {
+        return daoText.findTextWithDetails(source,snapshot, textId);
+    }
+
+    @Override
+    public Integer getDisnetConceptsCountInAText(String sourceName, String snapshot, String textId, boolean validatedMedicalElement) {
+        return daoText.getDisnetConceptsCountInAText(sourceName, snapshot, textId, validatedMedicalElement);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

@@ -2,6 +2,7 @@ package edu.ctb.upm.midas.repository.jpa;
 
 import edu.ctb.upm.midas.model.jpa.Source;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,8 @@ public interface SourceRepository {
     Source findByIdNative(String sourceId);
 
     Source findByIdNativeResultClass(String sourceId);
+
+    List<Date> findAllSnapshotBySourceNative(String source);
 
     List<Source> findAllQuery();
 

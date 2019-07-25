@@ -51,6 +51,7 @@ public class HasSectionHelperNative {
     @Transactional
     public String insert(String documentId, Date version, Section section){
         //Busca la sección que ya debe existir
+//        System.out.println("Sección a buscar: " + section.getName());
         edu.ctb.upm.midas.model.jpa.Section existSection = sectionService.findByName( section.getName() );
         if (existSection!=null) {
             //inserta la relación entre el documento y la sección (insert ignore)

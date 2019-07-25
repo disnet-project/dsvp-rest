@@ -2,6 +2,7 @@ package edu.ctb.upm.midas.service.jpa;
 
 import edu.ctb.upm.midas.model.jpa.Source;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,8 @@ public interface SourceService {
     Source findLastSourceQuery();
 
     String findLastSourceIdQuery();
+
+    List<Date> findAllSnapshotBySourceNative(String source);
 
     List<Source> findAll();
 

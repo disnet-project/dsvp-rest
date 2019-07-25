@@ -115,13 +115,29 @@ public class TextRepositoryImpl extends AbstractDao<String, Text>
 
     @SuppressWarnings("unchecked")
     @Override
-    public Integer getValidatedOrNotDisnetConceptsCount(String sourceName, String snapshot, String diseaseId, boolean validatedMedicalElement) {
+    public List<Object[]> findTextWithDetails(String source, Date snapshot, String textId) {
+        List<Object[]> texts = null;
+        List<Object[]> textList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Text.findTextWithDetails")
+                .setParameter("source", source)
+                .setParameter("snapshot", snapshot)
+                //.setParameter("versionLike", textId)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(textList))
+            texts = textList;
+        return texts;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Integer getDisnetConceptsCountInAText(String sourceName, String snapshot, String textId, boolean validatedMedicalElement) {
         int count = 0;
         List<Integer> resultList = (List<Integer>) getEntityManager()
-                .createNamedQuery("Text.getValidatedOrNotDisnetConceptsCount")
+                .createNamedQuery("getDisnetConceptsCountInAText")
                 .setParameter("source", sourceName)
                 .setParameter("snapshot", snapshot)
-                .setParameter("disease_id", diseaseId)
+                .setParameter("text_id", textId)
                 .setParameter("validated_medical_element", validatedMedicalElement)
                 .setMaxResults(1)
                 .getResultList();
