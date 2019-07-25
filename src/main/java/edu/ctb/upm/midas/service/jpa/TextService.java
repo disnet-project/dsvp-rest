@@ -26,6 +26,8 @@ public interface TextService {
 
     List<Object[]> findByLikeVersionNative(Date version, String strVersion, String source);
 
+    Integer getValidatedOrNotDisnetConceptsCount(String sourceName, String snapshot, String diseaseId, boolean validatedMedicalElement);
+
     List<Text> findAll();
 
     void save(Text text);

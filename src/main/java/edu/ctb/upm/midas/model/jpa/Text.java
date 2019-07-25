@@ -96,6 +96,31 @@ import java.util.Objects;
                         "    AND tt.text_id IS NOT NULL " +
                         "    AND LENGTH(tt.text) > 0 " +
                         ") " //EVITAR VALORES VACIOS
+        ),
+        @NamedNativeQuery(
+                name = "Text.findBySourceAndSnapshotAndRelevantDiseaseAndValidatedMedicalTermNative",
+                query = "SELECT DISTINCT d.disease_id, d.name, t.text \n" +
+                        "FROM disease d\n" +
+                        " INNER JOIN has_disease hd ON hd.disease_id = d.disease_id  INNER JOIN document doc ON doc.document_id = hd.document_id AND doc.date = hd.date\n" +
+                        " INNER JOIN has_source hs ON hs.document_id = doc.document_id AND hs.date = doc.date\n" +
+                        " INNER JOIN source sce ON sce.source_id = hs.source_id\n" +
+                        "-- source and version\n" +
+                        " INNER JOIN has_section hsec ON hsec.document_id = doc.document_id AND hsec.date = doc.date\n" +
+                        " INNER JOIN has_text ht ON ht.document_id = hsec.document_id AND ht.date = hsec.date AND ht.section_id = hsec.section_id\n" +
+                        "   INNER JOIN text t on ht.text_id = t.text_id\n" +
+                        " INNER JOIN has_symptom hsym ON hsym.text_id = ht.text_id\n" +
+                        " INNER JOIN symptom sym ON sym.cui = hsym.cui\n" +
+                        "WHERE sce.name = @SOURCE\n" +
+                        "AND hs.date = @ANTERIOR\n" +
+                        "AND d.relevant = 1\n" +
+                        "  AND hsym.validated = 1\n" +
+                        " -- AND d.disease_id = 'DIS004797'\n" +
+                        "GROUP BY d.name, d.disease_id, sym.cui, sym.name\n" +
+                        "ORDER BY d.name ASC"
+        ),
+        @NamedNativeQuery(
+                name = "Text.getValidatedOrNotDisnetConceptsCount",
+                query = "SELECT getValidatedOrNotDisnetConceptsCount(:source, :snapshot, :disease_id, :validated_medical_element)"
         )
 
 

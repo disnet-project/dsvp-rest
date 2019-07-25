@@ -32,6 +32,8 @@ public interface TextRepository {
 
     List<Object[]> findByLikeVersionNative(Date version, String strVersion, String source);
 
+    Integer getValidatedOrNotDisnetConceptsCount(String sourceName, String snapshot, String diseaseId, boolean validatedMedicalElement);
+
     List<Text> findAllQuery();
 
     void persist(Text text);

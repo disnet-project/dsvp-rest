@@ -115,6 +115,25 @@ public class TextRepositoryImpl extends AbstractDao<String, Text>
 
     @SuppressWarnings("unchecked")
     @Override
+    public Integer getValidatedOrNotDisnetConceptsCount(String sourceName, String snapshot, String diseaseId, boolean validatedMedicalElement) {
+        int count = 0;
+        List<Integer> resultList = (List<Integer>) getEntityManager()
+                .createNamedQuery("Text.getValidatedOrNotDisnetConceptsCount")
+                .setParameter("source", sourceName)
+                .setParameter("snapshot", snapshot)
+                .setParameter("disease_id", diseaseId)
+                .setParameter("validated_medical_element", validatedMedicalElement)
+                .setMaxResults(1)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            //System.out.println("no nulo" + resultList.toString());
+            count = resultList.get(0);
+        }
+        return count;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public List<Text> findAllQuery() {
         return (List<Text>) getEntityManager()
                 .createNamedQuery("Text.findAll")

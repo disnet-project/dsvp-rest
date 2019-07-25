@@ -25,6 +25,13 @@ import java.util.Objects;
         , @NamedQuery(name = "Document.findById", query = "SELECT d FROM Document d WHERE d.documentId = :documentId AND d.date = :date")
         , @NamedQuery(name = "Document.findByDocumentId", query = "SELECT d FROM Document d WHERE d.documentId = :documentId")
         , @NamedQuery(name = "Document.findByDate", query = "SELECT d FROM Document d WHERE d.date = :date")
+        , @NamedQuery(name = "Document.findBySourceAndSnapshot", query = "" +
+        "SELECT d " +
+        "FROM Document d " +
+        "INNER JOIN d.hasSources hs " +
+        "WHERE d.date = :snapshot " +
+        "AND hs.sourceId = :sourceId"
+        )
 })
 
 @NamedNativeQueries({

@@ -70,6 +70,11 @@ public class TextServiceImpl implements TextService {
         return daoText.findByLikeVersionNative(version, strVersion, source);
     }
 
+    @Override
+    public Integer getValidatedOrNotDisnetConceptsCount(String sourceName, String snapshot, String diseaseId, boolean validatedMedicalElement) {
+        return daoText.getValidatedOrNotDisnetConceptsCount(sourceName, snapshot, diseaseId, validatedMedicalElement);
+    }
+
     @Transactional(propagation= Propagation.REQUIRED)
     public void save(Text text) {
         daoText.persist(text);

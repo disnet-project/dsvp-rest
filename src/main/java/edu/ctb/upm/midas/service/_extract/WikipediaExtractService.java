@@ -25,22 +25,19 @@ import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.request.Request
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.request.RequestFather;
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.request.RequestGDLL;
 import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.response.*;
+import edu.ctb.upm.midas.model.extraction.wikipedia.disease_list.response.Disease;
 import edu.ctb.upm.midas.model.extraction.wikipedia.texts_extraction.request.Request;
-import edu.ctb.upm.midas.model.jpa.Document;
-import edu.ctb.upm.midas.model.jpa.DocumentUrl;
-import edu.ctb.upm.midas.model.jpa.HasDisease;
-import edu.ctb.upm.midas.model.jpa.Url;
+import edu.ctb.upm.midas.model.jpa.*;
 import edu.ctb.upm.midas.service._populate.WikipediaPopulateDbNative;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
+import edu.ctb.upm.midas.service.jpa.TextService;
 import edu.ctb.upm.midas.service.jpa.helperNative.ConfigurationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by gerardo on 29/01/2018.
@@ -83,6 +80,10 @@ public class WikipediaExtractService {
     public void setSnapshot(String snapshot) {
         this.snapshot = snapshot;
     }
+
+    @Autowired
+    private TextService textService;
+
 
     /**
      * @param snapshot
@@ -522,6 +523,65 @@ public class WikipediaExtractService {
             }
         }
         //extractService.onlyExtract(xmlLinks);
+    }
+
+    /**
+     *
+     * countWordsUsingStringTokenizer
+     *
+     * @param sentence
+     * @return
+     */
+    public static int countWordsInAText(String sentence, String textType) {
+        if (sentence == null || sentence.isEmpty()) {
+            return 0;
+        }
+        if (textType.equalsIgnoreCase("LIST")){
+
+            String [] tokens = sentence.split("&|\\s+");
+            return tokens.length;
+
+        }else {
+            StringTokenizer tokens = new StringTokenizer(sentence);
+            return tokens.countTokens();
+        }
+    }
+
+    public void test() throws ParseException {
+        String source = "wikipedia";
+        String sourceId = "SO01";
+        String snapshot = "2018-02-01";
+        List<Document> documentList = documentService.findAllBySourceIdAndSnapshot(timeProvider.stringToDate(snapshot), sourceId);
+
+        String diseaseName = "";
+        int count = 1, total = documentList.size();
+        for (Document document: documentList) {
+//            System.out.println(count + " to " + total + ": " + document.getDocumentId() + " - " + document.getDate());
+            edu.ctb.upm.midas.model.jpa.Disease disease = null;
+//            int countDisease = 1;
+            for (HasDisease hasDisease: document.getHasDiseases()) {
+                 disease = hasDisease.getDiseaseByDiseaseId();
+//                if (countDisease>1) System.out.println("MAS DE DOS ENFERMEDADES POR DOCUMENTO: " + document.getDocumentId());
+//                countDisease++;
+            }
+            if (disease.getRelevant().intValue()==1) {
+                for (HasSection hasSection : document.getHasSections()) {
+                    for (HasText hasText : hasSection.getHasTexts()) {
+                        edu.ctb.upm.midas.model.jpa.Text text = hasText.getTextByTextId();
+                        Integer validatedMedicalElementCount = textService.getValidatedOrNotDisnetConceptsCount(source, snapshot, disease.getDiseaseId(), true);
+                        Integer noValidatedMedicalElementCount = textService.getValidatedOrNotDisnetConceptsCount(source, snapshot, disease.getDiseaseId(), true);
+                        int haveValidEM = 0;
+                        int haveNoValidEM = 0;
+
+                        if (validatedMedicalElementCount > 0) haveValidEM = 1;
+                        if (noValidatedMedicalElementCount > 0) haveNoValidEM = 1;
+
+                        System.out.println(count + " de " + total + " => " + disease.getDiseaseId() + "," + disease.getName() + "," + hasText.getTextOrder() + "," + text.getTextId() + "," + "" + text.getContentType() + "," + countWordsInAText(text.getText(), text.getContentType()) + "," + haveNoValidEM + "," + noValidatedMedicalElementCount + "," + haveValidEM + "," + validatedMedicalElementCount  /*+ ",\"" + text.getText() + "\""*/);
+                    }
+                }
+                count++;
+            }
+        }
     }
 
 }

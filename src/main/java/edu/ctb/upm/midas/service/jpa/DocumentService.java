@@ -23,6 +23,8 @@ public interface DocumentService {
 
     List<Document> findAll();
 
+    List<Document> findAllBySourceIdAndSnapshot(Date snapshot, String sourceId);
+
     void save(Document document);
 
     int insertNative(String documentId, Date date);

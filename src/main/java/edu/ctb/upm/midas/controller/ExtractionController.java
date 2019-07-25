@@ -78,5 +78,11 @@ public class ExtractionController {
         reportTest.getDiseaseCodesInfo();
     }
 
+    @RequestMapping(path = { "/test" }, //wikipedia extraction
+            method = RequestMethod.GET)
+    public void test() throws Exception {
+        wikipediaExtractService.test();
+    }
+
 
 }

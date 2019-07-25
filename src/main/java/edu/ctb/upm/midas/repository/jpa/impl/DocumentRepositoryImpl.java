@@ -91,6 +91,18 @@ public class DocumentRepositoryImpl extends AbstractDao<DocumentPK, Document>
                 .getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Document> findAllBySourceIdAndSnapshot(Date snapshot, String sourceId) {
+        return (List<Document>) getEntityManager()
+                .createNamedQuery("Document.findBySourceAndSnapshot")
+                .setParameter("sourceId", sourceId)
+                .setParameter("snapshot", snapshot)
+//                .setMaxResults(10)
+                .setMaxResults(0)
+                .getResultList();
+    }
+
     public void persist(Document document) {
         super.persist(document);
     }

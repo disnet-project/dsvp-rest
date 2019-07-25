@@ -46,6 +46,11 @@ public class DocumentServiceImpl implements DocumentService {
         return listDocumentEntities;
     }
 
+    @Override
+    public List<Document> findAllBySourceIdAndSnapshot(Date snapshot, String sourceId) {
+        return daoDocument.findAllBySourceIdAndSnapshot(snapshot, sourceId);
+    }
+
     @Transactional(propagation= Propagation.REQUIRED)
     public void save(Document document) {
         daoDocument.persist(document);
