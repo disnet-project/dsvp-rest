@@ -560,21 +560,22 @@ public class WikipediaExtractService {
         for (edu.ctb.upm.midas.model.jpa.Source source:sources) {
             List<Date> snapshots = sourceService.findAllSnapshotBySourceNative(source.getName());
             for (Date snapshot:snapshots) {
-                if (snapshot!=timeProvider.stringToDate("2018-02-01")) break;
-                List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
-                int count = 1, total = texts.size();
-                for (Object[] text: texts) {
-                    String diseaseId = (String) text[0];
-                    String diseaseName = (String) text[1];
-                    Integer textOrder = (Integer) text[2];
-                    String contentType = (String) text[3];
-                    String textId = (String) text[4];
-                    Integer hasNoValME = (Integer) text[5];
-                    Integer hasValME = (Integer) text[6];
-                    String textString = (String) text[7];
+                if (timeProvider.dateFormatyyyyMMdd(snapshot).equalsIgnoreCase("2018-02-01")) {
+                    List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
+                    int count = 1, total = texts.size();
+                    for (Object[] text : texts) {
+                        String diseaseId = (String) text[0];
+                        String diseaseName = (String) text[1];
+                        Integer textOrder = (Integer) text[2];
+                        String contentType = (String) text[3];
+                        String textId = (String) text[4];
+                        Integer hasNoValME = (Integer) text[5];
+                        Integer hasValME = (Integer) text[6];
+                        String textString = (String) text[7];
 
-                    System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
-                    count++;
+                        System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
+                        count++;
+                    }
                 }
             }
         }
