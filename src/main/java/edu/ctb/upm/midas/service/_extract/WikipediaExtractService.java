@@ -36,6 +36,8 @@ import edu.ctb.upm.midas.service.jpa.helperNative.ConfigurationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -550,7 +552,7 @@ public class WikipediaExtractService {
         }
     }
 
-    public void test() throws ParseException {
+    public void test() throws ParseException, IOException {
 //        String sourceName = "wikipedia";
 //        String sourceId = "SO01";
 //        String snapshot = "2018-02-01";
@@ -560,7 +562,14 @@ public class WikipediaExtractService {
         for (edu.ctb.upm.midas.model.jpa.Source source:sources) {
             List<Date> snapshots = sourceService.findAllSnapshotBySourceNative(source.getName());
             for (Date snapshot:snapshots) {
-                if (timeProvider.dateFormatyyyyMMdd(snapshot).equalsIgnoreCase("2018-02-01")) {
+                String fileName = timeProvider.dateFormatyyyyMMdd(snapshot) + "_" + source.getName() + "_text_analisis.csv";
+                String pathFile = Constants.ANALISIS_FOLDER + fileName;
+                FileWriter fileWriter = new FileWriter(pathFile);
+
+                fileWriter.write("disease_id;disease_name;text_order;text_id;content_type;word_count;has_no_val_me;has_val_me;text\n");
+
+
+//                if (timeProvider.dateFormatyyyyMMdd(snapshot).equalsIgnoreCase("2018-02-01")) {
                     List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
                     int count = 1, total = texts.size();
                     for (Object[] text : texts) {
@@ -573,9 +582,12 @@ public class WikipediaExtractService {
                         Integer hasValME = (Integer) text[6];
                         String textString = (String) text[7];
 
-                        System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
+                        fileWriter.write(diseaseId + ";" + diseaseName + ";" + textOrder + ";" + textId + ";" + "" + contentType + ";" + countWordsInAText(textString, contentType) + ";" + hasNoValME + ";" + hasValME + ";\"" + textString + "\"\n");
+//                        System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
                         count++;
-                    }
+//                    }
+                    fileWriter.close();
+                    System.out.println("FINALIZA");
                 }
             }
         }

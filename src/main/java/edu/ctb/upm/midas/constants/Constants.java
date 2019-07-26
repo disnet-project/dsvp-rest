@@ -57,6 +57,7 @@ public class Constants {
     public static final String WIKIPEDIA_SEMTYPE_FILE_NAME = "_wikipedia_semtype";
     public static final String WIKIPEDIA_RETRIEVAL_FILE_NAME = "_wikipedia_retrieval";
     public static final String WIKIPEDIA_DISEASE_LIST_FILE_NAME = "_wikipedia_disease_list";
+    public static final String ANALISIS_FOLDER = "tmp/analisis/";
 
     public static final String DOT_JSON = ".json";
     public static final String DOT_XML = ".xml";
