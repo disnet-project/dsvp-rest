@@ -560,36 +560,40 @@ public class WikipediaExtractService {
         List<edu.ctb.upm.midas.model.jpa.Source> sources = sourceService.findAll();
 
         for (edu.ctb.upm.midas.model.jpa.Source source:sources) {
-            List<Date> snapshots = sourceService.findAllSnapshotBySourceNative(source.getName());
-            for (Date snapshot:snapshots) {
-                String fileName = timeProvider.dateFormatyyyyMMdd(snapshot) + "_" + source.getName() + "_text_analisis.csv";
-                String pathFile = Constants.ANALISIS_FOLDER + fileName;
-                FileWriter fileWriter = new FileWriter(pathFile);
+            if (source.getName().equals("wikipedia")) {
+                List<Date> snapshots = sourceService.findAllSnapshotBySourceNative(source.getName());
+                for (Date snapshot : snapshots) {
+                    String fileName = timeProvider.dateFormatyyyyMMdd(snapshot) + "_" + source.getName() + "_text_analisis.csv";
+                    String pathFile = Constants.ANALISIS_FOLDER + fileName;
+                    FileWriter fileWriter = new FileWriter(pathFile);
+                    System.out.println(pathFile);
 
-                fileWriter.write("disease_id;disease_name;text_order;text_id;content_type;word_count;has_no_val_me;has_val_me;text\n");
+                    fileWriter.write("disease_id;disease_name;text_order;text_id;content_type;word_count;has_no_val_me;has_val_me;text\n");
 
 
 //                if (timeProvider.dateFormatyyyyMMdd(snapshot).equalsIgnoreCase("2018-02-01")) {
                     List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
                     int count = 1, total = texts.size();
                     for (Object[] text : texts) {
+                        System.out.println("    Tiene TEXTOS");
                         String diseaseId = (String) text[0];
                         String diseaseName = (String) text[1];
-                        Integer textOrder = (Integer) text[2];
-                        String contentType = (String) text[3];
-                        String textId = (String) text[4];
-                        Integer hasNoValME = (Integer) text[5];
-                        Integer hasValME = (Integer) text[6];
-                        String textString = (String) text[7];
+                        String sectionName = (String) text[2];
+                        Integer textOrder = (Integer) text[3];
+                        String contentType = (String) text[4];
+                        String textId = (String) text[5];
+                        Integer hasNoValME = (Integer) text[6];
+                        Integer hasValME = (Integer) text[7];
+                        String textString = (String) text[8];
 
-                        fileWriter.write(diseaseId + ";" + diseaseName + ";" + textOrder + ";" + textId + ";" + "" + contentType + ";" + countWordsInAText(textString, contentType) + ";" + hasNoValME + ";" + hasValME + ";\"" + textString + "\"\n");
+                        fileWriter.write(diseaseId + ";" + diseaseName + ";" + sectionName + ";" + textOrder + ";" + textId + ";" + "" + contentType + ";" + countWordsInAText(textString, contentType) + ";" + hasNoValME + ";" + hasValME + ";\"" + textString + "\"\n");
 //                        System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
                         count++;
 //                    }
+                    }
                     fileWriter.close();
-                    System.out.println("FINALIZA");
                 }
-            }
+            }// if source
         }
 
         /*

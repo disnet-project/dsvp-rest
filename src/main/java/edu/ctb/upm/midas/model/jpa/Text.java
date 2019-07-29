@@ -101,6 +101,7 @@ import java.util.Objects;
                 name = "Text.findTextWithDetails",
                 query = "SELECT DISTINCT d.disease_id " +
                         "              , d.name " +
+                        "              , s.name " +
                         "              , ht.text_order " +
                         "              , t.content_type " +
                         "              , t.text_id " +
@@ -115,6 +116,7 @@ import java.util.Objects;
                         " INNER JOIN source sce ON sce.source_id = hs.source_id " +
                         "-- source and version\n" +
                         " INNER JOIN has_section hsec ON hsec.document_id = doc.document_id AND hsec.date = doc.date " +
+                        " INNER JOIN section s on hsec.section_id = s.section_id " +
                         " INNER JOIN has_text ht ON ht.document_id = hsec.document_id AND ht.date = hsec.date AND ht.section_id = hsec.section_id " +
                         " INNER JOIN text t on ht.text_id = t.text_id " +
                         " INNER JOIN has_symptom hsym ON hsym.text_id = ht.text_id " +
