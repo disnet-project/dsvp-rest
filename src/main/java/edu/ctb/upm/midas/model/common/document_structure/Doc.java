@@ -29,6 +29,8 @@ public class Doc {
     private List<Section> sectionList;
     private Integer codeCount;
     private List<Code> codeList;
+    private List<Reference> referenceList;
+
 
 
 
@@ -120,4 +122,11 @@ public class Doc {
         this.codeCount = codeCount;
     }
 
+    public List<Reference> getReferenceList() {
+        return referenceList;
+    }
+
+    public void setReferenceList(List<Reference> referenceList) {
+        this.referenceList = referenceList;
+    }
 }
