@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -559,39 +560,49 @@ public class WikipediaExtractService {
         System.out.println("INICIA... ");
         List<edu.ctb.upm.midas.model.jpa.Source> sources = sourceService.findAll();
 
+        String anteriorSnanpshot    = "2018-02-01";
+        String actualSnanpshot      = "2018-02-15";
         for (edu.ctb.upm.midas.model.jpa.Source source:sources) {
             if (source.getName().equals("wikipedia")) {
                 List<Date> snapshots = sourceService.findAllSnapshotBySourceNative(source.getName());
+                int countSnapshot = 1;
                 for (Date snapshot : snapshots) {
-                    String fileName = timeProvider.dateFormatyyyyMMdd(snapshot) + "_" + source.getName() + "_text_analisis.csv";
-                    String pathFile = Constants.ANALISIS_FOLDER + fileName;
-                    FileWriter fileWriter = new FileWriter(pathFile);
-                    System.out.println(pathFile);
+                    if (anteriorSnanpshot.equalsIgnoreCase(timeProvider.dateFormatyyyyMMdd(snapshot))) {
+                        if (countSnapshot >= 3) break;
+                        String typeSnapshot = "anterior";
+                        if (countSnapshot == 2) typeSnapshot = "actual";
+                        String fileName = timeProvider.dateFormatyyyyMMdd(snapshot) + "_" + source.getName() + "_text_analisis.sql";
+                        String pathFile = Constants.ANALISIS_FOLDER + fileName;
+                        FileWriter fileWriter = new FileWriter(pathFile);
+                        System.out.println(pathFile);
 
-                    fileWriter.write("disease_id;disease_name;text_order;text_id;content_type;word_count;has_no_val_me;has_val_me;text\n");
+//                    fileWriter.write("disease_id;disease_name;text_order;text_id;content_type;word_count;has_no_val_me;has_val_me;text\n");
+                        fileWriter.write("CREATE TEMPORARY TABLE new_tbl_" + typeSnapshot + "_diseases_text_word_count\n");
 
 
 //                if (timeProvider.dateFormatyyyyMMdd(snapshot).equalsIgnoreCase("2018-02-01")) {
-                    List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
-                    int count = 1, total = texts.size();
-                    for (Object[] text : texts) {
-                        System.out.println("    Tiene TEXTOS");
-                        String diseaseId = (String) text[0];
-                        String diseaseName = (String) text[1];
-                        String sectionName = (String) text[2];
-                        Integer textOrder = (Integer) text[3];
-                        String contentType = (String) text[4];
-                        String textId = (String) text[5];
-                        Integer hasNoValME = (Integer) text[6];
-                        Integer hasValME = (Integer) text[7];
-                        String textString = (String) text[8];
+                        List<Object[]> texts = textService.findTextWithDetails(source.getName(), snapshot, "");
+                        int count = 1, total = texts.size();
+                        for (Object[] text : texts) {
+                            String diseaseId = (String) text[0];
+                            String diseaseName = (String) text[1];
+                            String sectionName = (String) text[2];
+                            Integer textOrder = (Integer) text[3];
+                            String contentType = (String) text[4];
+                            String textId = (String) text[5];
+                            Integer hasNoValME = (text[6]==null)?0:(Integer) text[6];
+                            Integer hasValME = (text[7]==null)?0:(Integer) text[7];
+                            String textString = (text[8]==null)?"":(String) text[8];
+                            Integer urlCount = (text[9]==null)?0:((BigInteger) text[9]).intValue();
 
-                        fileWriter.write(diseaseId + ";" + diseaseName + ";" + sectionName + ";" + textOrder + ";" + textId + ";" + "" + contentType + ";" + countWordsInAText(textString, contentType) + ";" + hasNoValME + ";" + hasValME + ";\"" + textString + "\"\n");
+                            fileWriter.write(diseaseId + ";" + diseaseName + ";" + sectionName + ";" + textOrder + ";" + textId + ";" + "" + contentType + ";" + countWordsInAText(textString, contentType) + ";" + hasNoValME + ";" + hasValME + ";" + urlCount   /*+ ";\"" + textString*/ + "\"\n");
 //                        System.out.println(count + " de " + total + " => " + diseaseId + "," + diseaseName + "," + textOrder + "," + textId + "," + "" + contentType + "," + countWordsInAText(textString, contentType) + "," + hasNoValME + "," + hasValME);
-                        count++;
+                            count++;
 //                    }
+                        }
+                        fileWriter.close();
+                        countSnapshot++;
                     }
-                    fileWriter.close();
                 }
             }// if source
         }

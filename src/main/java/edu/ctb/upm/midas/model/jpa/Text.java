@@ -101,7 +101,7 @@ import java.util.Objects;
                 name = "Text.findTextWithDetails",
                 query = "SELECT DISTINCT d.disease_id " +
                         "              , d.name " +
-                        "              , s.name " +
+                        "              , s.description " +
                         "              , ht.text_order " +
                         "              , t.content_type " +
                         "              , t.text_id " +
@@ -109,7 +109,8 @@ import java.util.Objects;
                         "              , getDisnetConceptsCountInAText(:source, :snapshot, t.text_id, 1) has_val_me " +
                         "              , t.text " +
                         "              -- , wordCount(t.text) word_count\n " +
-                        " FROM disease d\n" +
+                        "              , count(DISTINCT u.url_id) url_count " +
+                        " FROM disease d " +
                         " INNER JOIN has_disease hd ON hd.disease_id = d.disease_id " +
                         " INNER JOIN document doc ON doc.document_id = hd.document_id AND doc.date = hd.date " +
                         " INNER JOIN has_source hs ON hs.document_id = doc.document_id AND hs.date = doc.date " +
@@ -121,6 +122,8 @@ import java.util.Objects;
                         " INNER JOIN text t on ht.text_id = t.text_id " +
                         " INNER JOIN has_symptom hsym ON hsym.text_id = ht.text_id " +
                         " INNER JOIN symptom sym ON sym.cui = hsym.cui " +
+                        " LEFT JOIN text_url tu on t.text_id = tu.text_id " +
+                        " LEFT JOIN url u on tu.url_id = u.url_id " +
                         "WHERE sce.name = :source " +
                         "AND hs.date = :snapshot " +
                         "AND d.relevant = 1 " +
