@@ -1,5 +1,6 @@
 package edu.ctb.upm.midas.common.util;
 
+import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.model.common.document_structure.text.List_;
 import edu.ctb.upm.midas.model.common.document_structure.text.Paragraph;
 import edu.ctb.upm.midas.model.common.document_structure.text.Table;
@@ -7,6 +8,7 @@ import edu.ctb.upm.midas.model.common.document_structure.text.Text;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -115,6 +117,22 @@ public class Common {
             }
         }
         return typeText;
+    }
+
+
+    public void writeAnalysisJSONFile(String jsonBody, String snapshot) throws IOException {
+        String fileName = "disnet_article_analysis_" + snapshot + Constants.DOT_JSON;
+        String path = Constants.STATISTICS_HISTORY_FOLDER + fileName;
+        InputStream in = getClass().getResourceAsStream(path);
+        //BufferedReader bL = new BufferedReader(new InputStreamReader(in));
+        File file = new File(path);
+        BufferedWriter bW;
+
+        if (!file.exists()){
+            bW = new BufferedWriter(new FileWriter(file));
+            bW.write(jsonBody);
+            bW.close();
+        }
     }
 
 

@@ -1,6 +1,9 @@
 package edu.ctb.upm.midas.service.jpa.impl;
+import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.model.jpa.Document;
 import edu.ctb.upm.midas.model.jpa.DocumentPK;
+import edu.ctb.upm.midas.model.wikipediaApi.Disease;
+import edu.ctb.upm.midas.model.wikipediaApi.Revision;
 import edu.ctb.upm.midas.repository.jpa.DocumentRepository;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +53,62 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public List<Document> findAllBySourceIdAndSnapshot(Date snapshot, String sourceId) {
         return daoDocument.findAllBySourceIdAndSnapshot(snapshot, sourceId);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    @Override
+    public List<Disease> findAllArticlesAndSnapshot() {
+        List<Object[]> objects = daoDocument.findAllArticlesAndSnapshot();
+        return createDiseaseList(objects, false);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    @Override
+    public List<Disease> findAllDistinctArticlesAndSnapshot() {
+        List<Object[]> objects = daoDocument.findAllDistinctArticlesAndSnapshot();
+        return createDiseaseList(objects, true);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    @Override
+    public List<Revision> findAllSnapshotsOfAArticle(String diseaseId) {
+        TimeProvider timeProvider = new TimeProvider();
+        List<Revision> revisions = new ArrayList<>();
+        List<Object[]> objects = daoDocument.findAllSnapshotsOfAArticle(diseaseId);
+        if (objects!=null){
+            revisions = new ArrayList<>();
+            for (Object[] obj: objects) {
+                Revision revision = new Revision(
+                        (Integer) obj[0]
+                        , timeProvider.sqlDateFormatyyyyMMdd( ((java.sql.Date) obj[1]) )
+                        , (obj[2]==null)?"":timeProvider.sqlDateFormatyyyyMMdd( (java.sql.Date) obj[2] )
+                );
+                revisions.add(revision);
+            }
+        }
+        return revisions;
+    }
+
+    public List<Disease> createDiseaseList(List<Object[]> objects, boolean basicInfo){
+        List<Disease> diseases = new ArrayList<>();
+        if (objects!=null){
+            diseases = new ArrayList<>();
+            for (Object[] obj: objects) {
+                Disease disease = new Disease();
+                if (basicInfo){
+                    disease.setId((String) obj[0]);
+                    disease.setName((String) obj[1]);
+                }else {
+                    disease.setId((String) obj[0]);
+                    disease.setName((String) obj[1]);
+                    disease.setSnapshotId((Integer) obj[2]);
+                    disease.setCurrentSnapshot((Date) obj[3]);
+                    disease.setPreviousSnapshot((Date) obj[4]);
+                }
+                diseases.add(disease);
+            }
+        }
+        return diseases;
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

@@ -1,5 +1,6 @@
 package edu.ctb.upm.midas.controller;
 
+import edu.ctb.upm.midas.service.WikipediaApiService;
 import edu.ctb.upm.midas.service._extract.MayoClinicExtractService;
 import edu.ctb.upm.midas.service._extract.ReportTest;
 import edu.ctb.upm.midas.service._extract.WikipediaExtractService;
@@ -34,6 +35,8 @@ public class ExtractionController {
     private MayoClinicExtractService mayoClinicExtractService;
     @Autowired
     private ReportTest reportTest;
+    @Autowired
+    private WikipediaApiService wikipediaApiService;
 
     @RequestMapping(path = { "${my.service.rest.request.mapping.wikipedia.retrieval.texts.path}" }, //_wikipedia extraction
             method = RequestMethod.GET,
@@ -81,7 +84,8 @@ public class ExtractionController {
     @RequestMapping(path = { "/test" }, //wikipedia extraction
             method = RequestMethod.GET)
     public void test() throws Exception {
-        wikipediaExtractService.test();
+//        wikipediaExtractService.test();
+        wikipediaApiService.init();
     }
 
 

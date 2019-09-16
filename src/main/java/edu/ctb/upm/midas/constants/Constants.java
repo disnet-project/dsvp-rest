@@ -52,6 +52,7 @@ public class Constants {
     public static final String TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncmFyZG9sYWdhckBob3RtYWlsLmNvbSIsImF1ZCI6IndlYiIsIm5hbWUiOiJHZXJhcmRvIExhZ3VuZXMiLCJ1c2VyIjp0cnVlLCJpYXQiOjE1MDk2MTQyNjh9.uVhDgfLrAgdnj02Hsbgfj9tkVlfni89i0hKVYW31eHApCHpheikK9ae1MhbzRhiyUcFGMKwtiyVgff5NCMY3PA";
     public static final String EXTRACTION_WIKIPEDIA_FOLDER = "tmp/wikipedia/";
     public static final String PM_RETRIEVAL_HISTORY_FOLDER = "tmp/pubmed/";
+    public static final String STATISTICS_HISTORY_FOLDER = "tmp/statistics/";
     public static final String PM_RETRIEVAL_FILE_NAME = "_pubmed_retrieval";
     public static final String WIKIPEDIA_RESOURCE_FILE_NAME = "_wikipedia_resource";
     public static final String WIKIPEDIA_SEMTYPE_FILE_NAME = "_wikipedia_semtype";
@@ -120,7 +121,7 @@ reactions.
         add("lbtr");
         //<editor-fold desc="Description">
         *//*
-            DEF: The outcome of a specific test to measure an attribute or to determine the
+            DEF: The outcome of a specific getPageIdAndTheirSpecificRevisionByTitleAndSnapshot to measure an attribute or to determine the
 presence, absence, or degree of a condition.
             EX: Blood Flow Velocity; Serum Calcium Level; Spinal Fluid Pressure
         *//*
@@ -273,7 +274,7 @@ the patient and reported as a subjective observation.
         add("lbtr");//lbtr|T034|Laboratory or Test Result (YES)
         //<editor-fold desc="Description">
         /*
-            DEF: The outcome of a specific test to measure an attribute or to determine the
+            DEF: The outcome of a specific getPageIdAndTheirSpecificRevisionByTitleAndSnapshot to measure an attribute or to determine the
 presence, absence, or degree of a condition.
             EX: Blood Flow Velocity; Serum Calcium Level; Spinal Fluid Pressure
         */
@@ -945,6 +946,35 @@ reactions.
 
     public final static String CHAR_SEPARATOR = "!";
 
+    public final static String BLANK_SPACE_CODE = "%20";
+
+    /**
+     * Wikipedia API
+     */
+    public final static String SQUARE_BRACKETS_OPEN = "[";
+    public final static String SQUARE_BRACKETS_CLOSE = "]";
+
+    public final static String QUERY_ELEMENT_NAME = "query";
+
+    public final static String PAGES_ELEMENT_NAME = "pages";
+    public final static String PAGES_ELEMENT_PAGEID_NAME = "pageid";
+    public final static String PAGES_ELEMENT_TITLE_NAME = "title";
+
+    public final static String REVISIONS_ELEMENT_NAME = "revisions";
+    public final static String REVISIONS_ELEMENT_REVID_NAME = "revid";
+    public final static String REVISIONS_ELEMENT_PARENTID_NAME = "parentid";
+    public final static String REVISIONS_ELEMENT_MINOR_NAME = "minor";
+    public final static String REVISIONS_ELEMENT_USER_NAME = "user";
+    public final static String REVISIONS_ELEMENT_USERID_NAME = "userid";
+    public final static String REVISIONS_ELEMENT_TIMESTAMP_NAME = "timestamp";
+    public final static String REVISIONS_ELEMENT_SIZE_NAME = "size";
+    public final static String REVISIONS_ELEMENT_COMMENT_NAME = "comment";
+    public final static String REVISIONS_ELEMENT_TEXT_NAME = "text";
+
+
+    /**
+     * Rutas
+     */
     public final static String VALIDATED_FOLDER = "cnv_data/filter/validated/";
     public final static String NO_VALIDATED_FOLDER = "cnv_data/filter/not_validated/";
     public final static String VALIDATION_FINDINGS_FILE = "vte_data/results/allFindings.fd";

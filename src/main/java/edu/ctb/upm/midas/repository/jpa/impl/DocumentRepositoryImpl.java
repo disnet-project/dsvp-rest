@@ -5,6 +5,8 @@ import edu.ctb.upm.midas.repository.jpa.AbstractDao;
 import edu.ctb.upm.midas.repository.jpa.DocumentRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -101,6 +103,52 @@ public class DocumentRepositoryImpl extends AbstractDao<DocumentPK, Document>
 //                .setMaxResults(10)
                 .setMaxResults(0)
                 .getResultList();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Object[]> findAllArticlesAndSnapshot() {
+        List<Object[]> diseases = null;
+        List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Document.findAllArticlesAndSnapshot")
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(diseaseList))
+            diseases = diseaseList;
+
+        return diseases;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Object[]> findAllDistinctArticlesAndSnapshot() {
+        List<Object[]> diseases = null;
+        List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Document.findAllDistinctArticlesAndSnapshot")
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(diseaseList))
+            diseases = diseaseList;
+
+        return diseases;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Object[]> findAllSnapshotsOfAArticle(String diseaseId) {
+        List<Object[]> revisions = null;
+        List<Object[]> revisionList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Document.findAllSnapshotsOfAArticle")
+                .setParameter("diseaseId", diseaseId)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(revisionList))
+            revisions = revisionList;
+
+        return revisions;
     }
 
     public void persist(Document document) {

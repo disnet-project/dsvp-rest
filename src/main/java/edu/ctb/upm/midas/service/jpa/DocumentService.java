@@ -2,6 +2,8 @@ package edu.ctb.upm.midas.service.jpa;
 
 import edu.ctb.upm.midas.model.jpa.Document;
 import edu.ctb.upm.midas.model.jpa.DocumentPK;
+import edu.ctb.upm.midas.model.wikipediaApi.Disease;
+import edu.ctb.upm.midas.model.wikipediaApi.Revision;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,12 @@ public interface DocumentService {
     List<Document> findAll();
 
     List<Document> findAllBySourceIdAndSnapshot(Date snapshot, String sourceId);
+
+    List<Disease> findAllArticlesAndSnapshot();
+
+    List<Disease> findAllDistinctArticlesAndSnapshot();
+
+    List<Revision> findAllSnapshotsOfAArticle(String diseaseId);
 
     void save(Document document);
 

@@ -152,7 +152,7 @@
 //        source.setName("medline");
 //        Link link = new Link();
 //        link.setId(1);
-//        link.setUrl("www.test.com");
+//        link.setUrl("www.getPageIdAndTheirSpecificRevisionByTitleAndSnapshot.com");
 //        source.setUrl(link);
 //        System.out.println("SourceId: " + sourceHelperNative.insertIfExistByCodeList( source ) );
 //*/

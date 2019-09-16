@@ -1,6 +1,17 @@
 package edu.ctb.upm.midas;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import edu.ctb.upm.midas.common.util.Common;
+import edu.ctb.upm.midas.common.util.TimeProvider;
+import edu.ctb.upm.midas.model.wikipediaApi.Disease;
+import edu.ctb.upm.midas.model.wikipediaApi.Page;
+import edu.ctb.upm.midas.service.WikipediaApiService;
+import edu.ctb.upm.midas.service.jpa.DocumentService;
+import edu.ctb.upm.midas.service.jpa.impl.DocumentServiceImpl;
 import org.apache.tomcat.jdbc.pool.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +21,8 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -19,8 +32,11 @@ import javax.annotation.PostConstruct;
 @EnableScheduling
 public class DsvpApplication  implements CommandLineRunner {
 
+	private static final Logger logger = LoggerFactory.getLogger(DsvpApplication.class);
+
 	@Autowired
 	private DataSource dataSource;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(DsvpApplication.class, args);

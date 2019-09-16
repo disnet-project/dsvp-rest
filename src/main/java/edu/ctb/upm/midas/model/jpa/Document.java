@@ -179,6 +179,22 @@ import java.util.Objects;
                 name = "HasSymptom.insertNative_",
                 query = "INSERT INTO has_symptom (text_id, cui, validated) "
                         + "VALUES (:textId, :cui, :validated)"
+        ),
+        @NamedNativeQuery(
+                name = "Document.findAllArticlesAndSnapshot",
+                query = "SELECT d.disease_id, d.name, d.snapshot_id, d.actual_snapshot, d.anterior_snapshot " +
+                        "FROM new_tbl_disease_list d"
+        ),
+        @NamedNativeQuery(
+                name = "Document.findAllDistinctArticlesAndSnapshot",
+                query = "SELECT DISTINCT d.disease_id, d.name " +
+                        "FROM new_tbl_disease_list d"
+        ),
+        @NamedNativeQuery(
+                name = "Document.findAllSnapshotsOfAArticle",
+                query = "SELECT d.snapshot_id, d.actual_snapshot, d.anterior_snapshot\n" +
+                        "FROM new_tbl_disease_list d\n" +
+                        "WHERE d.disease_id = :diseaseId "
         )
 
 })

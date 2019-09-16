@@ -5,7 +5,7 @@ package edu.ctb.upm.midas.client_modules.extraction.pubmed;
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
  * @project dsvp-rest
- * @className test
+ * @className getPageIdAndTheirSpecificRevisionByTitleAndSnapshot
  * @see
  */
 public class test {
