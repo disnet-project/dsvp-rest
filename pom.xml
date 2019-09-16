@@ -23,7 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 
-		<jsoup.version>1.10.2</jsoup.version>
+		<jsoup.version>1.11.3</jsoup.version>
 		<jdom2.version>2.0.6</jdom2.version>
 
 		<prologbeans.version>4.2.1</prologbeans.version>
@@ -160,6 +160,14 @@
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
+		</dependency>
+
+
+		<!-- jsoup HTML parser library @ http://jsoup.org/ -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
 		</dependency>
 
 

@@ -4,11 +4,11 @@ import com.google.gson.*;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.constants.Constants;
-import edu.ctb.upm.midas.model.wikipediaApi.Disease;
-import edu.ctb.upm.midas.model.wikipediaApi.Page;
-import edu.ctb.upm.midas.model.wikipediaApi.Revision;
-import edu.ctb.upm.midas.model.wikipediaApi.Section;
+import edu.ctb.upm.midas.model.wikipediaApi.*;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class WikipediaApiService {
@@ -36,7 +33,6 @@ public class WikipediaApiService {
 
     public void init(){
         WikipediaApiService wikipediaApiService = new WikipediaApiService();
-        List<Page> pages = null;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
@@ -46,30 +42,37 @@ public class WikipediaApiService {
         if (diseases.size()>0) {
             for (Disease disease : diseases) {
                 logger.info(count + ". DISEASE to " + total + " (" + (count*100)/total + ")." + disease.getName() /*+ " | " + disease.getSnapshotId() + " | " + disease.getCurrentSnapshot() + " | " + disease.getPreviousSnapshot()*/);
-                List<Revision> revisions = documentService.findAllSnapshotsOfAArticle(disease.getId());
+                List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
 //                for (Revision revision: revisions) {
 //                    logger.info("   " + revision.getSnapshotId() + " | " + revision.getSnapshot() + " | " + revision.getPreviousSnapshot());
 //                }
-                Page page = wikipediaApiService.getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), revisions);
-//                if (page!=null) pages.add(page);
-                if (count==5) break;
+                if (snapshots!=null) {
+                    Page page = wikipediaApiService.getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                    disease.setPage(page);
+                    disease.setSnapshots(snapshots);
+                    System.out.println(disease);
+                }
+                if (count==1) break;
                 count++;
             }
         }
         //Escribir json
         try {
-            common.writeAnalysisJSONFile(gson.toJson(pages), timeProvider.getNowFormatyyyyMMdd());
+            common.writeAnalysisJSONFile(gson.toJson(diseases), timeProvider.getNowFormatyyyyMMdd());
             logger.info("JSON file write successful!");
         }catch (Exception e){logger.error("Error to write the JSON file", e);}
     }
 
-    public Page getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(String pageTitle, List<Revision> revisions){
+
+    public Page getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(String pageTitle, List<Snapshot> snapshots){
         Page page = null;
         Revision previousR = null;
+        List<Revision> revisionList = new ArrayList<>();
+        Revision revision = null;
         try {
-            int revisionCount = 1;
-            for (Revision revision: revisions) {
-                String responseWikipediaAPI = getWikipediaApiQueryResponse(pageTitle, revision.getSnapshot());
+            int snapshotCount = 1;
+            for (Snapshot snapshot: snapshots) {
+                String responseWikipediaAPI = getWikipediaApiQueryResponse(pageTitle, snapshot.getSnapshot());
 //            System.out.println("Wikipedia API response = " + responseWikipediaAPI);
 
                 //Parser string response Wikipedia API to Java JSON object
@@ -91,7 +94,7 @@ public class WikipediaApiService {
                         if (elementPageInfo!=null) {
                             //Recorre los elementos del mapa
                             for (Map.Entry<String, JsonElement> element : elementPageInfo) {
-                                if (revisionCount==1) {
+                                if (snapshotCount==1) {
                                     //Inicializa el objeto Page
                                     page = new Page();
                                     //Verifica cada elemento para asignar sus valores a los campos correspondientes
@@ -113,6 +116,7 @@ public class WikipediaApiService {
                                     //Doble verificación para saber si el elemento "revisions" es un objeto Json
                                     boolean isJsonObject = revisionsSet.isJsonObject();
                                     if (isJsonObject) {
+                                        revision = new Revision();
                                         //Se recorren los elementos del mapa "revisions"
                                         for (Map.Entry<String, JsonElement> revElement : revisionsSet.getAsJsonObject().entrySet()) {
                                             getRevIdAndSetInRevisionObject(revision, revElement);
@@ -131,6 +135,8 @@ public class WikipediaApiService {
                                         }else{
                                             revision.setPreviousDate(previousR.getDate());
                                         }
+                                        snapshot.setRevId(revision.getRevid());
+                                        revisionList.add(revision);
                                     }//END if (isJsonObject)
                                 }//END if compare if the element is kind of "revisions"
                             }//END for that each element of pages element
@@ -148,22 +154,83 @@ public class WikipediaApiService {
                     revision.setText(previousR.getText());
                     revision.setSectionCount(previousR.getSectionCount());
                     revision.setSections(previousR.getSections());
+                    revision.setCharacterCount(previousR.getCharacterCount());
                 }else{
 //                    System.out.println("NO ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
                     getRevisionTextAndSectionList(revision);
                 }
 
-                System.out.println(revision.toString());
+//                System.out.println(revision.toString());
 
-                revisionCount++;
+                snapshotCount++;
                 previousR = revision;
             }
-            if (page!=null) page.setRevisions(revisions);
+            removeRepetedRevision(revisionList);
+            if (page!=null) page.setRevisions(revisionList);
         }catch (Exception e){
             logger.error("Error", e);
         }
         return page;
     }
+
+
+    public List<Revision> removeRepetedRevision(List<Revision> elements){
+        List<Revision> resList = elements;
+        Set<Revision> linkedHashSet = new LinkedHashSet<>();
+        linkedHashSet.addAll(elements);
+        elements.clear();
+        elements.addAll(linkedHashSet);
+        return resList;
+    }
+
+
+    public Long getNumberOfCharactersOfAllTextsFromARevision(String htmlText){
+        Long characterCount = 0L;
+        Long paragraphCharacterCount = 0L;
+        Long tableCharacterCount = 0L;
+        Long listCharacterCount = 0L;
+        Long imgCharacterCount = 0L;
+        org.jsoup.nodes.Document doc = Jsoup.parse(htmlText);
+
+        Elements paragraphs = doc.getElementsByTag(Constants.HTML_P);
+        Elements tables = doc.getElementsByTag(Constants.HTML_TABLE);
+        Elements ulElements = doc.getElementsByTag(Constants.HTML_UL);
+        Elements olElements = doc.getElementsByTag(Constants.HTML_OL);
+        Elements dlElements = doc.getElementsByTag(Constants.HTML_DL);
+        //todos los caption de imagenes, exepto la del infobox,
+        //que esa ya se obtiene en "tables"
+        Elements imgElements = doc.select(Constants.QUERY_DIV_CLASS + "thumbcaption" + Constants.RIGHT_PARENTHESIS);
+
+        for (Element paragraph: paragraphs) {
+            paragraphCharacterCount = paragraphCharacterCount + (long) paragraph.text().length();
+        }
+        for (Element table: tables) {
+//            System.out.println(table.text() + " - " + table.ownText());
+            tableCharacterCount = tableCharacterCount + (long) table.text().length();
+        }
+        for (Element ulElement: ulElements) {
+            listCharacterCount = listCharacterCount + (long) ulElement.text().length();
+        }
+        for (Element olElement: olElements) {
+            listCharacterCount = listCharacterCount + (long) olElement.text().length();
+        }
+        for (Element dlElement: dlElements) {
+            listCharacterCount = listCharacterCount + (long) dlElement.text().length();
+        }
+        for (Element imgElement: imgElements) {
+            imgCharacterCount = imgCharacterCount + (long) imgElement.text().length();
+        }
+
+
+        logger.info("====================================================== ( PARA:"+paragraphCharacterCount+" TBL:"+tableCharacterCount+" LIST:"+listCharacterCount + " IMG:" + imgCharacterCount + " ) => " + (paragraphCharacterCount + tableCharacterCount + listCharacterCount + imgCharacterCount) );
+
+        characterCount = (paragraphCharacterCount + tableCharacterCount + listCharacterCount + imgCharacterCount);
+
+//        System.out.println("HTML_PARSE => " + doc.outerHtml());
+
+        return characterCount;
+    }
+
 
     public String getRevisionTextAndSectionList(Revision revision){
         String text = "";
@@ -209,6 +276,8 @@ public class WikipediaApiService {
                 }
                 revision.setSections(sectionList);
                 revision.setSectionCount(sectionList.size());
+                revision.setCharacterCount(getNumberOfCharactersOfAllTextsFromARevision(revision.getText()));
+//                System.out.println(revision.getRevid());
             }
 
         }catch (Exception e){

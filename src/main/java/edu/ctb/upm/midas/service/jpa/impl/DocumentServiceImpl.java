@@ -3,7 +3,7 @@ import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.model.jpa.Document;
 import edu.ctb.upm.midas.model.jpa.DocumentPK;
 import edu.ctb.upm.midas.model.wikipediaApi.Disease;
-import edu.ctb.upm.midas.model.wikipediaApi.Revision;
+import edu.ctb.upm.midas.model.wikipediaApi.Snapshot;
 import edu.ctb.upm.midas.repository.jpa.DocumentRepository;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,22 +71,22 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
-    public List<Revision> findAllSnapshotsOfAArticle(String diseaseId) {
+    public List<Snapshot> findAllSnapshotsOfAArticle(String diseaseId) {
         TimeProvider timeProvider = new TimeProvider();
-        List<Revision> revisions = new ArrayList<>();
+        List<Snapshot> snapshots = new ArrayList<>();
         List<Object[]> objects = daoDocument.findAllSnapshotsOfAArticle(diseaseId);
         if (objects!=null){
-            revisions = new ArrayList<>();
+            snapshots = new ArrayList<>();
             for (Object[] obj: objects) {
-                Revision revision = new Revision(
+                Snapshot snapshot = new Snapshot(
                         (Integer) obj[0]
                         , timeProvider.sqlDateFormatyyyyMMdd( ((java.sql.Date) obj[1]) )
                         , (obj[2]==null)?"":timeProvider.sqlDateFormatyyyyMMdd( (java.sql.Date) obj[2] )
                 );
-                revisions.add(revision);
+                snapshots.add(snapshot);
             }
         }
-        return revisions;
+        return snapshots;
     }
 
     public List<Disease> createDiseaseList(List<Object[]> objects, boolean basicInfo){
@@ -101,9 +101,9 @@ public class DocumentServiceImpl implements DocumentService {
                 }else {
                     disease.setId((String) obj[0]);
                     disease.setName((String) obj[1]);
-                    disease.setSnapshotId((Integer) obj[2]);
-                    disease.setCurrentSnapshot((Date) obj[3]);
-                    disease.setPreviousSnapshot((Date) obj[4]);
+//                    disease.setSnapshotId((Integer) obj[2]);
+//                    disease.setCurrentSnapshot((Date) obj[3]);
+//                    disease.setPreviousSnapshot((Date) obj[4]);
                 }
                 diseases.add(disease);
             }

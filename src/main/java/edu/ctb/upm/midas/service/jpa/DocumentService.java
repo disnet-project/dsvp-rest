@@ -3,7 +3,7 @@ package edu.ctb.upm.midas.service.jpa;
 import edu.ctb.upm.midas.model.jpa.Document;
 import edu.ctb.upm.midas.model.jpa.DocumentPK;
 import edu.ctb.upm.midas.model.wikipediaApi.Disease;
-import edu.ctb.upm.midas.model.wikipediaApi.Revision;
+import edu.ctb.upm.midas.model.wikipediaApi.Snapshot;
 
 import java.util.Date;
 import java.util.List;
@@ -31,7 +31,7 @@ public interface DocumentService {
 
     List<Disease> findAllDistinctArticlesAndSnapshot();
 
-    List<Revision> findAllSnapshotsOfAArticle(String diseaseId);
+    List<Snapshot> findAllSnapshotsOfAArticle(String diseaseId);
 
     void save(Document document);
 

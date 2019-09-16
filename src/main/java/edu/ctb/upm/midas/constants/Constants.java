@@ -372,6 +372,7 @@ reactions.
     public static final String HTML_LI = "li";
     public static final String HTML_UL = "ul";
     public static final String HTML_OL = "ol";
+    public static final String HTML_DL = "dl";
     public static final String HTML_IMG = "img";
     public static final String HTML_ALT = "alt";
     public static final String HTML_A = "a";
@@ -394,6 +395,12 @@ reactions.
     public static final String QUERY_TH_STYLE_TEXT_ALIGN_CENTER = "th[style=text-align:center]";
     public static final String QUERY_TD_STYLE_TEXT_ALIGN_CENTER = "td[style=text-align:center]";
 
+    /** LISTA DE ETIQUETAS REFERENCTES A LISTAS HTML */
+    public static final List<String> HTML_LIST_TAG_PARENTS_LIST_TAG = new ArrayList<String>(){{
+        add("ul");
+        add("ol");
+        add("dl");
+    }};
 
     /** Ruta del archivo XML source */
     public static final String XML_SOURCE_FILE = "src/main/resources/parameters/sources.xml";

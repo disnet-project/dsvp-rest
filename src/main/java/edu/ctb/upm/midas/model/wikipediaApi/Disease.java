@@ -1,13 +1,11 @@
 package edu.ctb.upm.midas.model.wikipediaApi;
 
-import java.util.Date;
+import java.util.List;
 
 public class Disease {
     private String id;
     private String name;
-    private Integer snapshotId;
-    private Date currentSnapshot;
-    private Date previousSnapshot;
+    List<Snapshot> snapshots;
     private Page page;
 
 
@@ -27,28 +25,12 @@ public class Disease {
         this.name = name;
     }
 
-    public Integer getSnapshotId() {
-        return snapshotId;
+    public List<Snapshot> getSnapshots() {
+        return snapshots;
     }
 
-    public void setSnapshotId(Integer snapshotId) {
-        this.snapshotId = snapshotId;
-    }
-
-    public Date getCurrentSnapshot() {
-        return currentSnapshot;
-    }
-
-    public void setCurrentSnapshot(Date currentSnapshot) {
-        this.currentSnapshot = currentSnapshot;
-    }
-
-    public Date getPreviousSnapshot() {
-        return previousSnapshot;
-    }
-
-    public void setPreviousSnapshot(Date previousSnapshot) {
-        this.previousSnapshot = previousSnapshot;
+    public void setSnapshots(List<Snapshot> snapshots) {
+        this.snapshots = snapshots;
     }
 
     public Page getPage() {
@@ -57,5 +39,16 @@ public class Disease {
 
     public void setPage(Page page) {
         this.page = page;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Disease{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", snapshots=" + snapshots +
+                ", page=" + page +
+                '}';
     }
 }

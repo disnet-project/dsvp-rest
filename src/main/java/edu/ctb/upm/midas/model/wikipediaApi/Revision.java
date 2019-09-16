@@ -1,6 +1,7 @@
 package edu.ctb.upm.midas.model.wikipediaApi;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Revision {
 
@@ -14,21 +15,14 @@ public class Revision {
     private String previousDate;
     private String comment;
     private boolean minor;
-    private Integer snapshotId;
-    private String snapshot;
-    private String previousSnapshot;
     private Integer sectionCount;
     private List<Section> sections;
+    private Long characterCount;//Número de carateres de todos los textos de cada sección
     private String text;
 
 
-    public Revision() {
-    }
 
-    public Revision(Integer snapshotId, String snapshot, String previousSnapshot) {
-        this.snapshotId = snapshotId;
-        this.snapshot = snapshot;
-        this.previousSnapshot = previousSnapshot;
+    public Revision() {
     }
 
     public Integer getRevid() {
@@ -111,30 +105,6 @@ public class Revision {
         this.minor = minor;
     }
 
-    public Integer getSnapshotId() {
-        return snapshotId;
-    }
-
-    public void setSnapshotId(Integer snapshotId) {
-        this.snapshotId = snapshotId;
-    }
-
-    public String getSnapshot() {
-        return snapshot;
-    }
-
-    public void setSnapshot(String snapshot) {
-        this.snapshot = snapshot;
-    }
-
-    public String getPreviousSnapshot() {
-        return previousSnapshot;
-    }
-
-    public void setPreviousSnapshot(String previousSnapshot) {
-        this.previousSnapshot = previousSnapshot;
-    }
-
     public Integer getSectionCount() {
         return sectionCount;
     }
@@ -151,12 +121,35 @@ public class Revision {
         this.sections = sections;
     }
 
+    public Long getCharacterCount() {
+        return characterCount;
+    }
+
+    public void setCharacterCount(Long characterCount) {
+        this.characterCount = characterCount;
+    }
+
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Revision)) return false;
+        Revision revision = (Revision) o;
+        return Objects.equals(getRevid(), revision.getRevid());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getRevid());
     }
 
     @Override
@@ -172,10 +165,8 @@ public class Revision {
                 ", previousDate='" + previousDate + '\'' +
                 ", comment='" + comment + '\'' +
                 ", minor=" + minor +
-                ", snapshotId=" + snapshotId +
-                ", snapshot='" + snapshot + '\'' +
-                ", previousSnapshot='" + previousSnapshot + '\'' +
                 ", sections='" + sections + '\'' +
+                ", characterCount='" + characterCount + '\'' +
                 ", text='" + text + '\'' +
                 '}';
     }
