@@ -1,15 +1,13 @@
 package edu.ctb.upm.midas.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.model.wikipediaApi.Disease;
 import edu.ctb.upm.midas.model.wikipediaApi.Page;
 import edu.ctb.upm.midas.model.wikipediaApi.Revision;
+import edu.ctb.upm.midas.model.wikipediaApi.Section;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -139,17 +138,22 @@ public class WikipediaApiService {
                     }
                 }//END if (elementPages!=null)
 
-                //Si las fechas son iguales significa que se trata de la misma revisión y por lo tanto
-                //el mismo texto de la anterior se debe colocar en la actual revisión
+                //Si las fechas son iguales significa que se trata de la misma actualización (revision) y por lo tanto
+                //el mismo texto de la anterior se debe colocar en la actual actualización (revision)
                 //con el fin de no hacer llamadas de más a la "Wikipedia API"
                 if (revision.getDate().equalsIgnoreCase(revision.getPreviousDate())){
-                    //Si es la misma versión copiaré el texto
-                    System.out.println("ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
+                    //Si es la misma versión se copia la información del texto y de las secciones de la
+                    //actualización (revision) anterior
+//                    System.out.println("ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
                     revision.setText(previousR.getText());
+                    revision.setSectionCount(previousR.getSectionCount());
+                    revision.setSections(previousR.getSections());
                 }else{
-                    System.out.println("NO ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
-                    getRevisionText(revision);
+//                    System.out.println("NO ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
+                    getRevisionTextAndSectionList(revision);
                 }
+
+                System.out.println(revision.toString());
 
                 revisionCount++;
                 previousR = revision;
@@ -161,7 +165,7 @@ public class WikipediaApiService {
         return page;
     }
 
-    public String getRevisionText(Revision revision){
+    public String getRevisionTextAndSectionList(Revision revision){
         String text = "";
         try {
 
@@ -175,10 +179,8 @@ public class WikipediaApiService {
             JsonElement sections = jsonElement.getAsJsonObject().get("parse").getAsJsonObject().get("sections");
             //Obtiene todos los elementos de un JsonElement en forma de mapa
             Set<Map.Entry<String, JsonElement>> parseElements = parse.getAsJsonObject().entrySet();
-            System.out.println("DELETE => "+deleteFirstAndLastChar(
-                    sections.toString()
-            ));
-            Set<Map.Entry<String, JsonElement>> sectionElements = parseWikipediaResponse(deleteFirstAndLastChar(sections.toString())).getAsJsonObject().entrySet();
+            JsonArray sectionElements = sections.getAsJsonArray();
+
 
             //Valida que el mapa no sea nulo
             if (parseElements!=null) {
@@ -190,9 +192,23 @@ public class WikipediaApiService {
             }
 
             if (sectionElements!=null){
-                for (Map.Entry<String, JsonElement> sectionElement : sectionElements) {
-                    System.out.println( sectionElement.getKey()+ " <-> " + sectionElement.getValue());
+                List<Section> sectionList = new ArrayList<>();
+                for (JsonElement sectionElement : sectionElements) {
+                    JsonObject sectionObj = sectionElement.getAsJsonObject();
+                    Integer toclevel = sectionObj.get("toclevel").getAsInt();
+                    String level = sectionObj.get("level").getAsString();
+                    String line = sectionObj.get("line").getAsString();
+                    String number = sectionObj.get("number").getAsString();
+                    String index = sectionObj.get("index").getAsString();
+                    String fromtitle = sectionObj.get("fromtitle").getAsString();
+                    Integer byteoffset = sectionObj.get("byteoffset").getAsInt();
+                    String anchor = sectionObj.get("anchor").getAsString();
+
+                    Section section = new Section(toclevel, level, line, number, index, fromtitle, byteoffset, anchor);
+                    sectionList.add(section);
                 }
+                revision.setSections(sectionList);
+                revision.setSectionCount(sectionList.size());
             }
 
         }catch (Exception e){
@@ -268,7 +284,7 @@ public class WikipediaApiService {
 
     public JsonElement parseWikipediaResponse(String wikipediaResponse){
         JsonElement jsonElement = null;
-        try {
+//        try {
             jsonElement = new JsonParser().parse(
                     new InputStreamReader(
                             new ByteArrayInputStream(
@@ -276,23 +292,23 @@ public class WikipediaApiService {
                             )
                     )
             );
-        }catch (Exception e){
-            logger.error("Error parser String Wikipedia response", e.getMessage());
-        }
+//        }catch (Exception e){
+//            logger.error("Error parser String Wikipedia response", e.getMessage());
+//        }
         return jsonElement;
     }
 
 
-    public String getWikipediaApiQueryResponse(String titleArticle, String snapshot){
+    public String getWikipediaApiQueryResponse(String titleArticle, String snapshot) throws MalformedURLException {
         //title: Blue rubber bleb nevus syndrome
         //snapshot: 2018-02-15
         String response = "";
-        try {
+//        try {
             URL url = new URL("https://en.wikipedia.org/w/api.php?action=query&prop=revisions&format=json&rvprop=ids|flags|timestamp|userid|user|size|comment&rvstart=" + snapshot + "T00:00:00Z&rvdir=older&rvlimit=1&titles=" + titleArticle.replace(" ", Constants.BLANK_SPACE_CODE));
             response = getResponseBody(url);
-        }catch (Exception e){
-            logger.error("Error to make Wikipedia API URL", e);
-        }
+//        }catch (Exception e){
+//            logger.error("Error to make Wikipedia API URL", e);
+//        }
         return response;
     }
 

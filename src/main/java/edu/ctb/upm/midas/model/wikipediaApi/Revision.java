@@ -1,6 +1,5 @@
 package edu.ctb.upm.midas.model.wikipediaApi;
 
-import java.util.Date;
 import java.util.List;
 
 public class Revision {
@@ -18,6 +17,7 @@ public class Revision {
     private Integer snapshotId;
     private String snapshot;
     private String previousSnapshot;
+    private Integer sectionCount;
     private List<Section> sections;
     private String text;
 
@@ -133,6 +133,14 @@ public class Revision {
 
     public void setPreviousSnapshot(String previousSnapshot) {
         this.previousSnapshot = previousSnapshot;
+    }
+
+    public Integer getSectionCount() {
+        return sectionCount;
+    }
+
+    public void setSectionCount(Integer sectionCount) {
+        this.sectionCount = sectionCount;
     }
 
     public List<Section> getSections() {

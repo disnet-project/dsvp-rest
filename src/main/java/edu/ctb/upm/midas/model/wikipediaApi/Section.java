@@ -11,6 +11,19 @@ public class Section {
     private Integer byteoffset;
     private String anchor;
 
+    public Section() {
+    }
+
+    public Section(Integer toclevel, String level, String line, String number, String index, String fromtitle, Integer byteoffset, String anchor) {
+        this.toclevel = toclevel;
+        this.level = level;
+        this.line = line;
+        this.number = number;
+        this.index = index;
+        this.fromtitle = fromtitle;
+        this.byteoffset = byteoffset;
+        this.anchor = anchor;
+    }
 
     public Integer getToclevel() {
         return toclevel;
@@ -74,5 +87,19 @@ public class Section {
 
     public void setAnchor(String anchor) {
         this.anchor = anchor;
+    }
+
+    @Override
+    public String toString() {
+        return "Section{" +
+                "toclevel=" + toclevel +
+                ", level='" + level + '\'' +
+                ", line='" + line + '\'' +
+                ", number='" + number + '\'' +
+                ", index='" + index + '\'' +
+                ", fromtitle='" + fromtitle + '\'' +
+                ", byteoffset=" + byteoffset +
+                ", anchor='" + anchor + '\'' +
+                '}';
     }
 }
