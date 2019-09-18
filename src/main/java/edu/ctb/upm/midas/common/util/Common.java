@@ -5,6 +5,7 @@ import edu.ctb.upm.midas.model.common.document_structure.text.List_;
 import edu.ctb.upm.midas.model.common.document_structure.text.Paragraph;
 import edu.ctb.upm.midas.model.common.document_structure.text.Table;
 import edu.ctb.upm.midas.model.common.document_structure.text.Text;
+import edu.ctb.upm.midas.model.wikipediaApi.Disease;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
@@ -120,8 +121,8 @@ public class Common {
     }
 
 
-    public void writeAnalysisJSONFile(String jsonBody, String snapshot) throws IOException {
-        String fileName = "disnet_article_analysis_" + snapshot + Constants.DOT_JSON;
+    public String writeAnalysisJSONFile(String jsonBody, Disease disease, int count, String snapshot) throws IOException {
+        String fileName = count + "_" + disease.getId() + "_" + snapshot + Constants.DOT_JSON;
         String path = Constants.STATISTICS_HISTORY_FOLDER + fileName;
         InputStream in = getClass().getResourceAsStream(path);
         //BufferedReader bL = new BufferedReader(new InputStreamReader(in));
@@ -133,6 +134,7 @@ public class Common {
             bW.write(jsonBody);
             bW.close();
         }
+        return fileName;
     }
 
 

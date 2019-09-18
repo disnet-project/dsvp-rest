@@ -32,7 +32,6 @@ public class WikipediaApiService {
     private DocumentService documentService;
 
     public void init(){
-        WikipediaApiService wikipediaApiService = new WikipediaApiService();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
@@ -41,38 +40,36 @@ public class WikipediaApiService {
         int count = 1, total = diseases.size();
         if (diseases.size()>0) {
             for (Disease disease : diseases) {
-                logger.info(count + ". DISEASE to " + total + " (" + (count*100)/total + ")." + disease.getName() /*+ " | " + disease.getSnapshotId() + " | " + disease.getCurrentSnapshot() + " | " + disease.getPreviousSnapshot()*/);
+                logger.info(count + ". DISEASE to " + total + " (" + (count*100)/total + "%)." + disease.getName() /*+ " | " + disease.getSnapshotId() + " | " + disease.getCurrentSnapshot() + " | " + disease.getPreviousSnapshot()*/);
                 List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
-//                for (Revision revision: revisions) {
-//                    logger.info("   " + revision.getSnapshotId() + " | " + revision.getSnapshot() + " | " + revision.getPreviousSnapshot());
-//                }
                 if (snapshots!=null) {
-                    Page page = wikipediaApiService.getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                    Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
                     disease.setPage(page);
                     disease.setSnapshots(snapshots);
-                    System.out.println(disease);
+                    //Escribir json
+                    try {
+                        String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, count, timeProvider.getNowFormatyyyyMMdd());
+                        logger.info("Write JSON file successful! => " + fileNAme);
+                    }catch (Exception e){logger.error("Error to write the JSON file", e);}
                 }
-                if (count==1) break;
+//                if (count==3) break;
                 count++;
             }
+            logger.info("End procedure");
         }
-        //Escribir json
-        try {
-            common.writeAnalysisJSONFile(gson.toJson(diseases), timeProvider.getNowFormatyyyyMMdd());
-            logger.info("JSON file write successful!");
-        }catch (Exception e){logger.error("Error to write the JSON file", e);}
+//        System.out.println(diseases.toString());
     }
 
 
     public Page getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(String pageTitle, List<Snapshot> snapshots){
-        Page page = null;
+        Page page = new Page();
         Revision previousR = null;
         List<Revision> revisionList = new ArrayList<>();
-        Revision revision = null;
         try {
             int snapshotCount = 1;
             for (Snapshot snapshot: snapshots) {
                 String responseWikipediaAPI = getWikipediaApiQueryResponse(pageTitle, snapshot.getSnapshot());
+                Revision revision = null;
 //            System.out.println("Wikipedia API response = " + responseWikipediaAPI);
 
                 //Parser string response Wikipedia API to Java JSON object
@@ -94,15 +91,12 @@ public class WikipediaApiService {
                         if (elementPageInfo!=null) {
                             //Recorre los elementos del mapa
                             for (Map.Entry<String, JsonElement> element : elementPageInfo) {
-                                if (snapshotCount==1) {
-                                    //Inicializa el objeto Page
-                                    page = new Page();
-                                    //Verifica cada elemento para asignar sus valores a los campos correspondientes
-                                    //del recien creado objeto Page
-                                    getPageIdAndSetInPageObject(page, element);
-                                    getPageTitleAndSetInPageObject(page, element);
-                                }
-//                            System.out.println(element.getKey() + " - " + element.getValue());
+
+                                //Verifica cada elemento para asignar sus valores a los campos correspondientes
+                                //del recien creado objeto Page
+                                getPageIdAndSetInPageObject(page, element);
+                                getPageTitleAndSetInPageObject(page, element);
+//                                System.out.println(element.getKey() + " - " + element.getValue());
                                 //Valida que el elemento del mapa sea de nombre "revisions". Porque necesita
                                 //ser tratado especialmente para poder acceder a sus elementos y valores
                                 if (element.getKey().equalsIgnoreCase(Constants.REVISIONS_ELEMENT_NAME)) {
@@ -168,7 +162,7 @@ public class WikipediaApiService {
             removeRepetedRevision(revisionList);
             if (page!=null) page.setRevisions(revisionList);
         }catch (Exception e){
-            logger.error("Error", e);
+            logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot ", e);
         }
         return page;
     }
@@ -222,7 +216,7 @@ public class WikipediaApiService {
         }
 
 
-        logger.info("====================================================== ( PARA:"+paragraphCharacterCount+" TBL:"+tableCharacterCount+" LIST:"+listCharacterCount + " IMG:" + imgCharacterCount + " ) => " + (paragraphCharacterCount + tableCharacterCount + listCharacterCount + imgCharacterCount) );
+//        logger.info("====================================================== ( PARA:"+paragraphCharacterCount+" TBL:"+tableCharacterCount+" LIST:"+listCharacterCount + " IMG:" + imgCharacterCount + " ) => " + (paragraphCharacterCount + tableCharacterCount + listCharacterCount + imgCharacterCount) );
 
         characterCount = (paragraphCharacterCount + tableCharacterCount + listCharacterCount + imgCharacterCount);
 
@@ -337,12 +331,18 @@ public class WikipediaApiService {
 
 
     public void getPageIdAndSetInPageObject(Page page, Map.Entry<String, JsonElement> element){
-        if (Constants.PAGES_ELEMENT_PAGEID_NAME.equalsIgnoreCase(element.getKey())) page.setPageid(element.getValue().getAsInt());
+        if (page.getPageid()==null) {
+            if (Constants.PAGES_ELEMENT_PAGEID_NAME.equalsIgnoreCase(element.getKey()))
+                page.setPageid(element.getValue().getAsInt());
+        }
     }
 
 
     public void getPageTitleAndSetInPageObject(Page page, Map.Entry<String, JsonElement> element){
-        if (Constants.PAGES_ELEMENT_TITLE_NAME.equalsIgnoreCase(element.getKey())) page.setTitle(element.getValue().getAsString());
+        if (page.getTitle()==null) {
+            if (Constants.PAGES_ELEMENT_TITLE_NAME.equalsIgnoreCase(element.getKey()))
+                page.setTitle(element.getValue().getAsString());
+        }
     }
 
 
