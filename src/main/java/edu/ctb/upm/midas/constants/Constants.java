@@ -53,6 +53,7 @@ public class Constants {
     public static final String EXTRACTION_WIKIPEDIA_FOLDER = "tmp/wikipedia/";
     public static final String PM_RETRIEVAL_HISTORY_FOLDER = "tmp/pubmed/";
     public static final String STATISTICS_HISTORY_FOLDER = "tmp/statistics/";
+    public static final String ANALYSIS_HISTORY_DIRECTORY = "tmp/analysis/";
     public static final String PM_RETRIEVAL_FILE_NAME = "_pubmed_retrieval";
     public static final String WIKIPEDIA_RESOURCE_FILE_NAME = "_wikipedia_resource";
     public static final String WIKIPEDIA_SEMTYPE_FILE_NAME = "_wikipedia_semtype";
@@ -977,6 +978,8 @@ reactions.
     public final static String REVISIONS_ELEMENT_SIZE_NAME = "size";
     public final static String REVISIONS_ELEMENT_COMMENT_NAME = "comment";
     public final static String REVISIONS_ELEMENT_TEXT_NAME = "text";
+
+    public final static String REDIRECTS_ELEMENT_NAME = "redirects";
 
 
     /**

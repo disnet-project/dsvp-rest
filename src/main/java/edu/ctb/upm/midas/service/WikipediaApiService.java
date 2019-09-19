@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -61,6 +59,16 @@ public class WikipediaApiService {
     }
 
 
+    public void test(){
+        List<Snapshot> snapshots = new ArrayList<Snapshot>(){{
+            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
+            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
+        }};
+        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("Ciguatera", snapshots);
+//        System.out.println(page);
+    }
+
+
     public Page getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(String pageTitle, List<Snapshot> snapshots){
         Page page = new Page();
         Revision previousR = null;
@@ -91,6 +99,7 @@ public class WikipediaApiService {
                         if (elementPageInfo!=null) {
                             //Recorre los elementos del mapa
                             for (Map.Entry<String, JsonElement> element : elementPageInfo) {
+                System.out.println( element.getKey()+ " <-> " + element.getValue());
 
                                 //Verifica cada elemento para asignar sus valores a los campos correspondientes
                                 //del recien creado objeto Page
@@ -133,6 +142,25 @@ public class WikipediaApiService {
                                         revisionList.add(revision);
                                     }//END if (isJsonObject)
                                 }//END if compare if the element is kind of "revisions"
+                                if (element.getKey().equalsIgnoreCase(Constants.REDIRECTS_ELEMENT_NAME)) {
+                                    JsonArray redirectSet = element.getValue().getAsJsonArray();
+                                    //Doble verificación para saber si el elemento "revisions" es un objeto Json
+                                    if (redirectSet!=null) {
+                                        for (JsonElement redirectElement : redirectSet) {
+                                            JsonObject redirectObj = redirectElement.getAsJsonObject();
+                                            Integer redirectpageid = (redirectObj.get("pageid") instanceof JsonNull)?0:(redirectObj.get("pageid").getAsInt());
+                                            String redirectpagetitle = redirectObj.get("title").getAsString();
+                                            if (pageTitle.equalsIgnoreCase(redirectpagetitle)){
+                                                page.setIsredirect(true);
+                                                page.setRedirectpageid(redirectpageid);
+                                                page.setRedirectpagetitle(redirectpagetitle);
+                                                break;
+                                            }
+                                        }
+
+                                        System.out.println("ENTRA red");
+                                    }
+                                }//END if compare if the element is kind of "redirects"
                             }//END for that each element of pages element
                         }//END if (elementPageInfo!=null)
                     }
@@ -227,6 +255,7 @@ public class WikipediaApiService {
 
 
     public String getRevisionTextAndSectionList(Revision revision){
+        Common common = new Common();
         String text = "";
         try {
 
@@ -256,13 +285,13 @@ public class WikipediaApiService {
                 List<Section> sectionList = new ArrayList<>();
                 for (JsonElement sectionElement : sectionElements) {
                     JsonObject sectionObj = sectionElement.getAsJsonObject();
-                    Integer toclevel = sectionObj.get("toclevel").getAsInt();
+                    Integer toclevel = (sectionObj.get("toclevel") instanceof JsonNull)?0:(sectionObj.get("toclevel").getAsInt());
                     String level = sectionObj.get("level").getAsString();
                     String line = sectionObj.get("line").getAsString();
                     String number = sectionObj.get("number").getAsString();
                     String index = sectionObj.get("index").getAsString();
-                    String fromtitle = sectionObj.get("fromtitle").getAsString();
-                    Integer byteoffset = sectionObj.get("byteoffset").getAsInt();
+                    String fromtitle = (common.isEmpty(sectionObj.get("fromtitle").getAsString()))?"":(sectionObj.get("fromtitle").getAsString());//Este es un ejemplo de que algunos elementos no son devueltos o no existen. Ver Hepatomegaly
+                    Integer byteoffset = (sectionObj.get("byteoffset") instanceof JsonNull)?0:(sectionObj.get("byteoffset").getAsInt());
                     String anchor = sectionObj.get("anchor").getAsString();
 
                     Section section = new Section(toclevel, level, line, number, index, fromtitle, byteoffset, anchor);
@@ -278,6 +307,13 @@ public class WikipediaApiService {
             logger.error("Error to get revision text Wikipedia API", e);
         }
         return text;
+    }
+
+
+    public Page getRedirectInfo(Disease disease){
+        Page page = null;
+
+        return page;
     }
 
 
@@ -346,6 +382,15 @@ public class WikipediaApiService {
     }
 
 
+    public void getPageRedirectInfoAndSetInPageObject(Page page, Map.Entry<String, JsonElement> element){
+        Common common = new Common();
+        if (common.isEmpty(page.getRedirectpagetitle())) {
+            if (Constants.PAGES_ELEMENT_TITLE_NAME.equalsIgnoreCase(element.getKey()))
+                page.setTitle(element.getValue().getAsString());
+        }
+    }
+
+
     public String deleteFirstAndLastChar(String str){
         return str.substring(1, str.length()-1);
     }
@@ -372,12 +417,12 @@ public class WikipediaApiService {
         //title: Blue rubber bleb nevus syndrome
         //snapshot: 2018-02-15
         String response = "";
-//        try {
-            URL url = new URL("https://en.wikipedia.org/w/api.php?action=query&prop=revisions&format=json&rvprop=ids|flags|timestamp|userid|user|size|comment&rvstart=" + snapshot + "T00:00:00Z&rvdir=older&rvlimit=1&titles=" + titleArticle.replace(" ", Constants.BLANK_SPACE_CODE));
+        try {
+            URL url = new URL("https://en.wikipedia.org/w/api.php?action=query&prop=revisions|redirects&format=json&rvprop=ids|flags|timestamp|userid|user|size|comment&rvstart=" + snapshot + "T00:00:00Z&rvdir=older&rvlimit=1&redirects&titles=" + titleArticle.replace(" ", Constants.BLANK_SPACE_CODE));
             response = getResponseBody(url);
-//        }catch (Exception e){
-//            logger.error("Error to make Wikipedia API URL", e);
-//        }
+        }catch (Exception e){
+            logger.error("Error to make Wikipedia API URL", e);
+        }
         return response;
     }
 
@@ -409,6 +454,58 @@ public class WikipediaApiService {
         }
         return response;
 
+    }
+
+
+    public void getDiseasesInfoAndPopulateTheDBProcedure(){
+        Common common = new Common();
+        File dir = new File(Constants.STATISTICS_HISTORY_FOLDER);
+
+        File[] directoryListing = dir.listFiles();
+
+        int count = 1;
+        if (directoryListing != null) {
+            for (File diseaseFile : directoryListing) {
+                try {
+                    Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
+                    count++;
+                }//END try
+                catch(Exception exception){
+                    System.out.println("File " + diseaseFile.getAbsolutePath() + " is not OLE");
+                }//END catch
+            }//END for (File file : directoryListing) {
+        }//END if (directoryListing != null) {
+    }
+
+
+    public void readDiseaseJSONFile(){
+
+    }
+
+
+    public void findErrorsInTheLog(){
+        boolean existError = false;
+        String previousLine = "";
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(
+                    Constants.ANALYSIS_HISTORY_DIRECTORY + "diseases_impl"));
+            String line = reader.readLine();
+            while (line != null) {
+//                System.out.println(line);
+                if(line.contains(": Error")){
+                    System.out.println(line);
+                    System.out.println("    " + previousLine);
+                }
+
+                previousLine = line;
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

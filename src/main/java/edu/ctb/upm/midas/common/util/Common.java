@@ -1,5 +1,6 @@
 package edu.ctb.upm.midas.common.util;
 
+import com.google.gson.Gson;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.model.common.document_structure.text.List_;
 import edu.ctb.upm.midas.model.common.document_structure.text.Paragraph;
@@ -7,6 +8,8 @@ import edu.ctb.upm.midas.model.common.document_structure.text.Table;
 import edu.ctb.upm.midas.model.common.document_structure.text.Text;
 import edu.ctb.upm.midas.model.wikipediaApi.Disease;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -27,6 +30,9 @@ import java.util.regex.Pattern;
  */
 @Service
 public class Common {
+
+    private static final Logger logger = LoggerFactory.getLogger(Common.class);
+
 
     public boolean isEmpty(String string) {
         if (string == null) {
@@ -135,6 +141,23 @@ public class Common {
             bW.close();
         }
         return fileName;
+    }
+
+
+    public Disease readDiseaseJSONFileAnalysis(File file) {
+        Disease disease = null;
+        logger.info("Read JSON disease: " + file.getName());
+        Gson gson = new Gson();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            disease = gson.fromJson(br, Disease.class);
+//            gson = new GsonBuilder().setPrettyPrinting().create();
+//            System.out.println(gson.toJson(disease));
+        }catch (Exception e){
+            logger.error("Error to read or convert JSON disease file {}", file.getName(), e);
+//            System.out.println("Error to read or convert JSON!..." + e.getLocalizedMessage() + e.getMessage() + e.getCause());
+        }
+        return disease;
     }
 
 

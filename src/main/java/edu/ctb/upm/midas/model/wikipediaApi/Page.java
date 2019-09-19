@@ -7,6 +7,9 @@ public class Page {
     private Integer pageid;
     private String title;
     private List<Revision> revisions;
+    private boolean isredirect;
+    private Integer redirectpageid;
+    private String redirectpagetitle;
 
 
     public Page() {
@@ -49,6 +52,29 @@ public class Page {
         this.revisions = revisions;
     }
 
+    public boolean isIsredirect() {
+        return isredirect;
+    }
+
+    public void setIsredirect(boolean isredirect) {
+        this.isredirect = isredirect;
+    }
+
+    public Integer getRedirectpageid() {
+        return redirectpageid;
+    }
+
+    public void setRedirectpageid(Integer redirectpageid) {
+        this.redirectpageid = redirectpageid;
+    }
+
+    public String getRedirectpagetitle() {
+        return redirectpagetitle;
+    }
+
+    public void setRedirectpagetitle(String redirectpagetitle) {
+        this.redirectpagetitle = redirectpagetitle;
+    }
 
 
     @Override
@@ -57,6 +83,9 @@ public class Page {
                 "pageid=" + pageid +
                 ", title='" + title + '\'' +
                 ", revisions=" + revisions +
+                ", isredirect=" + isredirect +
+                ", redirectpageid=" + redirectpageid +
+                ", redirectpagetitle='" + redirectpagetitle + '\'' +
                 '}';
     }
 }

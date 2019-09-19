@@ -85,7 +85,9 @@ public class ExtractionController {
             method = RequestMethod.GET)
     public void test() throws Exception {
 //        wikipediaExtractService.test();
-        wikipediaApiService.init();
+//        wikipediaApiService.init();
+//        wikipediaApiService.findErrorsInTheLog();
+        wikipediaApiService.test();
     }
 
 
