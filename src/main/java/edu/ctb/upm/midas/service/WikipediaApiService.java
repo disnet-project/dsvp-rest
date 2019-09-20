@@ -80,7 +80,7 @@ public class WikipediaApiService {
 //            System.out.println("Clave: " + key + " -> Valor: " + disease);
 
 
-            logger.info(key + ". DISEASE to total?" + disease.getId() + ": " + disease.getName());
+            logger.info(key + ". DISEASE to total? " + disease.getId() + ": " + disease.getName());
             List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
             if (snapshots!=null) {
                 Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
