@@ -127,9 +127,9 @@ public class Common {
     }
 
 
-    public String writeAnalysisJSONFile(String jsonBody, Disease disease, int count, String snapshot) throws IOException {
+    public String writeAnalysisJSONFile(String jsonBody, Disease disease, int count, String snapshot, String directory) throws IOException {
         String fileName = count + "_" + disease.getId() + "_" + snapshot + Constants.DOT_JSON;
-        String path = Constants.STATISTICS_HISTORY_FOLDER + fileName;
+        String path = directory + fileName;//Constants.STATISTICS_HISTORY_FOLDER
         InputStream in = getClass().getResourceAsStream(path);
         //BufferedReader bL = new BufferedReader(new InputStreamReader(in));
         File file = new File(path);

@@ -1,6 +1,7 @@
 package edu.ctb.upm.midas.model.wikipediaApi;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Disease {
     private String id;
@@ -8,6 +9,14 @@ public class Disease {
     List<Snapshot> snapshots;
     private Page page;
 
+
+    public Disease() {
+    }
+
+    public Disease(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public String getId() {
         return id;
@@ -41,6 +50,20 @@ public class Disease {
         this.page = page;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Disease)) return false;
+        Disease disease = (Disease) o;
+        return Objects.equals(getId(), disease.getId());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
+    }
 
     @Override
     public String toString() {

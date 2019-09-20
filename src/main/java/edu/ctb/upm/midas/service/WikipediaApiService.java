@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class WikipediaApiService {
@@ -33,12 +35,14 @@ public class WikipediaApiService {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
+//        List<String> diseaseListError = findErrorsInTheLog();
 
         List<Disease> diseases = documentService.findAllDistinctArticlesAndSnapshot();
         int count = 1, total = diseases.size();
         if (diseases.size()>0) {
             for (Disease disease : diseases) {
                 logger.info(count + ". DISEASE to " + total + " (" + (count*100)/total + "%)." + disease.getName() /*+ " | " + disease.getSnapshotId() + " | " + disease.getCurrentSnapshot() + " | " + disease.getPreviousSnapshot()*/);
+//                if (disease.getName().trim())
                 List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
                 if (snapshots!=null) {
                     Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
@@ -46,7 +50,7 @@ public class WikipediaApiService {
                     disease.setSnapshots(snapshots);
                     //Escribir json
                     try {
-                        String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, count, timeProvider.getNowFormatyyyyMMdd());
+                        String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, count, timeProvider.getNowFormatyyyyMMdd(), Constants.STATISTICS_HISTORY_FOLDER);
                         logger.info("Write JSON file successful! => " + fileNAme);
                     }catch (Exception e){logger.error("Error to write the JSON file", e);}
                 }
@@ -60,12 +64,42 @@ public class WikipediaApiService {
 
 
     public void test(){
-        List<Snapshot> snapshots = new ArrayList<Snapshot>(){{
-            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
-            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
-        }};
-        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("Ciguatera", snapshots);
+//        List<Snapshot> snapshots = new ArrayList<Snapshot>(){{
+//            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
+//            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
+//        }};
+//        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("Ciguatera", snapshots);
 //        System.out.println(page);
+
+        Common common = new Common();
+        TimeProvider timeProvider = new TimeProvider();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<Integer, Disease> diseaseMap = findErrorsInTheLog();
+        for (Integer key: diseaseMap.keySet()) {
+            Disease disease = diseaseMap.get(key);
+//            System.out.println("Clave: " + key + " -> Valor: " + disease);
+
+
+            logger.info(key + ". DISEASE to total?" + disease.getId() + ": " + disease.getName());
+            List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
+            if (snapshots!=null) {
+                Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                disease.setPage(page);
+                disease.setSnapshots(snapshots);
+                //Escribir json
+                try {
+                    String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, key, timeProvider.getNowFormatyyyyMMdd(), Constants.ANALYSIS_HISTORY_DIRECTORY);
+                    logger.info("Write JSON file successful! => " + fileNAme);
+                    page=null;
+                    disease=null;
+                }catch (Exception e){logger.error("Error to write the JSON file", e);}
+            }
+
+
+
+        }
+
+
     }
 
 
@@ -97,9 +131,9 @@ public class WikipediaApiService {
                         Set<Map.Entry<String, JsonElement>> elementPageInfo = elementPage.getValue().getAsJsonObject().entrySet();
                         //Valida que el mapa del elemento pages no sea nulo
                         if (elementPageInfo!=null) {
-                            //Recorre los elementos del mapa
+                                //Recorre los elementos del mapa
                             for (Map.Entry<String, JsonElement> element : elementPageInfo) {
-                System.out.println( element.getKey()+ " <-> " + element.getValue());
+//                                System.out.println( element.getKey()+ " <-> " + element.getValue());
 
                                 //Verifica cada elemento para asignar sus valores a los campos correspondientes
                                 //del recien creado objeto Page
@@ -148,8 +182,8 @@ public class WikipediaApiService {
                                     if (redirectSet!=null) {
                                         for (JsonElement redirectElement : redirectSet) {
                                             JsonObject redirectObj = redirectElement.getAsJsonObject();
-                                            Integer redirectpageid = (redirectObj.get("pageid") instanceof JsonNull)?0:(redirectObj.get("pageid").getAsInt());
-                                            String redirectpagetitle = redirectObj.get("title").getAsString();
+                                            Integer redirectpageid = (redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME) instanceof JsonNull)?0:(redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME).getAsInt());
+                                            String redirectpagetitle = redirectObj.get(Constants.PAGES_ELEMENT_TITLE_NAME).getAsString();
                                             if (pageTitle.equalsIgnoreCase(redirectpagetitle)){
                                                 page.setIsredirect(true);
                                                 page.setRedirectpageid(redirectpageid);
@@ -157,8 +191,6 @@ public class WikipediaApiService {
                                                 break;
                                             }
                                         }
-
-                                        System.out.println("ENTRA red");
                                     }
                                 }//END if compare if the element is kind of "redirects"
                             }//END for that each element of pages element
@@ -483,7 +515,10 @@ public class WikipediaApiService {
     }
 
 
-    public void findErrorsInTheLog(){
+    public Map<Integer, Disease> findErrorsInTheLog(){
+        List<String> diseaseErrorList = new ArrayList<>();
+        List<String> logLines = getLogLines();
+        Map<Integer, Disease> diseaseLog = new HashMap<Integer, Disease>();
         boolean existError = false;
         String previousLine = "";
         BufferedReader reader;
@@ -491,11 +526,30 @@ public class WikipediaApiService {
             reader = new BufferedReader(new FileReader(
                     Constants.ANALYSIS_HISTORY_DIRECTORY + "diseases_impl"));
             String line = reader.readLine();
+            int count = 1;
             while (line != null) {
 //                System.out.println(line);
                 if(line.contains(": Error")){
-                    System.out.println(line);
-                    System.out.println("    " + previousLine);
+//                    System.out.println(count + ". " + line);
+//                    System.out.println(count + ". " + previousLine);
+                    if (!previousLine.isEmpty()) {
+//                        System.out.println(count + "    " + previousLine);
+                        String[] div = previousLine.split("%\\)\\.");
+                        Pattern pattern = Pattern.compile("\\: (.*?)\\.");
+                        Matcher matcher = pattern.matcher(div[0]);
+                        Integer numberLine = Integer.valueOf( ((matcher.find())?matcher.group(1):"n/a") );
+
+                        String strFind = " " + numberLine + "_DIS";
+                        String diseaseId = getDiseaseIdInLogFile(logLines, strFind);
+                        String diseaseName = div[1];
+//                        System.out.println(count + ". Logline: " + numberLine + " | Disease: " + diseaseId + " : " + div[1]);
+
+                        Disease disease = new Disease(diseaseId, diseaseName);
+                        diseaseLog.put(numberLine, disease);
+
+                        diseaseErrorList.add(div[1]);
+                        count++;
+                    }
                 }
 
                 previousLine = line;
@@ -506,6 +560,43 @@ public class WikipediaApiService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        System.out.println("Tamaño del mapa: " + diseaseLog.size());
+        return diseaseLog;
+    }
+
+
+    public List<String> getLogLines(){
+        List<String> lines = new ArrayList<>();
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(
+                    Constants.ANALYSIS_HISTORY_DIRECTORY + "diseases_impl"));
+            String line = reader.readLine();
+            int count = 1;
+            while (line != null) {
+//                System.out.println(line);
+                lines.add(line);
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
+
+
+    public String getDiseaseIdInLogFile(List<String> lines, String strFind){
+        String diseaseId = "";
+        for (String line: lines) {
+            if (line.contains(strFind)){
+                String[] disInfo = line.split("=> ");
+                String[] idInfo = disInfo[1].split("_");
+                diseaseId = idInfo[1];
+            }
+        }
+        return diseaseId;
     }
 
 }
