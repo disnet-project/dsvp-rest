@@ -64,6 +64,7 @@ public class WikipediaApiService {
 
 
     public void test(){
+        System.out.println("test method");
 //        List<Snapshot> snapshots = new ArrayList<Snapshot>(){{
 //            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
 //            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
@@ -304,7 +305,7 @@ public class WikipediaApiService {
             JsonArray sectionElements = sections.getAsJsonArray();
 
 
-            //Valida que el mapa no sea nulo
+            //Valida que el mapa no sea nulo /// MAS CAMBIOS
             if (parseElements!=null) {
                 for (Map.Entry<String, JsonElement> parseElement : parseElements) {
 //                    System.out.println( parseElement.getKey()+ " <-> " + parseElement.getValue());
