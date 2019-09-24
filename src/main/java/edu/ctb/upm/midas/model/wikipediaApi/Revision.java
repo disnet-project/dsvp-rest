@@ -15,6 +15,7 @@ public class Revision {
     private String previousDate;
     private String comment;
     private boolean minor;
+    private Integer relevantSectionCount;
     private Integer sectionCount;
     private List<Section> sections;
     private Long characterCount;//Número de carateres de todos los textos de cada sección
@@ -103,6 +104,14 @@ public class Revision {
 
     public void setMinor(boolean minor) {
         this.minor = minor;
+    }
+
+    public Integer getRelevantSectionCount() {
+        return relevantSectionCount;
+    }
+
+    public void setRelevantSectionCount(Integer relevantSectionCount) {
+        this.relevantSectionCount = relevantSectionCount;
     }
 
     public Integer getSectionCount() {

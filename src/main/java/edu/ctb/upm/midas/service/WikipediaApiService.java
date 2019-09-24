@@ -63,14 +63,35 @@ public class WikipediaApiService {
     }
 
 
-    public void test(){
-        System.out.println("test method");
+    public void staticTest(){
 //        List<Snapshot> snapshots = new ArrayList<Snapshot>(){{
 //            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
 //            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
 //        }};
-//        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("Ciguatera", snapshots);
+        Common common = new Common();
+        TimeProvider timeProvider = new TimeProvider();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Disease disease = new Disease("DIS009247", "Stiff-Person syndrome");
+        List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
+        if (snapshots!=null) {
+            Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+            disease.setPage(page);
+            disease.setSnapshots(snapshots);
+//            System.out.println(page);
+            //Escribir json
+            try {
+                String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, 4332, timeProvider.getNowFormatyyyyMMdd(), Constants.STATISTICS_HISTORY_FOLDER);
+                logger.info("Write JSON file successful! => " + fileNAme);
+            }catch (Exception e){logger.error("Error to write the JSON file", e);}
+        }
+//        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("COACH syndrome", snapshots);
 //        System.out.println(page);
+
+    }
+
+
+    public void test(){
+        System.out.println("test method");
 
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
@@ -111,119 +132,133 @@ public class WikipediaApiService {
         try {
             int snapshotCount = 1;
             for (Snapshot snapshot: snapshots) {
-                String responseWikipediaAPI = getWikipediaApiQueryResponse(pageTitle, snapshot.getSnapshot());
-                Revision revision = null;
+                try {
+                    String responseWikipediaAPI = getWikipediaApiQueryResponse(pageTitle, snapshot.getSnapshot());
+                    Revision revision = null;
 //            System.out.println("Wikipedia API response = " + responseWikipediaAPI);
 
-                //Parser string response Wikipedia API to Java JSON object
-                JsonElement jsonElement = parseWikipediaResponse(responseWikipediaAPI);
-                //Get information from Json object
-                JsonElement pages = jsonElement.getAsJsonObject().get("query").getAsJsonObject().get("pages");
-                //Obtiene todos los elementos de un JsonElement en forma de mapa
-                Set<Map.Entry<String, JsonElement>> elementPages = pages.getAsJsonObject().entrySet();
+                    //Parser string response Wikipedia API to Java JSON object
+                    JsonElement jsonElement = parseWikipediaResponse(responseWikipediaAPI);
+                    //Get information from Json object
+                    JsonElement pages = jsonElement.getAsJsonObject().get("query").getAsJsonObject().get("pages");
+                    //Obtiene todos los elementos de un JsonElement en forma de mapa
+                    Set<Map.Entry<String, JsonElement>> elementPages = pages.getAsJsonObject().entrySet();
 
-                //Valida que el mapa no sea nulo
-                if (elementPages!=null) {
-                    //Recorre los elementos del mapa que corresponde al elemento con el pageid,
-                    // => " {"24811533": "
-                    for (Map.Entry<String, JsonElement> elementPage : elementPages) {
+                    //Valida que el mapa no sea nulo
+                    if (elementPages != null) {
+                        //Recorre los elementos del mapa que corresponde al elemento con el pageid,
+                        // => " {"24811533": "
+                        for (Map.Entry<String, JsonElement> elementPage : elementPages) {
 //                System.out.println( elementPage.getKey()+ " <-> " + elementPage.getValue());
-                        //Obtiene todos los elementos de un JsonElement en forma de mapa
-                        Set<Map.Entry<String, JsonElement>> elementPageInfo = elementPage.getValue().getAsJsonObject().entrySet();
-                        //Valida que el mapa del elemento pages no sea nulo
-                        if (elementPageInfo!=null) {
+                            //Obtiene todos los elementos de un JsonElement en forma de mapa
+                            Set<Map.Entry<String, JsonElement>> elementPageInfo = elementPage.getValue().getAsJsonObject().entrySet();
+                            //Valida que el mapa del elemento pages no sea nulo
+                            if (elementPageInfo != null) {
                                 //Recorre los elementos del mapa
-                            for (Map.Entry<String, JsonElement> element : elementPageInfo) {
+                                for (Map.Entry<String, JsonElement> element : elementPageInfo) {
 //                                System.out.println( element.getKey()+ " <-> " + element.getValue());
 
-                                //Verifica cada elemento para asignar sus valores a los campos correspondientes
-                                //del recien creado objeto Page
-                                getPageIdAndSetInPageObject(page, element);
-                                getPageTitleAndSetInPageObject(page, element);
+                                    //Verifica cada elemento para asignar sus valores a los campos correspondientes
+                                    //del recien creado objeto Page
+                                    getPageIdAndSetInPageObject(page, element);
+                                    getPageTitleAndSetInPageObject(page, element);
 //                                System.out.println(element.getKey() + " - " + element.getValue());
-                                //Valida que el elemento del mapa sea de nombre "revisions". Porque necesita
-                                //ser tratado especialmente para poder acceder a sus elementos y valores
-                                if (element.getKey().equalsIgnoreCase(Constants.REVISIONS_ELEMENT_NAME)) {
-                                    //Parsea el elemento revision
-                                    JsonElement revisionsSet = parseWikipediaResponse(
-                                            //Para dar formato y hacer el parse a Json del String, es necesario
-                                            //quitar el primer y el último elemento que son "[" y "]" para obtener un
-                                            //String(JSON) que inicie y termine con "{" y "}"
-                                            deleteFirstAndLastChar(element.getValue().toString())
-                                    );
-                                    //Doble verificación para saber si el elemento "revisions" es un objeto Json
-                                    boolean isJsonObject = revisionsSet.isJsonObject();
-                                    if (isJsonObject) {
-                                        revision = new Revision();
-                                        //Se recorren los elementos del mapa "revisions"
-                                        for (Map.Entry<String, JsonElement> revElement : revisionsSet.getAsJsonObject().entrySet()) {
-                                            getRevIdAndSetInRevisionObject(revision, revElement);
-                                            getParentIdAndSetInRevisionObject(revision, revElement);
-                                            getMinorAndSetInRevisionObject(revision, revElement);
-                                            getUserAndSetInRevisionObject(revision, revElement);
-                                            getUserIdAndSetInRevisionObject(revision, revElement);
-                                            getTimestampAndSetInRevisionObject(revision, revElement);
-                                            getSizeAndSetInRevisionObject(revision, revElement);
-                                            getCommentAndSetInRevisionObject(revision, revElement);
+                                    //Valida que el elemento del mapa sea de nombre "revisions". Porque necesita
+                                    //ser tratado especialmente para poder acceder a sus elementos y valores
+                                    if (element.getKey().equalsIgnoreCase(Constants.REVISIONS_ELEMENT_NAME)) {
+                                        //Parsea el elemento revision
+                                        JsonElement revisionsSet = parseWikipediaResponse(
+                                                //Para dar formato y hacer el parse a Json del String, es necesario
+                                                //quitar el primer y el último elemento que son "[" y "]" para obtener un
+                                                //String(JSON) que inicie y termine con "{" y "}"
+                                                deleteFirstAndLastChar(element.getValue().toString())
+                                        );
+                                        //Doble verificación para saber si el elemento "revisions" es un objeto Json
+                                        boolean isJsonObject = revisionsSet.isJsonObject();
+                                        if (isJsonObject) {
+                                            revision = new Revision();
+                                            //Se recorren los elementos del mapa "revisions"
+                                            for (Map.Entry<String, JsonElement> revElement : revisionsSet.getAsJsonObject().entrySet()) {
+                                                getRevIdAndSetInRevisionObject(revision, revElement);
+                                                getParentIdAndSetInRevisionObject(revision, revElement);
+                                                getMinorAndSetInRevisionObject(revision, revElement);
+                                                getUserAndSetInRevisionObject(revision, revElement);
+                                                getUserIdAndSetInRevisionObject(revision, revElement);
+                                                getTimestampAndSetInRevisionObject(revision, revElement);
+                                                getSizeAndSetInRevisionObject(revision, revElement);
+                                                getCommentAndSetInRevisionObject(revision, revElement);
 
 //                                        System.out.println(revElement.getKey() + " - " + revElement.getValue());
-                                        }
-                                        if (previousR==null){
-                                            revision.setPreviousDate("");
-                                        }else{
-                                            revision.setPreviousDate(previousR.getDate());
-                                        }
-                                        snapshot.setRevId(revision.getRevid());
-                                        revisionList.add(revision);
-                                    }//END if (isJsonObject)
-                                }//END if compare if the element is kind of "revisions"
-                                if (element.getKey().equalsIgnoreCase(Constants.REDIRECTS_ELEMENT_NAME)) {
-                                    JsonArray redirectSet = element.getValue().getAsJsonArray();
-                                    //Doble verificación para saber si el elemento "revisions" es un objeto Json
-                                    if (redirectSet!=null) {
-                                        for (JsonElement redirectElement : redirectSet) {
-                                            JsonObject redirectObj = redirectElement.getAsJsonObject();
-                                            Integer redirectpageid = (redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME) instanceof JsonNull)?0:(redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME).getAsInt());
-                                            String redirectpagetitle = redirectObj.get(Constants.PAGES_ELEMENT_TITLE_NAME).getAsString();
-                                            if (pageTitle.equalsIgnoreCase(redirectpagetitle)){
-                                                page.setIsredirect(true);
-                                                page.setRedirectpageid(redirectpageid);
-                                                page.setRedirectpagetitle(redirectpagetitle);
-                                                break;
+                                            }
+                                            if (previousR == null) {
+                                                revision.setPreviousDate("");
+                                            } else {
+                                                revision.setPreviousDate(previousR.getDate());
+                                            }
+                                            snapshot.setRevId(revision.getRevid());
+                                            revisionList.add(revision);
+                                        }//END if (isJsonObject)
+                                    }//END if compare if the element is kind of "revisions"
+                                    if (element.getKey().equalsIgnoreCase(Constants.REDIRECTS_ELEMENT_NAME)) {
+                                        JsonArray redirectSet = element.getValue().getAsJsonArray();
+                                        //Doble verificación para saber si el elemento "revisions" es un objeto Json
+                                        if (redirectSet != null) {
+                                            for (JsonElement redirectElement : redirectSet) {
+                                                JsonObject redirectObj = redirectElement.getAsJsonObject();
+                                                Integer redirectpageid = (redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME) instanceof JsonNull) ? 0 : (redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME).getAsInt());
+                                                String redirectpagetitle = redirectObj.get(Constants.PAGES_ELEMENT_TITLE_NAME).getAsString();
+                                                if (pageTitle.equalsIgnoreCase(redirectpagetitle)) {
+                                                    page.setIsredirect(true);
+                                                    page.setRedirectpageid(redirectpageid);
+                                                    page.setRedirectpagetitle(redirectpagetitle);
+//                                                    break;
+                                                }
                                             }
                                         }
-                                    }
-                                }//END if compare if the element is kind of "redirects"
-                            }//END for that each element of pages element
-                        }//END if (elementPageInfo!=null)
-                    }
-                }//END if (elementPages!=null)
+                                    }//END if compare if the element is kind of "redirects"
+                                }//END for that each element of pages element
+                            }//END if (elementPageInfo!=null)
+                        }
+                    }//END if (elementPages!=null)
 
-                //Si las fechas son iguales significa que se trata de la misma actualización (revision) y por lo tanto
-                //el mismo texto de la anterior se debe colocar en la actual actualización (revision)
-                //con el fin de no hacer llamadas de más a la "Wikipedia API"
-                if (revision.getDate().equalsIgnoreCase(revision.getPreviousDate())){
-                    //Si es la misma versión se copia la información del texto y de las secciones de la
-                    //actualización (revision) anterior
+                    //Si las fechas son iguales significa que se trata de la misma actualización (revision) y por lo tanto
+                    //el mismo texto de la anterior se debe colocar en la actual actualización (revision)
+                    //con el fin de no hacer llamadas de más a la "Wikipedia API"
+                    try {
+                        if (revision.getDate().equalsIgnoreCase(revision.getPreviousDate())) {
+                            //Si es la misma versión se copia la información del texto y de las secciones de la
+                            //actualización (revision) anterior
 //                    System.out.println("ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
-                    revision.setText(previousR.getText());
-                    revision.setSectionCount(previousR.getSectionCount());
-                    revision.setSections(previousR.getSections());
-                    revision.setCharacterCount(previousR.getCharacterCount());
-                }else{
+                            revision.setText(previousR.getText());
+                            revision.setSectionCount(previousR.getSectionCount());
+                            revision.setSections(previousR.getSections());
+                            revision.setCharacterCount(previousR.getCharacterCount());
+                        } else {
 //                    System.out.println("NO ES LA MISMA REVISIÓN: (" + revision.getDate() + "==" + revision.getPreviousDate() + ") => (" + revision.getSnapshot() + ")");
-                    getRevisionTextAndSectionList(revision);
-                }
+                            try {
+                                getRevisionTextAndSectionList(revision);
+                            }catch (Exception e){
+                                logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot in getRevisionTextAndSectionList: pageTitle:" + pageTitle + " | snapshot:" + snapshot + " => REV:" + revision, e);
+                            }
+                        }
+                    }catch (Exception e){
+                        snapshot.setRevId(0);
+                        logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + pageTitle + " | snapshot:" + snapshot + " => REV:" + revision, e);
+
+                    }
 
 //                System.out.println(revision.toString());
 
-                snapshotCount++;
-                previousR = revision;
+                    snapshotCount++;
+                    if (revision!=null) previousR = revision;
+                }catch (Exception e){
+                    logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + pageTitle + " | snapshot:" + snapshot, e);
+                }
             }
             removeRepetedRevision(revisionList);
             if (page!=null) page.setRevisions(revisionList);
         }catch (Exception e){
-            logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot ", e);
+            logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + pageTitle, e);
         }
         return page;
     }
@@ -337,7 +372,7 @@ public class WikipediaApiService {
             }
 
         }catch (Exception e){
-            logger.error("Error to get revision text Wikipedia API", e);
+            logger.error("Error to get revision text Wikipedia API. Revision: " + revision, e);
         }
         return text;
     }
@@ -490,24 +525,78 @@ public class WikipediaApiService {
     }
 
 
-    public void getDiseasesInfoAndPopulateTheDBProcedure(){
+    public void getDiseasesInfoAndPopulateTheDBProcedure() throws IOException {
         Common common = new Common();
-        File dir = new File(Constants.STATISTICS_HISTORY_FOLDER);
-
+        TimeProvider timeProvider = new TimeProvider();
+        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY);
         File[] directoryListing = dir.listFiles();
+        String sqlFileSectionTableReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_updates_new_tbl_disease_section_list.sql";
+        String pathSqlFileSectionTableReport = "tmp/analysis_result/" + sqlFileSectionTableReport;
+        FileWriter fileWriterSqlFileSectionTableReport = new FileWriter(pathSqlFileSectionTableReport);
+
+
 
         int count = 1;
         if (directoryListing != null) {
+            int total = directoryListing.length-1;
             for (File diseaseFile : directoryListing) {
-                try {
-                    Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
-                    count++;
-                }//END try
-                catch(Exception exception){
-                    System.out.println("File " + diseaseFile.getAbsolutePath() + " is not OLE");
-                }//END catch
+                if (!diseaseFile.getName().equalsIgnoreCase(".DS_Store")) {
+                    try {
+                        Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
+                        if (!jsonFileDisease.isScorn()) {
+                            logger.info(count + " to " + total + ". (" + jsonFileDisease.isScorn() + ") " + jsonFileDisease.getId() + " - " + jsonFileDisease.getName() + ": revisions: " + jsonFileDisease.getPage().getRevisions().size());
+                            for (Revision revision : jsonFileDisease.getPage().getRevisions()) {
+                                if (revision.getSections()!=null) {
+                                    int countSectionLevelTwo = 0;
+                                    for (Section section : revision.getSections()) {
+                                        if(Integer.parseInt(section.getLevel())==2){
+                                            countSectionLevelTwo=countSectionLevelTwo+1;
+                                        }
+                                    }
+                                    revision.setRelevantSectionCount(countSectionLevelTwo);
+//                                    System.out.println("Number of section level 2: " + revision.getRelevantSectionCount());
+                                }else{
+                                    logger.error("Error, NO tiene Section:" + jsonFileDisease.getId() + " => " +jsonFileDisease.getName());
+                                }
+                            }
+
+                            Revision previousRevision = null;
+                            for (Snapshot snapshot: jsonFileDisease.getSnapshots()) {
+                                Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
+//                                System.out.println(revision.getRevid() + " - " + revision.getUser());
+                                //Creación de los mysql scripts
+                                String sql = "";
+                                if (previousRevision==null) {
+                                    sql = "update new_tbl_disease_section_list set real_all_section_count = " + revision.getRelevantSectionCount() + " , var_real_all_section_count = " + null + " , total_char_count = " + revision.getCharacterCount() + " , var_total_char_count = " + null + " where disease_id = '" + jsonFileDisease.getId() + "' and actual_snapshot = '" + snapshot.getSnapshot() + "';";
+                                }else{
+                                    sql = "update new_tbl_disease_section_list set real_all_section_count = " + revision.getRelevantSectionCount() + " , var_real_all_section_count = " + (revision.getRelevantSectionCount() - previousRevision.getRelevantSectionCount()) + " , total_char_count = " + revision.getCharacterCount() + " , var_total_char_count = " + (revision.getCharacterCount() - previousRevision.getCharacterCount()) + " where disease_id = '" + jsonFileDisease.getId() + "' and actual_snapshot = '" + snapshot.getSnapshot() + "';";
+                                }
+//                                System.out.println(sql);
+                                fileWriterSqlFileSectionTableReport.write(sql);
+                                previousRevision = revision;
+                            }
+
+                            count++;
+                        }else{
+//                            String noRelevantSQL = "UPDATE new_tbl_disease_list SET relevant = 0 WHERE disease_id = '" + jsonFileDisease.getId() + "';";
+//                            System.out.println(noRelevantSQL);
+                        }
+                    }//END try
+                    catch (Exception exception) {
+                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
+                    }//END catch
+                }
             }//END for (File file : directoryListing) {
         }//END if (directoryListing != null) {
+        fileWriterSqlFileSectionTableReport.close();
+    }
+
+
+    public Revision getRevisionBySnapshot(List<Revision> revisions, Integer revisionId){
+        return revisions.stream()
+                .filter(revision -> revisionId.equals(revision.getRevid()))
+                .findAny()
+                .orElse(null);
     }
 
 

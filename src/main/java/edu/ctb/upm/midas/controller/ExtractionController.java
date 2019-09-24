@@ -87,7 +87,9 @@ public class ExtractionController {
 //        wikipediaExtractService.test();
 //        wikipediaApiService.init();
 //        wikipediaApiService.findErrorsInTheLog();
-        wikipediaApiService.test();
+//        wikipediaApiService.test();
+//        wikipediaApiService.staticTest();
+        wikipediaApiService.getDiseasesInfoAndPopulateTheDBProcedure();
     }
 
 

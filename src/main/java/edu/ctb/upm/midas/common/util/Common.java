@@ -146,7 +146,7 @@ public class Common {
 
     public Disease readDiseaseJSONFileAnalysis(File file) {
         Disease disease = null;
-        logger.info("Read JSON disease: " + file.getName());
+//        logger.info("Read JSON disease: " + file.getName());
         Gson gson = new Gson();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));

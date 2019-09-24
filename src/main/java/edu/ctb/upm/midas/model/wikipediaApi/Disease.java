@@ -8,6 +8,7 @@ public class Disease {
     private String name;
     List<Snapshot> snapshots;
     private Page page;
+    private boolean scorn;
 
 
     public Disease() {
@@ -50,6 +51,13 @@ public class Disease {
         this.page = page;
     }
 
+    public boolean isScorn() {
+        return scorn;
+    }
+
+    public void setScorn(boolean scorn) {
+        this.scorn = scorn;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -72,6 +80,7 @@ public class Disease {
                 ", name='" + name + '\'' +
                 ", snapshots=" + snapshots +
                 ", page=" + page +
+        ", scorn=" + scorn +
                 '}';
     }
 }
