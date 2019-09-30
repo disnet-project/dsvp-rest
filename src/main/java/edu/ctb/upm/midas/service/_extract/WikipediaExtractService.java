@@ -97,7 +97,7 @@ public class WikipediaExtractService {
      * @return
      * @throws Exception
      */
-    public boolean extract(String snapshot, boolean json, boolean onlyTextRetrieval) throws Exception {
+    public boolean extract(String snapshot, boolean json, boolean onlyTextRetrieval, boolean fix) throws Exception {
         boolean res = false;
         String inicio = timeProvider.getTime();
         Date version = (json)?timeProvider.stringToDate(snapshot):timeProvider.getSqlDate();
@@ -125,7 +125,7 @@ public class WikipediaExtractService {
                     //System.out.println("No poblara...");
                     wikipediaPopulateDbNative.populateResource(resourceHashMap);
                     wikipediaPopulateDbNative.populateSemanticTypes();
-                    wikipediaPopulateDbNative.populate(sources, version, json);
+                    wikipediaPopulateDbNative.populate(sources, version, json, fix);
                     //Insertar la configuración por la que se esta creando la lista
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     String configurationJson = gson.toJson(dBpediaResponse.getConfig());

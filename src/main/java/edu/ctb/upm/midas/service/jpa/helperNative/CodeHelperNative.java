@@ -198,6 +198,10 @@ public class CodeHelperNative {
     public Code getCodeAndResourceIdByCodeAndResourceName(Code code){
 //        System.out.println("RESOURCE NAME A BUSCAR: " + code.getResource().getName());
         Resource existResource = resourceService.findByName( code.getResource().getName() );
+        if (existResource!=null){
+            resourceService.insertNative(code.getResource().getName());
+            existResource = resourceService.findByName( code.getResource().getName() );
+        }
         Object[] codeObject = codeService.findByIdNative(code.getCode(), existResource.getResourceId());
 //        (String) codeEntity[0], (int) codeEntity[1]
         Code existCode = null;

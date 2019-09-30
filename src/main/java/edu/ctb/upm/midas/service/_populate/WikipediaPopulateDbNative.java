@@ -82,7 +82,7 @@ public class WikipediaPopulateDbNative {
      * @throws Exception
      */
     @Transactional
-    public void populate(List<Source> sourceList, Date version, boolean isJSONRequest) throws Exception {
+    public void populate(List<Source> sourceList, Date version, boolean isJSONRequest, boolean fix) throws Exception {
         //Date version = dateVersion;//date.getSqlDate();
         System.out.println("-------------------- POPULATE DATABASE --------------------");
         System.out.println("Populate start...");
@@ -100,8 +100,11 @@ public class WikipediaPopulateDbNative {
             for (Doc document: source.getDocuments()) {
                 //Solo inserta aquellos documentos que al menos tengan códigos o secciones
                 if (document.isDiseaseArticle()) {
-                    insertDocumentData(document, sourceId, version, source, docsCount, isJSONRequest);
-//                    insertDocumentDataRestore(document, sourceId, version, source, docsCount, isJSONRequest);
+                    if (fix){
+                        insertDocumentDataRestore(document, sourceId, version, source, docsCount, isJSONRequest);
+                    }else{
+                        insertDocumentData(document, sourceId, version, source, docsCount, isJSONRequest);
+                    }
                     docsCount++;
                 }else{
                     invalidCount++;

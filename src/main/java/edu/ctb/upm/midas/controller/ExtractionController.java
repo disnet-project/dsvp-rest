@@ -41,10 +41,12 @@ public class ExtractionController {
     @RequestMapping(path = { "${my.service.rest.request.mapping.wikipedia.retrieval.texts.path}" }, //_wikipedia extraction
             method = RequestMethod.GET,
             params = {"snapshot", "json", "onlyTextRetrieval"})
-    public String extract(@RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot,
-                          @RequestParam(value = "json", required = false, defaultValue = "false") boolean json,
-                          @RequestParam(value = "onlyTextRetrieval", required = false, defaultValue = "false") boolean onlyTextRetrieval) throws Exception {
-        wikipediaExtractService.extract(snapshot, json, onlyTextRetrieval);
+    public String extract(
+            @RequestParam(value = "snapshot") @Valid @NotBlank @NotNull @NotEmpty String snapshot
+            , @RequestParam(value = "json", required = false, defaultValue = "false") boolean json
+            , @RequestParam(value = "onlyTextRetrieval", required = false, defaultValue = "false") boolean onlyTextRetrieval
+            , @RequestParam(value = "fix", required = false, defaultValue = "false") boolean fix) throws Exception {
+        wikipediaExtractService.extract(snapshot, json, onlyTextRetrieval, fix);
         return "Successful extraction and insertion in a DB!";
     }
 
