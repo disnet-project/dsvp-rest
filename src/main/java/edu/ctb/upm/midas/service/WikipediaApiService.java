@@ -4,6 +4,8 @@ import com.google.gson.*;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.constants.Constants;
+import edu.ctb.upm.midas.model.common.document_structure.Link;
+import edu.ctb.upm.midas.model.common.document_structure.Reference;
 import edu.ctb.upm.midas.model.wikipediaApi.*;
 import edu.ctb.upm.midas.service.jpa.DocumentService;
 import org.jsoup.Jsoup;
@@ -592,6 +594,66 @@ public class WikipediaApiService {
     }
 
 
+    public void getDiseasesInfoAndPopulateTheDBProcedure_REFERENCES() throws IOException {
+        Common common = new Common();
+        TimeProvider timeProvider = new TimeProvider();
+        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY);
+        File[] directoryListing = dir.listFiles();
+        String sqlFileSectionTableReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_updates_new_tbl_disease_url_list.sql";
+        String pathSqlFileSectionTableReport = "tmp/analysis_result/" + sqlFileSectionTableReport;
+        FileWriter fileWriterSqlFileSectionTableReport = new FileWriter(pathSqlFileSectionTableReport);
+
+        int count = 1;
+        if (directoryListing != null) {
+            int total = directoryListing.length-1;
+            for (File diseaseFile : directoryListing) {
+                if (!diseaseFile.getName().equalsIgnoreCase(".DS_Store")) {
+                    try {
+                        Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
+                        if (!jsonFileDisease.isScorn()) {
+                            logger.info(count + " to " + total + ". (" + jsonFileDisease.isScorn() + ") " + jsonFileDisease.getId() + " - " + jsonFileDisease.getName() + ": revisions: " + jsonFileDisease.getPage().getRevisions().size());
+                            for (Revision revision : jsonFileDisease.getPage().getRevisions()) {
+                                if (!common.isEmpty(revision.getText())) {
+                                    List<Reference> referenceList = extracReferences(revision.getText());
+                                    revision.setReferenceCount(referenceList.size());
+                                    System.out.println("Number of references: " + revision.getReferenceCount());
+                                }else{
+                                    logger.error("Error, NO tiene Section:" + jsonFileDisease.getId() + " => " +jsonFileDisease.getName());
+                                }
+                            }
+
+                            Revision previousRevision = null;
+                            for (Snapshot snapshot: jsonFileDisease.getSnapshots()) {
+                                Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
+//                                System.out.println(revision.getRevid() + " - " + revision.getUser());
+                                //Creación de los mysql scripts
+                                String sql = "";
+                                if (previousRevision==null) {
+                                    sql = "update new_tbl_disease_url_list set reference_count = " + revision.getReferenceCount() + " , var_reference_count = " + null + " where disease_id = '" + jsonFileDisease.getId() + "' and actual_snapshot = '" + snapshot.getSnapshot() + "';";
+                                }else{
+                                    sql = "update new_tbl_disease_url_list set reference_count = " + revision.getReferenceCount() + " , var_reference_count = " + (revision.getReferenceCount() - previousRevision.getReferenceCount()) +  " where disease_id = '" + jsonFileDisease.getId() + "' and actual_snapshot = '" + snapshot.getSnapshot() + "';";
+                                }
+//                                System.out.println(sql);
+                                fileWriterSqlFileSectionTableReport.write(sql);
+                                previousRevision = revision;
+                            }
+
+                            count++;
+                        }else{
+//                            String noRelevantSQL = "UPDATE new_tbl_disease_list SET relevant = 0 WHERE disease_id = '" + jsonFileDisease.getId() + "';";
+//                            System.out.println(noRelevantSQL);
+                        }
+                    }//END try
+                    catch (Exception exception) {
+                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
+                    }//END catch
+                }
+            }//END for (File file : directoryListing) {
+        }//END if (directoryListing != null) {
+        fileWriterSqlFileSectionTableReport.close();
+    }
+
+
     public Revision getRevisionBySnapshot(List<Revision> revisions, Integer revisionId){
         return revisions.stream()
                 .filter(revision -> revisionId.equals(revision.getRevid()))
@@ -688,5 +750,138 @@ public class WikipediaApiService {
         }
         return diseaseId;
     }
+
+//
+//
+//    SECCIÓN QUE PERMITE OBTENER EL NÚMERO DE REFERENCIAS
+//
+//
+
+
+    public List<Reference> extracReferences(String htmlText){
+        org.jsoup.nodes.Document webDocument = Jsoup.parse(htmlText);
+
+        List<Reference> referenceList = new ArrayList<>();
+        //En busca de las referencias
+        Elements referenceElements = webDocument.getElementsByClass("references").select(Constants.HTML_LI); // .select("");
+        if (referenceElements!=null) {
+            int refCount = 1;
+            for (Element liElement : referenceElements) {
+                Reference reference = new Reference();
+
+                reference.setId(refCount);
+                reference.setReferenceId(liElement.id());
+                reference.setType(getReferenceType(liElement));
+                reference.setText(getReferenceText(liElement));
+                reference.setTextLinks(getReferenceLinks(liElement));
+                reference.setBackLinks(getBackLinkList(liElement));
+//                System.out.println(reference);
+                referenceList.add(reference);
+
+                refCount++;
+            }
+        }
+
+        return referenceList;
+
+    }
+
+
+    public String getReferenceType(Element liElement){
+        Elements cites = liElement.getElementsByTag(Constants.HTML_CITE);
+        String refType = "";
+//        System.out.println(cites.text());
+        if (!cites.text().equals("")) {
+            for (Element cite : cites) {
+                refType = cite.className();break;
+            }
+        }else{
+//            System.out.println(liElement.text());
+            Elements spanCite = liElement.getElementsByClass("reference-text");
+            for (Element cite : spanCite) {
+                refType = cite.className();break;
+            }
+        }
+        return refType;
+    }
+
+
+    public String getReferenceText(Element liElement){
+        Elements cites = liElement.getElementsByTag(Constants.HTML_CITE);
+        String text = "";
+        if (!cites.text().equals("")) {
+            for (Element cite: cites) {
+                text = cite.text();break;
+            }
+        }else{
+            Elements spanCite = liElement.getElementsByClass("reference-text");
+            for (Element cite : spanCite) {
+                text = cite.text();break;
+            }
+        }
+        return text;
+    }
+
+
+    public List<Link> getReferenceLinks(Element liElement){
+        List<Link> linkList = new ArrayList<>();
+        Elements cites = liElement.getElementsByTag(Constants.HTML_CITE);
+        if (!cites.text().equals("")) {
+            for (Element cite : cites) {
+//            Elements links = cite.select(Constants.QUERY_A_HREF);
+                linkList = getTextUrls(cite);
+                break;
+            }
+        }else{
+            Elements spanCite = liElement.getElementsByClass("reference-text");
+            for (Element cite : spanCite) {
+                linkList = getTextUrls(cite);break;
+            }
+        }
+        return linkList;
+    }
+
+
+    public List<Link> getBackLinkList(Element liElement){
+        List<Link> linkList = new ArrayList<>();
+        Elements backLinks = liElement.getElementsByClass("mw-cite-backlink");
+        for (Element backLink: backLinks) {
+//            Elements links = cite.select(Constants.QUERY_A_HREF);
+            linkList = getTextUrls(backLink);break;
+        }
+        return linkList;
+    }
+
+
+    /**
+     * Método que recupera información de enlaces encontrados en cualquier bloque "elemento" del documento
+     *
+     * @param element
+     * @return lista de objetos Link
+     */
+    public List<Link> getTextUrls(Element element){
+        List<Link> urlList = new ArrayList<>();
+        Link url;
+
+        // Recorre para obtener todos los enlaces de la lista
+        Elements aElements = element.select( Constants.QUERY_A_HREF );
+        int countUrl = 1;
+        for (Element a : aElements) {
+            // Crear un enlace "Link"
+            url = new Link();
+            url.setId( countUrl );
+            url.setUrl( a.attr( Constants.QUERY_ABS_HREF ) );// Obtiene la url absoluta
+            url.setDescription( a.text() );
+
+            // Agrea un enlace a la lista de enlaces
+            urlList.add( url );
+//                                            linkTextMap.put(a.text(), a.attr( Constants.QUERY_ABS_HREF ));
+            countUrl++;
+        }
+
+        return  urlList;
+    }
+
+
 
 }

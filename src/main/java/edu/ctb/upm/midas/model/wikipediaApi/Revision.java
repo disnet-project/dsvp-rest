@@ -20,6 +20,7 @@ public class Revision {
     private List<Section> sections;
     private Long characterCount;//Número de carateres de todos los textos de cada sección
     private String text;
+    private Integer referenceCount;
 
 
 
@@ -146,6 +147,13 @@ public class Revision {
         this.text = text;
     }
 
+    public Integer getReferenceCount() {
+        return referenceCount;
+    }
+
+    public void setReferenceCount(Integer referenceCount) {
+        this.referenceCount = referenceCount;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -66,6 +66,10 @@ public class Constants {
 
     public static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
 
+    public static final String HTML_REF = "references";
+    public static final String HTML_CITE = "cite";
+
+
     /** Validaciones */
     public static final String SEMANTIC_TYPES[] = { "sosy", "diap", "dsyn", "fndg", "lbpr", "lbtr" };
     public static final List<String> SEMANTIC_TYPES_LIST = new ArrayList<String>(){{
