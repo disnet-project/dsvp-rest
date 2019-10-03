@@ -66,25 +66,49 @@ public class WikipediaApiService {
 
 
     public void staticTest(){
+
 //        List<Snapshot> snapshots = new ArrayList<Snapshot>(){{
 //            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
 //            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
 //        }};
+        List<Disease> diseases = new ArrayList<Disease>(){{
+            add(new Disease("DIS002645", "Pediatric acute-onset neuropsychiatric syndrome (PANS)"));
+            add(new Disease("DIS003200", "Alpha 1-antitrypsin deficiency"));
+            add(new Disease("DIS003545", "Diabetes mellitus type 1"));
+            add(new Disease("DIS004064", "Diabetes mellitus"));
+            add(new Disease("DIS004098", "Erythema chronicum migrans"));
+            add(new Disease("DIS004879", "Chlamydia infection"));
+            add(new Disease("DIS005124", "Diabetes mellitus type 2"));
+            add(new Disease("DIS005383", "Poliomyelitis"));
+            add(new Disease("DIS006298", "Paraproteinemia"));
+            add(new Disease("DIS006481", "Cri du chat"));
+            add(new Disease("DIS006526", "49,XXXXX"));
+            add(new Disease("DIS006848", "Thrombocytosis"));
+            add(new Disease("DIS007260", "Idiopathic CD4+ lymphocytopenia"));
+            add(new Disease("DIS007413", "Cornelia de Lange Syndrome"));
+            add(new Disease("DIS007485", "Essential thrombocytosis"));
+            add(new Disease("DIS007956", "Pertussis"));
+            add(new Disease("DIS010801", "Neonatal diabetes mellitus"));
+        }};
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Disease disease = new Disease("DIS009247", "Stiff-Person syndrome");
-        List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
-        if (snapshots!=null) {
-            Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
-            disease.setPage(page);
-            disease.setSnapshots(snapshots);
+//        Disease disease = new Disease("DIS009247", "Stiff-Person syndrome");
+        for (Disease disease: diseases) {
+            List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
+            if (snapshots != null) {
+                Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                disease.setPage(page);
+                disease.setSnapshots(snapshots);
 //            System.out.println(page);
-            //Escribir json
-            try {
-                String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, 4332, timeProvider.getNowFormatyyyyMMdd(), Constants.STATISTICS_HISTORY_FOLDER);
-                logger.info("Write JSON file successful! => " + fileNAme);
-            }catch (Exception e){logger.error("Error to write the JSON file", e);}
+                //Escribir json
+                try {
+                    String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, 1, timeProvider.getNowFormatyyyyMMdd(), "tmp/last_diseases/");
+                    logger.info("Write JSON file successful! => " + fileNAme);
+                } catch (Exception e) {
+                    logger.error("Error to write the JSON file", e);
+                }
+            }
         }
 //        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("COACH syndrome", snapshots);
 //        System.out.println(page);
@@ -530,13 +554,33 @@ public class WikipediaApiService {
     public void getDiseasesInfoAndPopulateTheDBProcedure() throws IOException {
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
-        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY);
+//        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY);
+        File dir = new File("tmp/last_diseases/");
         File[] directoryListing = dir.listFiles();
         String sqlFileSectionTableReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_updates_new_tbl_disease_section_list.sql";
         String pathSqlFileSectionTableReport = "tmp/analysis_result/" + sqlFileSectionTableReport;
+
         FileWriter fileWriterSqlFileSectionTableReport = new FileWriter(pathSqlFileSectionTableReport);
 
-
+//        List<Disease> diseases = new ArrayList<Disease>(){{
+//            add(new Disease("DIS002645", "Pediatric acute-onset neuropsychiatric syndrome (PANS)"));
+//            add(new Disease("DIS003200", "Alpha 1-antitrypsin deficiency"));
+//            add(new Disease("DIS003545", "Diabetes mellitus type 1"));
+//            add(new Disease("DIS004064", "Diabetes mellitus"));
+//            add(new Disease("DIS004098", "Erythema chronicum migrans"));
+//            add(new Disease("DIS004879", "Chlamydia infection"));
+//            add(new Disease("DIS005124", "Diabetes mellitus type 2"));
+//            add(new Disease("DIS005383", "Poliomyelitis"));
+//            add(new Disease("DIS006298", "Paraproteinemia"));
+//            add(new Disease("DIS006481", "Cri du chat"));
+//            add(new Disease("DIS006526", "49,XXXXX"));
+//            add(new Disease("DIS006848", "Thrombocytosis"));
+//            add(new Disease("DIS007260", "Idiopathic CD4+ lymphocytopenia"));
+//            add(new Disease("DIS007413", "Cornelia de Lange Syndrome"));
+//            add(new Disease("DIS007485", "Essential thrombocytosis"));
+//            add(new Disease("DIS007956", "Pertussis"));
+//            add(new Disease("DIS010801", "Neonatal diabetes mellitus"));
+//        }};
 
         int count = 1;
         if (directoryListing != null) {
