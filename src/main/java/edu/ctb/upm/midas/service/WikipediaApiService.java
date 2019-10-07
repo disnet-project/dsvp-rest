@@ -792,6 +792,90 @@ public class WikipediaApiService {
     }
 
 
+    public void analysisAboutToTheJSONDiseases() throws IOException {
+        Common common = new Common();
+        TimeProvider timeProvider = new TimeProvider();
+        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY);
+        File[] directoryListing = dir.listFiles();
+        String sqlFileSectionTableReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_characters.csv";
+        String pathSqlFileSectionTableReport = "tmp/analysis_result/" + sqlFileSectionTableReport;
+        FileWriter fileWriterSqlFileSectionTableReport = new FileWriter(pathSqlFileSectionTableReport);
+
+        int count = 0;
+        if (directoryListing != null) {
+            int total = directoryListing.length-1;
+            String head = "disease_id,disease_name";
+            for (File diseaseFile : directoryListing) {
+                if (!diseaseFile.getName().equalsIgnoreCase(".DS_Store")) {
+                    try {
+                        Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
+                        if (!jsonFileDisease.isScorn()) {
+                            count++;
+                            logger.info(count + " to " + total + ". (" + jsonFileDisease.isScorn() + ") " + jsonFileDisease.getId() + " - " + jsonFileDisease.getName() + ": Num Snapshots: " + jsonFileDisease.getSnapshots().size());
+
+                            if (count==1){
+                                int snapCount = 0;
+                                for (String trueSnapshot: Constants.ANALYSIS_SNAPSHOT_LIST) {
+                                    snapCount++;
+                                    head = head + Constants.COMMA + snapCount + "_" + trueSnapshot;
+                                }
+                                fileWriterSqlFileSectionTableReport.write(head + "\n");
+                            }
+                            String csvString = "";
+                            int snapshotCount = 0;
+                            for (String trueSnapshot: Constants.ANALYSIS_SNAPSHOT_LIST) {
+
+                                snapshotCount++;
+                                Snapshot snapshot = buscarSnapshot(trueSnapshot, jsonFileDisease.getSnapshots());
+                                if (snapshot!=null){
+                                    Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
+                                    if (snapshotCount==1){
+                                        csvString = csvString + revision.getCharacterCount();
+                                    }else{
+                                        csvString = csvString + Constants.COMMA + revision.getCharacterCount() ;
+                                    }
+                                }else{
+                                    if (snapshotCount==1){
+                                        csvString = csvString + 0;
+                                    }else{
+                                        csvString = csvString + Constants.COMMA + 0;
+                                    }
+                                }
+
+                            }
+                            String row = jsonFileDisease.getId() + Constants.COMMA + Constants.QUOTATION_MARKS + jsonFileDisease.getName() + Constants.QUOTATION_MARKS + Constants.COMMA + csvString;
+//                            System.out.println(row);
+                                fileWriterSqlFileSectionTableReport.write(row + "\n");
+
+
+
+                        }else{
+//                            String noRelevantSQL = "UPDATE new_tbl_disease_list SET relevant = 0 WHERE disease_id = '" + jsonFileDisease.getId() + "';";
+//                            System.out.println(noRelevantSQL);
+                        }
+                    }//END try
+                    catch (Exception exception) {
+                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
+                    }//END catch
+                }
+            }//END for (File file : directoryListing) {
+        }//END if (directoryListing != null) {
+        fileWriterSqlFileSectionTableReport.close();
+
+
+        System.out.println("True number of diseases: " + count);
+    }
+
+
+    public Snapshot buscarSnapshot(String findSnapshot, List<Snapshot> snapshots) {
+        Optional<Snapshot> snapshot = snapshots.stream()
+                .filter(p -> p.getSnapshot().equals(findSnapshot))
+                .findFirst();
+        return snapshot.isPresent() ? snapshot.get() : null;
+    }
+
+
+
     public Revision getRevisionBySnapshot(List<Revision> revisions, Integer revisionId){
         return revisions.stream()
                 .filter(revision -> revisionId.equals(revision.getRevid()))

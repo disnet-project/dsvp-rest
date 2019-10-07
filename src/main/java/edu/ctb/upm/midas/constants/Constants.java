@@ -70,6 +70,44 @@ public class Constants {
     public static final String HTML_REF = "references";
     public static final String HTML_CITE = "cite";
 
+    public static final List<String> ANALYSIS_SNAPSHOT_LIST = new ArrayList<String>(){{
+        add("2018-02-01");
+    add("2018-02-15");
+    add("2018-03-01");
+    add("2018-03-15");
+    add("2018-04-01");
+    add("2018-04-15");
+    add("2018-05-01");
+    add("2018-05-15");
+    add("2018-06-01");
+    add("2018-06-15");
+    add("2018-07-01");
+    add("2018-07-15");
+    add("2018-08-01");
+    add("2018-08-15");
+    add("2018-09-01");
+    add("2018-09-15");
+    add("2018-10-01");
+    add("2018-10-15");
+    add("2018-11-01");
+    add("2018-11-15");
+    add("2018-12-01");
+    add("2018-12-15");
+    add("2019-01-01");
+    add("2019-01-15");
+    add("2019-02-01");
+    add("2019-02-15");
+    add("2019-03-01");
+    add("2019-03-15");
+    add("2019-04-01");
+    add("2019-04-15");
+    add("2019-05-01");
+    add("2019-05-15");
+    add("2019-06-01");
+    add("2019-06-15");
+    add("2019-07-01");
+    add("2019-07-15");}};
+
 
     /** Validaciones */
     public static final String SEMANTIC_TYPES[] = { "sosy", "diap", "dsyn", "fndg", "lbpr", "lbtr" };
@@ -481,6 +519,11 @@ reactions.
      * Coma
      */
     public static final String COMMA = ",";
+
+    /**
+     * Comillas (quotation marks)
+     */
+    public static final String QUOTATION_MARKS = "\"";
 
     /**
      * Punto y coma
