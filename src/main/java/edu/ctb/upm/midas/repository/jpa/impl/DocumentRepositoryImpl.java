@@ -151,6 +151,22 @@ public class DocumentRepositoryImpl extends AbstractDao<DocumentPK, Document>
         return revisions;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    public List<Object[]> getDiseaseDKEInfoToAnalysis(String diseaseId) {
+        List<Object[]> snapshots = null;
+        List<Object[]> snapshotList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Document.getDiseaseDKEInfoToAnalysis")
+                .setParameter("diseaseId", diseaseId)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(snapshotList))
+            snapshots = snapshotList;
+
+        return snapshots;
+    }
+
     public void persist(Document document) {
         super.persist(document);
     }

@@ -37,6 +37,8 @@ public interface DocumentRepository {
 
     List<Object[]> findAllSnapshotsOfAArticle(String diseaseId);
 
+    List<Object[]> getDiseaseDKEInfoToAnalysis(String diseaseId);
+
     void persist(Document document);
 
     int insertNative(String documentId, Date date);

@@ -152,25 +152,94 @@ public class WikipediaApiService {
 //            add(new Snapshot(1, "2018-02-01", "2018-02-01"));
 //            add(new Snapshot(2, "2018-02-15", "2018-02-15"));
 //        }};
+//        List<Disease> diseases = new ArrayList<Disease>(){{
+//            add(new Disease("DIS002645", "Pediatric acute-onset neuropsychiatric syndrome (PANS)"));
+//            add(new Disease("DIS003200", "Alpha 1-antitrypsin deficiency"));
+//            add(new Disease("DIS003545", "Diabetes mellitus type 1"));
+//            add(new Disease("DIS004064", "Diabetes mellitus"));
+//            add(new Disease("DIS004098", "Erythema chronicum migrans"));
+//            add(new Disease("DIS004879", "Chlamydia infection"));
+//            add(new Disease("DIS005124", "Diabetes mellitus type 2"));
+//            add(new Disease("DIS005383", "Poliomyelitis"));
+//            add(new Disease("DIS006298", "Paraproteinemia"));
+//            add(new Disease("DIS006481", "Cri du chat"));
+//            add(new Disease("DIS006526", "49,XXXXX"));
+//            add(new Disease("DIS006848", "Thrombocytosis"));
+//            add(new Disease("DIS007260", "Idiopathic CD4+ lymphocytopenia"));
+//            add(new Disease("DIS007413", "Cornelia de Lange Syndrome"));
+//            add(new Disease("DIS007485", "Essential thrombocytosis"));
+//            add(new Disease("DIS007956", "Pertussis"));
+//            add(new Disease("DIS010801", "Neonatal diabetes mellitus"));
+//        }};
         List<Disease> diseases = new ArrayList<Disease>(){{
-            add(new Disease("DIS002645", "Pediatric acute-onset neuropsychiatric syndrome (PANS)"));
-            add(new Disease("DIS003200", "Alpha 1-antitrypsin deficiency"));
-            add(new Disease("DIS003545", "Diabetes mellitus type 1"));
-            add(new Disease("DIS004064", "Diabetes mellitus"));
-            add(new Disease("DIS004098", "Erythema chronicum migrans"));
-            add(new Disease("DIS004879", "Chlamydia infection"));
-            add(new Disease("DIS005124", "Diabetes mellitus type 2"));
-            add(new Disease("DIS005383", "Poliomyelitis"));
-            add(new Disease("DIS006298", "Paraproteinemia"));
-            add(new Disease("DIS006481", "Cri du chat"));
-            add(new Disease("DIS006526", "49,XXXXX"));
-            add(new Disease("DIS006848", "Thrombocytosis"));
-            add(new Disease("DIS007260", "Idiopathic CD4+ lymphocytopenia"));
-            add(new Disease("DIS007413", "Cornelia de Lange Syndrome"));
-            add(new Disease("DIS007485", "Essential thrombocytosis"));
-            add(new Disease("DIS007956", "Pertussis"));
-            add(new Disease("DIS010801", "Neonatal diabetes mellitus"));
-        }};
+        add(new Disease("DIS007220", "Abdominal mass"))	;
+
+        add(new Disease("DIS002816", "Ammonia poisoning"))	;
+        add(new Disease("DIS005302", "Atrophic vaginitis"))	;
+        add(new Disease("DIS006853", "Bird fancier's lung"))	;
+        add(new Disease("DIS007001", "Brazilian purpuric fever"))	;
+        add(new Disease("DIS005794", "Bundle branch block"))	;
+
+        add(new Disease("DIS004998", "Cholestasis"))	;
+        add(new Disease("DIS007564", "Coloboma of optic nerve"))	;
+
+
+        add(new Disease("DIS006317", "Dacryoadenitis"))	;
+        add(new Disease("DIS001079", "Deformity"))	;
+
+
+
+        add(new Disease("DIS006513", "Enterocolitis"))	;
+
+        add(new Disease("DIS006049", "Eye strain"))	;
+        add(new Disease("DIS006649", "Fragile X-associated tremor/ataxia syndrome"))	;
+        add(new Disease("DIS007928", "Gastric varices"))	;
+        add(new Disease("DIS005980", "Gastric volvulus"))	;
+        add(new Disease("DIS001836", "Granulocytosis"))	;
+        add(new Disease("DIS002297", "Heinrich event"))	;
+        add(new Disease("DIS004312", "Hematosalpinx"))	;
+        add(new Disease("DIS003326", "Hemoglobinuria"))	;
+        add(new Disease("DIS001001", "Hemoperitoneum"))	;
+        add(new Disease("DIS006930", "Heterophoria"))	;
+        add(new Disease("DIS006948", "Hypertropia"))	;
+        add(new Disease("DIS001714", "Hypochondrogenesis"))	;
+        add(new Disease("DIS000693", "Hypokalemic acidosis"))	;
+
+        add(new Disease("DIS001557", "Idiopathic osteosclerosis"))	;
+        add(new Disease("DIS005332", "Intraparenchymal hemorrhage"))	;
+        add(new Disease("DIS001218", "Jargon aphasia"))	;
+        add(new Disease("DIS003276", "Kyphoscoliosis"))	;
+        add(new Disease("DIS007444", "Langer mesomelic dysplasia"))	;
+        add(new Disease("DIS002910", "Malformative syndrome"))	;
+        add(new Disease("DIS006985", "Monoarthritis"))	;
+        add(new Disease("DIS005408", "Nasal septum perforation"))	;
+        add(new Disease("DIS004924", "Neonatal hepatitis"))	;
+        add(new Disease("DIS005417", "Orbital cellulitis"))	;
+        add(new Disease("DIS007913", "Otospondylomegaepiphyseal dysplasia"))	;
+
+
+
+        add(new Disease("DIS007282", "Plica syndrome"))	;
+
+        add(new Disease("DIS006104", "Polyarthritis"))	;
+        add(new Disease("DIS003148", "Presbylarynx"))	;
+        add(new Disease("DIS002972", "Priming (steam locomotive)"))	;
+        add(new Disease("DIS005825", "Pulmonary sequestration"))	;
+        add(new Disease("DIS005819", "Pyaemia"))	;
+        add(new Disease("DIS004791", "Pyogenic liver abscess"))	;
+        add(new Disease("DIS002528", "Rheumatoid pleuritis"))	;
+        add(new Disease("DIS000111", "Ringbone"))	;
+        add(new Disease("DIS002651", "Sidebone"))	;
+        add(new Disease("DIS001728", "Sinonasal undifferentiated carcinoma"))	;
+        add(new Disease("DIS001602", "Snap oversteer"))	;
+        add(new Disease("DIS002271", "Software brittleness"))	;
+        add(new Disease("DIS001303", "Sphenoid wing meningioma"))	;
+        add(new Disease("DIS007585", "Subdural hygroma"))	;
+
+        add(new Disease("DIS002833", "Trochleitis"))	;
+        add(new Disease("DIS003330", "Ureterocele"))	;
+        add(new Disease("DIS000754", "Zadikâ€“Barakâ€“Levin syndrome"))	;
+    }};
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -792,22 +861,31 @@ public class WikipediaApiService {
     }
 
 
-    public void analysisAboutToTheJSONDiseases() throws IOException {
+    public void analysisAboutToTheJSONDiseases(boolean character, boolean references, boolean medicalTerms) throws IOException {
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
-        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY);
+        File dir = new File(/*Constants.ANALYSIS_HISTORY_DIRECTORY*/"tmp/test/");
         File[] directoryListing = dir.listFiles();
-        String sqlFileSectionTableReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_characters.csv";
-        String pathSqlFileSectionTableReport = "tmp/analysis_result/" + sqlFileSectionTableReport;
-        FileWriter fileWriterSqlFileSectionTableReport = new FileWriter(pathSqlFileSectionTableReport);
+//        String diseaseCharactersReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_characters.csv";
+//        String pathDiseaseCharactersReport = "tmp/analysis_result/" + diseaseCharactersReport;
+//        FileWriter fileWriterdiseaseCharactersReport = new FileWriter(pathDiseaseCharactersReport);
+
+        String diseaseReferencesReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_references.csv";
+        String pathDiseaseReferencesReport = "tmp/analysis_result/test/" + diseaseReferencesReport;
+        FileWriter fileWriterdiseaseReferencesReport = new FileWriter(pathDiseaseReferencesReport);
+
+//        String diseaseMedicalTermsReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_medical_term.csv";
+//        String pathDiseaseMedicalTermsReport = "tmp/analysis_result/" + diseaseMedicalTermsReport;
+//        FileWriter fileWriterdiseaseMedicalTermsReport = new FileWriter(pathDiseaseMedicalTermsReport);
 
         int count = 0;
         if (directoryListing != null) {
             int total = directoryListing.length-1;
+            System.out.println("total: " + total);
             String head = "disease_id,disease_name";
             for (File diseaseFile : directoryListing) {
                 if (!diseaseFile.getName().equalsIgnoreCase(".DS_Store")) {
-                    try {
+//                    try {
                         Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
                         if (!jsonFileDisease.isScorn()) {
                             count++;
@@ -819,55 +897,98 @@ public class WikipediaApiService {
                                     snapCount++;
                                     head = head + Constants.COMMA + snapCount + "_" + trueSnapshot;
                                 }
-                                fileWriterSqlFileSectionTableReport.write(head + "\n");
+//                                fileWriterdiseaseCharactersReport.write(head + "\n");
+                                fileWriterdiseaseReferencesReport.write(head + "\n");
+//                                fileWriterdiseaseMedicalTermsReport.write(head + "\n");
                             }
+
+                            List<Object[]> snapshotsDKE = null;
+                            if (medicalTerms) snapshotsDKE = documentService.getDiseaseDKEInfoToAnalysis(jsonFileDisease.getId());
+
                             String csvString = "";
                             int snapshotCount = 0;
                             for (String trueSnapshot: Constants.ANALYSIS_SNAPSHOT_LIST) {
 
                                 snapshotCount++;
-                                Snapshot snapshot = buscarSnapshot(trueSnapshot, jsonFileDisease.getSnapshots());
-                                if (snapshot!=null){
-                                    Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
-                                    if (snapshotCount==1){
-                                        csvString = csvString + revision.getCharacterCount();
-                                    }else{
-                                        csvString = csvString + Constants.COMMA + revision.getCharacterCount() ;
+
+                                if (medicalTerms){
+                                    if (snapshotCount == 1) {
+                                        csvString = csvString + getMedicalTermCountBySnapshotInfo(snapshotsDKE, trueSnapshot);
+                                    }else {
+                                        csvString = csvString + Constants.COMMA + getMedicalTermCountBySnapshotInfo(snapshotsDKE, trueSnapshot);
                                     }
-                                }else{
-                                    if (snapshotCount==1){
-                                        csvString = csvString + 0;
-                                    }else{
-                                        csvString = csvString + Constants.COMMA + 0;
+                                }else {
+                                    Snapshot snapshot = findSnapshot(trueSnapshot, jsonFileDisease.getSnapshots());
+                                    if (snapshot != null) {
+                                        Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
+                                        if (references) {
+                                            List<Reference> referenceList = extracReferences(revision.getText());
+                                            revision.setReferenceCount(referenceList.size());
+                                        }
+                                        if (snapshotCount == 1) {
+                                            if (character) csvString = csvString + revision.getCharacterCount();
+                                            if (references) csvString = csvString + revision.getReferenceCount();
+                                        } else {
+                                            if (character)
+                                                csvString = csvString + Constants.COMMA + revision.getCharacterCount();
+                                            if (references)
+                                                csvString = csvString + Constants.COMMA + revision.getReferenceCount();
+                                        }
+                                    } else {
+                                        if (snapshotCount == 1) {
+                                            csvString = csvString + 0;
+                                        } else {
+                                            csvString = csvString + Constants.COMMA + 0;
+                                        }
                                     }
                                 }
 
                             }
                             String row = jsonFileDisease.getId() + Constants.COMMA + Constants.QUOTATION_MARKS + jsonFileDisease.getName() + Constants.QUOTATION_MARKS + Constants.COMMA + csvString;
-//                            System.out.println(row);
-                                fileWriterSqlFileSectionTableReport.write(row + "\n");
-
-
+                            System.out.println(row);
+//                                fileWriterdiseaseCharactersReport.write(row + "\n");
+                            fileWriterdiseaseReferencesReport.write(row + "\n");
+//                            fileWriterdiseaseMedicalTermsReport.write(row + "\n");
 
                         }else{
 //                            String noRelevantSQL = "UPDATE new_tbl_disease_list SET relevant = 0 WHERE disease_id = '" + jsonFileDisease.getId() + "';";
 //                            System.out.println(noRelevantSQL);
                         }
-                    }//END try
-                    catch (Exception exception) {
-                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
-                    }//END catch
+//                    }//END try
+//                    catch (Exception exception) {
+//                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
+//                    }//END catch
                 }
             }//END for (File file : directoryListing) {
         }//END if (directoryListing != null) {
-        fileWriterSqlFileSectionTableReport.close();
-
+//        fileWriterdiseaseCharactersReport.close();
+        fileWriterdiseaseReferencesReport.close();
+//        fileWriterdiseaseMedicalTermsReport.close();
 
         System.out.println("True number of diseases: " + count);
     }
 
 
-    public Snapshot buscarSnapshot(String findSnapshot, List<Snapshot> snapshots) {
+
+    public Integer getMedicalTermCountBySnapshotInfo(List<Object[]> snapshots, String findSnapshot){
+        TimeProvider timeProvider = new TimeProvider();
+        Integer medicalTermCount = 0;
+        try {
+            for (Object[] oSnapshot : snapshots) {
+                String snap = (oSnapshot[3] == null) ? "" : timeProvider.sqlDateFormatyyyyMMdd((java.sql.Date) oSnapshot[3]);
+                if (snap.equals(findSnapshot)) {
+                    medicalTermCount = (oSnapshot[5] == null) ? 0 : (Integer) oSnapshot[5];
+                }
+            }
+        }catch (Exception e){
+            logger.error("Error to try to find dke snapshot info", e);
+        }
+        return medicalTermCount;
+    }
+
+
+
+    public Snapshot findSnapshot(String findSnapshot, List<Snapshot> snapshots) {
         Optional<Snapshot> snapshot = snapshots.stream()
                 .filter(p -> p.getSnapshot().equals(findSnapshot))
                 .findFirst();
@@ -986,26 +1107,42 @@ public class WikipediaApiService {
         List<Reference> referenceList = new ArrayList<>();
         //En busca de las referencias
         Elements referenceElements = webDocument.getElementsByClass("references").select(Constants.HTML_LI); // .select("");
-        if (referenceElements!=null) {
+//        System.out.println("SIZE: "+referenceElements.size());
+        if (referenceElements.size()>0) {
             int refCount = 1;
             for (Element liElement : referenceElements) {
-                Reference reference = new Reference();
-
-                reference.setId(refCount);
-                reference.setReferenceId(liElement.id());
-                reference.setType(getReferenceType(liElement));
-                reference.setText(getReferenceText(liElement));
-                reference.setTextLinks(getReferenceLinks(liElement));
-                reference.setBackLinks(getBackLinkList(liElement));
-//                System.out.println(reference);
-                referenceList.add(reference);
-
+                referenceList.add(createReference(liElement, refCount));
                 refCount++;
+            }
+        }else {
+//            System.out.println(webDocument.getElementById("References").nextElementSibling().toString());
+            Element element = webDocument.getElementById("References");
+            if (element!=null) {
+                referenceElements = element.parent().nextElementSibling().select(Constants.HTML_LI);
+                if (referenceElements != null) {
+                    int refCount = 1;
+                    for (Element liElement : referenceElements) {
+//                System.out.println(liElement.toString());
+                        referenceList.add(createReference(liElement, refCount));
+                        refCount++;
+                    }
+                }
             }
         }
 
         return referenceList;
 
+    }
+
+    public Reference createReference(Element element, int refCount){
+        Reference reference = new Reference();
+        reference.setId(refCount);
+        reference.setReferenceId(element.id());
+        reference.setType(getReferenceType(element));
+        reference.setText(getReferenceText(element));
+        reference.setTextLinks(getReferenceLinks(element));
+        reference.setBackLinks(getBackLinkList(element));
+        return reference;
     }
 
 

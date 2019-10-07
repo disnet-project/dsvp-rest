@@ -33,6 +33,8 @@ public interface DocumentService {
 
     List<Snapshot> findAllSnapshotsOfAArticle(String diseaseId);
 
+    List<Object[]> getDiseaseDKEInfoToAnalysis(String diseaseId);
+
     void save(Document document);
 
     int insertNative(String documentId, Date date);

@@ -89,6 +89,12 @@ public class DocumentServiceImpl implements DocumentService {
         return snapshots;
     }
 
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    @Override
+    public List<Object[]> getDiseaseDKEInfoToAnalysis(String diseaseId) {
+        return daoDocument.getDiseaseDKEInfoToAnalysis(diseaseId);
+    }
+
     public List<Disease> createDiseaseList(List<Object[]> objects, boolean basicInfo){
         List<Disease> diseases = new ArrayList<>();
         if (objects!=null){

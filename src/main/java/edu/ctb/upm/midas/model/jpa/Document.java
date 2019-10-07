@@ -196,6 +196,25 @@ import java.util.Objects;
                 query = "SELECT d.snapshot_id, d.actual_snapshot, d.anterior_snapshot\n" +
                         "FROM new_tbl_disease_list d\n" +
                         "WHERE d.disease_id = :diseaseId "
+        ),
+        @NamedNativeQuery(
+                name = "Document.getDiseaseDKEInfoToAnalysis",
+                query = "SELECT DISTINCT e.disease_id\n" +
+                        "     , e.name " +
+                        "     , d.snapshot_id " +
+                        "     , e.actual_snapshot " +
+                        "     , e.anterior_snapshot " +
+                        "     , e.dke_count " +
+                        "     , e.abs_variation_dke_count " +
+                        "     , e.real_variation_dke_count " +
+                        "     , e.dke_variation " +
+                        "FROM new_tbl_disease_dke_list e " +
+                        "INNER JOIN new_tbl_disease_section_list s ON s.disease_id = e.disease_id AND s.actual_snapshot = e.actual_snapshot " +
+                        "INNER JOIN new_tbl_disease_url_list u ON u.disease_id = e.disease_id AND u.actual_snapshot = e.actual_snapshot " +
+                        "INNER JOIN new_tbl_disease_list d ON d.disease_id = u.disease_id AND d.actual_snapshot = u.actual_snapshot " +
+                        "WHERE d.relevant = 1 " +
+                        "AND d.disease_id = :diseaseId " +
+                        "ORDER BY e.actual_snapshot ASC "
         )
 
 })
