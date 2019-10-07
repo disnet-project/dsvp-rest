@@ -140,6 +140,7 @@ public class Common {
             bW.write(jsonBody);
             bW.close();
         }
+        jsonBody = null;
         return fileName;
     }
 

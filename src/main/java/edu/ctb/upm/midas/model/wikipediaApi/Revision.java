@@ -13,6 +13,7 @@ public class Revision {
     private String timestamp;
     private String date;
     private String previousDate;
+    private String snapshot;
     private String comment;
     private boolean minor;
     private Integer relevantSectionCount;
@@ -89,6 +90,14 @@ public class Revision {
 
     public void setPreviousDate(String previousDate) {
         this.previousDate = previousDate;
+    }
+
+    public String getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(String snapshot) {
+        this.snapshot = snapshot;
     }
 
     public String getComment() {

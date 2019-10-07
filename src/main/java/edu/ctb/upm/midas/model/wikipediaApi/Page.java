@@ -6,10 +6,11 @@ public class Page {
 
     private Integer pageid;
     private String title;
-    private List<Revision> revisions;
     private boolean isredirect;
     private Integer redirectpageid;
     private String redirectpagetitle;
+    private Integer revisionCount;
+    private List<Revision> revisions;
 
 
     public Page() {
@@ -42,6 +43,14 @@ public class Page {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getRevisionCount() {
+        return revisionCount;
+    }
+
+    public void setRevisionCount(Integer revisionCount) {
+        this.revisionCount = revisionCount;
     }
 
     public List<Revision> getRevisions() {

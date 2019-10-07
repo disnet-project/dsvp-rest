@@ -54,6 +54,7 @@ public class Constants {
     public static final String PM_RETRIEVAL_HISTORY_FOLDER = "tmp/pubmed/";
     public static final String STATISTICS_HISTORY_FOLDER = "tmp/statistics/";
     public static final String ANALYSIS_HISTORY_DIRECTORY = "tmp/analysis/";
+    public static final String ANALYSIS_2_HISTORY_DIRECTORY = "tmp/analysis_2/";
     public static final String PM_RETRIEVAL_FILE_NAME = "_pubmed_retrieval";
     public static final String WIKIPEDIA_RESOURCE_FILE_NAME = "_wikipedia_resource";
     public static final String WIKIPEDIA_SEMTYPE_FILE_NAME = "_wikipedia_semtype";

@@ -188,7 +188,8 @@ import java.util.Objects;
         @NamedNativeQuery(
                 name = "Document.findAllDistinctArticlesAndSnapshot",
                 query = "SELECT DISTINCT d.disease_id, d.name " +
-                        "FROM new_tbl_disease_list d"
+                        "FROM new_tbl_disease_list d " +
+                        "WHERE d.relevant = 1 "
         ),
         @NamedNativeQuery(
                 name = "Document.findAllSnapshotsOfAArticle",

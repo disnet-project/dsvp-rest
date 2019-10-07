@@ -91,7 +91,8 @@ public class ExtractionController {
 //        wikipediaApiService.findErrorsInTheLog();
 //        wikipediaApiService.test();
 //        wikipediaApiService.staticTest();
-        wikipediaApiService.getDiseasesInfoAndPopulateTheDBProcedure_REFERENCES();
+//        wikipediaApiService.getDiseasesInfoAndPopulateTheDBProcedure_REFERENCES();
+        wikipediaApiService.initCompleteSnapshots();
     }
 
 

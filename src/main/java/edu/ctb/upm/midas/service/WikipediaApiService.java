@@ -47,7 +47,7 @@ public class WikipediaApiService {
 //                if (disease.getName().trim())
                 List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
                 if (snapshots!=null) {
-                    Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                    Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease, snapshots);
                     disease.setPage(page);
                     disease.setSnapshots(snapshots);
                     //Escribir json
@@ -55,6 +55,87 @@ public class WikipediaApiService {
                         String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, count, timeProvider.getNowFormatyyyyMMdd(), Constants.STATISTICS_HISTORY_FOLDER);
                         logger.info("Write JSON file successful! => " + fileNAme);
                     }catch (Exception e){logger.error("Error to write the JSON file", e);}
+                }
+//                if (count==3) break;
+                count++;
+            }
+            logger.info("End procedure");
+        }
+//        System.out.println(diseases.toString());
+    }
+
+
+    public void initCompleteSnapshots(){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Common common = new Common();
+        TimeProvider timeProvider = new TimeProvider();
+//        List<String> diseaseListError = findErrorsInTheLog();
+
+        List<Snapshot> commonSnapshots = new ArrayList<Snapshot>() {{
+            add(new Snapshot(1, "2018-02-01", ""));
+            add(new Snapshot(2, "2018-02-15", ""));
+            add(new Snapshot(3, "2018-03-01", ""));
+            add(new Snapshot(4, "2018-03-15", ""));
+            add(new Snapshot(5, "2018-04-01", ""));
+            add(new Snapshot(6, "2018-04-15", ""));
+            add(new Snapshot(7, "2018-05-01", ""));
+            add(new Snapshot(8, "2018-05-15", ""));
+            add(new Snapshot(9, "2018-06-01", ""));
+            add(new Snapshot(10, "2018-06-15", ""));
+            add(new Snapshot(11, "2018-07-01", ""));
+            add(new Snapshot(12, "2018-07-15", ""));
+            add(new Snapshot(13, "2018-08-01", ""));
+            add(new Snapshot(14, "2018-08-15", ""));
+            add(new Snapshot(15, "2018-09-01", ""));
+            add(new Snapshot(16, "2018-09-15", ""));
+            add(new Snapshot(17, "2018-10-01", ""));
+            add(new Snapshot(18, "2018-10-15", ""));
+            add(new Snapshot(19, "2018-11-01", ""));
+            add(new Snapshot(20, "2018-11-15", ""));
+            add(new Snapshot(21, "2018-12-01", ""));
+            add(new Snapshot(22, "2018-12-15", ""));
+            add(new Snapshot(23, "2019-01-01", ""));
+            add(new Snapshot(24, "2019-01-15", ""));
+            add(new Snapshot(25, "2019-02-01", ""));
+            add(new Snapshot(26, "2019-02-15", ""));
+            add(new Snapshot(27, "2019-03-01", ""));
+            add(new Snapshot(28, "2019-03-15", ""));
+            add(new Snapshot(29, "2019-04-01", ""));
+            add(new Snapshot(30, "2019-04-15", ""));
+            add(new Snapshot(31, "2019-05-01", ""));
+            add(new Snapshot(32, "2019-05-15", ""));
+            add(new Snapshot(33, "2019-06-01", ""));
+            add(new Snapshot(34, "2019-06-15", ""));
+            add(new Snapshot(35, "2019-07-01", ""));
+            add(new Snapshot(36, "2019-07-15", ""));
+            add(new Snapshot(37, "2019-08-01", ""));
+            add(new Snapshot(38, "2019-08-15", ""));
+        }};
+
+        List<Disease> diseases = documentService.findAllDistinctArticlesAndSnapshot();
+        int count = 1, total = diseases.size();
+        if (diseases.size()>0) {
+            for (Disease disease : diseases) {
+                logger.info(count + ". DISEASE to " + total + " (" + (count*100)/total + "%)." + disease.getName() /*+ " | " + disease.getSnapshotId() + " | " + disease.getCurrentSnapshot() + " | " + disease.getPreviousSnapshot()*/);
+                if (count>=3715) {
+//                if (disease.getName().trim())
+                    if (commonSnapshots != null) {
+                        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease, commonSnapshots);
+                        disease.setPage(page);
+                        disease.setSnapshots(commonSnapshots);
+                        disease.setSnapshotCount(commonSnapshots.size());
+                        //Escribir json
+                        try {
+                            String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, count, timeProvider.getNowFormatyyyyMMdd(), Constants.ANALYSIS_2_HISTORY_DIRECTORY);
+                            logger.info("Write JSON file successful! => " + fileNAme);
+                        } catch (Exception e) {
+                            logger.error("Error to write the JSON file", e);
+                        }
+                        disease.getPage().setRevisions(null);
+                        disease.setPage(null);
+                        disease.setSnapshots(null);
+                        disease = null;
+                    }
                 }
 //                if (count==3) break;
                 count++;
@@ -97,7 +178,7 @@ public class WikipediaApiService {
         for (Disease disease: diseases) {
             List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
             if (snapshots != null) {
-                Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease, snapshots);
                 disease.setPage(page);
                 disease.setSnapshots(snapshots);
 //            System.out.println(page);
@@ -131,7 +212,7 @@ public class WikipediaApiService {
             logger.info(key + ". DISEASE to total? " + disease.getId() + ": " + disease.getName());
             List<Snapshot> snapshots = documentService.findAllSnapshotsOfAArticle(disease.getId());
             if (snapshots!=null) {
-                Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease.getName(), snapshots);
+                Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease, snapshots);
                 disease.setPage(page);
                 disease.setSnapshots(snapshots);
                 //Escribir json
@@ -151,7 +232,7 @@ public class WikipediaApiService {
     }
 
 
-    public Page getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(String pageTitle, List<Snapshot> snapshots){
+    public Page getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(Disease disease, List<Snapshot> snapshots){
         Page page = new Page();
         Revision previousR = null;
         List<Revision> revisionList = new ArrayList<>();
@@ -159,7 +240,7 @@ public class WikipediaApiService {
             int snapshotCount = 1;
             for (Snapshot snapshot: snapshots) {
                 try {
-                    String responseWikipediaAPI = getWikipediaApiQueryResponse(pageTitle, snapshot.getSnapshot());
+                    String responseWikipediaAPI = getWikipediaApiQueryResponse(disease.getName(), snapshot.getSnapshot());
                     Revision revision = null;
 //            System.out.println("Wikipedia API response = " + responseWikipediaAPI);
 
@@ -233,7 +314,7 @@ public class WikipediaApiService {
                                                 JsonObject redirectObj = redirectElement.getAsJsonObject();
                                                 Integer redirectpageid = (redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME) instanceof JsonNull) ? 0 : (redirectObj.get(Constants.PAGES_ELEMENT_PAGEID_NAME).getAsInt());
                                                 String redirectpagetitle = redirectObj.get(Constants.PAGES_ELEMENT_TITLE_NAME).getAsString();
-                                                if (pageTitle.equalsIgnoreCase(redirectpagetitle)) {
+                                                if (disease.getName().equalsIgnoreCase(redirectpagetitle)) {
                                                     page.setIsredirect(true);
                                                     page.setRedirectpageid(redirectpageid);
                                                     page.setRedirectpagetitle(redirectpagetitle);
@@ -264,27 +345,35 @@ public class WikipediaApiService {
                             try {
                                 getRevisionTextAndSectionList(revision);
                             }catch (Exception e){
-                                logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot in getRevisionTextAndSectionList: pageTitle:" + pageTitle + " | snapshot:" + snapshot + " => REV:" + revision, e);
+                                disease.setScorn(true);
+                                logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot in getRevisionTextAndSectionList: pageTitle:" + disease.getName() + " | snapshot:" + snapshot + " => REV:" + revision, e);
                             }
                         }
                     }catch (Exception e){
                         snapshot.setRevId(0);
-                        logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + pageTitle + " | snapshot:" + snapshot + " => REV:" + revision, e);
+                        disease.setScorn(true);
+                        logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + disease.getName() + " | snapshot:" + snapshot + " => REV:" + revision, e);
 
                     }
 
 //                System.out.println(revision.toString());
 
                     snapshotCount++;
+                    revision.setSnapshot(snapshot.getSnapshot());
                     if (revision!=null) previousR = revision;
                 }catch (Exception e){
-                    logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + pageTitle + " | snapshot:" + snapshot, e);
+                    disease.setScorn(true);
+                    logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + disease.getName() + " | snapshot:" + snapshot, e);
                 }
             }
             removeRepetedRevision(revisionList);
-            if (page!=null) page.setRevisions(revisionList);
+            if (page!=null){
+                page.setRevisions(revisionList);
+                page.setRevisionCount(revisionList.size());
+            }
         }catch (Exception e){
-            logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + pageTitle, e);
+            disease.setScorn(true);
+            logger.error("Error getPageIdAndTheirSpecificRevisionByTitleAndSnapshot: pageTitle:" + disease.getName(), e);
         }
         return page;
     }
@@ -395,6 +484,11 @@ public class WikipediaApiService {
                 revision.setSectionCount(sectionList.size());
                 revision.setCharacterCount(getNumberOfCharactersOfAllTextsFromARevision(revision.getText()));
 //                System.out.println(revision.getRevid());
+            }
+            //Inserta el número de referencias encontrado
+            if (revision.getText()!=null){
+                List<Reference> references = extracReferences(revision.getText());
+                revision.setReferenceCount(references.size());
             }
 
         }catch (Exception e){

@@ -6,6 +6,7 @@ import java.util.Objects;
 public class Disease {
     private String id;
     private String name;
+    private Integer snapshotCount;
     List<Snapshot> snapshots;
     private Page page;
     private boolean scorn;
@@ -33,6 +34,14 @@ public class Disease {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getSnapshotCount() {
+        return snapshotCount;
+    }
+
+    public void setSnapshotCount(Integer snapshotCount) {
+        this.snapshotCount = snapshotCount;
     }
 
     public List<Snapshot> getSnapshots() {
