@@ -191,9 +191,9 @@ public class Revision {
                 ", previousDate='" + previousDate + '\'' +
                 ", comment='" + comment + '\'' +
                 ", minor=" + minor +
-                ", sections='" + sections + '\'' +
+                ", sections='" + sections.size() + '\'' +
                 ", characterCount='" + characterCount + '\'' +
-                ", text='" + text + '\'' +
+//                ", text='" + text + '\'' +
                 '}';
     }
 }

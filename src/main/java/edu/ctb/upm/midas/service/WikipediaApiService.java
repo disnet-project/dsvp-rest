@@ -172,72 +172,72 @@ public class WikipediaApiService {
 //            add(new Disease("DIS010801", "Neonatal diabetes mellitus"));
 //        }};
         List<Disease> diseases = new ArrayList<Disease>(){{
-        add(new Disease("DIS007220", "Abdominal mass"))	;
-
-        add(new Disease("DIS002816", "Ammonia poisoning"))	;
-        add(new Disease("DIS005302", "Atrophic vaginitis"))	;
-        add(new Disease("DIS006853", "Bird fancier's lung"))	;
-        add(new Disease("DIS007001", "Brazilian purpuric fever"))	;
-        add(new Disease("DIS005794", "Bundle branch block"))	;
-
-        add(new Disease("DIS004998", "Cholestasis"))	;
-        add(new Disease("DIS007564", "Coloboma of optic nerve"))	;
-
-
-        add(new Disease("DIS006317", "Dacryoadenitis"))	;
-        add(new Disease("DIS001079", "Deformity"))	;
-
-
-
-        add(new Disease("DIS006513", "Enterocolitis"))	;
-
-        add(new Disease("DIS006049", "Eye strain"))	;
-        add(new Disease("DIS006649", "Fragile X-associated tremor/ataxia syndrome"))	;
-        add(new Disease("DIS007928", "Gastric varices"))	;
-        add(new Disease("DIS005980", "Gastric volvulus"))	;
-        add(new Disease("DIS001836", "Granulocytosis"))	;
-        add(new Disease("DIS002297", "Heinrich event"))	;
-        add(new Disease("DIS004312", "Hematosalpinx"))	;
-        add(new Disease("DIS003326", "Hemoglobinuria"))	;
-        add(new Disease("DIS001001", "Hemoperitoneum"))	;
-        add(new Disease("DIS006930", "Heterophoria"))	;
-        add(new Disease("DIS006948", "Hypertropia"))	;
-        add(new Disease("DIS001714", "Hypochondrogenesis"))	;
-        add(new Disease("DIS000693", "Hypokalemic acidosis"))	;
-
-        add(new Disease("DIS001557", "Idiopathic osteosclerosis"))	;
-        add(new Disease("DIS005332", "Intraparenchymal hemorrhage"))	;
-        add(new Disease("DIS001218", "Jargon aphasia"))	;
-        add(new Disease("DIS003276", "Kyphoscoliosis"))	;
-        add(new Disease("DIS007444", "Langer mesomelic dysplasia"))	;
-        add(new Disease("DIS002910", "Malformative syndrome"))	;
-        add(new Disease("DIS006985", "Monoarthritis"))	;
-        add(new Disease("DIS005408", "Nasal septum perforation"))	;
-        add(new Disease("DIS004924", "Neonatal hepatitis"))	;
-        add(new Disease("DIS005417", "Orbital cellulitis"))	;
-        add(new Disease("DIS007913", "Otospondylomegaepiphyseal dysplasia"))	;
-
-
-
-        add(new Disease("DIS007282", "Plica syndrome"))	;
-
-        add(new Disease("DIS006104", "Polyarthritis"))	;
-        add(new Disease("DIS003148", "Presbylarynx"))	;
-        add(new Disease("DIS002972", "Priming (steam locomotive)"))	;
-        add(new Disease("DIS005825", "Pulmonary sequestration"))	;
-        add(new Disease("DIS005819", "Pyaemia"))	;
-        add(new Disease("DIS004791", "Pyogenic liver abscess"))	;
-        add(new Disease("DIS002528", "Rheumatoid pleuritis"))	;
-        add(new Disease("DIS000111", "Ringbone"))	;
-        add(new Disease("DIS002651", "Sidebone"))	;
-        add(new Disease("DIS001728", "Sinonasal undifferentiated carcinoma"))	;
-        add(new Disease("DIS001602", "Snap oversteer"))	;
-        add(new Disease("DIS002271", "Software brittleness"))	;
-        add(new Disease("DIS001303", "Sphenoid wing meningioma"))	;
-        add(new Disease("DIS007585", "Subdural hygroma"))	;
-
-        add(new Disease("DIS002833", "Trochleitis"))	;
-        add(new Disease("DIS003330", "Ureterocele"))	;
+//        add(new Disease("DIS007220", "Abdominal mass"))	;
+//
+//        add(new Disease("DIS002816", "Ammonia poisoning"))	;
+//        add(new Disease("DIS005302", "Atrophic vaginitis"))	;
+//        add(new Disease("DIS006853", "Bird fancier's lung"))	;
+//        add(new Disease("DIS007001", "Brazilian purpuric fever"))	;
+//        add(new Disease("DIS005794", "Bundle branch block"))	;
+//
+//        add(new Disease("DIS004998", "Cholestasis"))	;
+//        add(new Disease("DIS007564", "Coloboma of optic nerve"))	;
+//
+//
+//        add(new Disease("DIS006317", "Dacryoadenitis"))	;
+//        add(new Disease("DIS001079", "Deformity"))	;
+//
+//
+//
+//        add(new Disease("DIS006513", "Enterocolitis"))	;
+//
+//        add(new Disease("DIS006049", "Eye strain"))	;
+//        add(new Disease("DIS006649", "Fragile X-associated tremor/ataxia syndrome"))	;
+//        add(new Disease("DIS007928", "Gastric varices"))	;
+//        add(new Disease("DIS005980", "Gastric volvulus"))	;
+//        add(new Disease("DIS001836", "Granulocytosis"))	;
+//        add(new Disease("DIS002297", "Heinrich event"))	;
+//        add(new Disease("DIS004312", "Hematosalpinx"))	;
+//        add(new Disease("DIS003326", "Hemoglobinuria"))	;
+//        add(new Disease("DIS001001", "Hemoperitoneum"))	;
+//        add(new Disease("DIS006930", "Heterophoria"))	;
+//        add(new Disease("DIS006948", "Hypertropia"))	;
+//        add(new Disease("DIS001714", "Hypochondrogenesis"))	;
+//        add(new Disease("DIS000693", "Hypokalemic acidosis"))	;
+//
+//        add(new Disease("DIS001557", "Idiopathic osteosclerosis"))	;
+//        add(new Disease("DIS005332", "Intraparenchymal hemorrhage"))	;
+//        add(new Disease("DIS001218", "Jargon aphasia"))	;
+//        add(new Disease("DIS003276", "Kyphoscoliosis"))	;
+//        add(new Disease("DIS007444", "Langer mesomelic dysplasia"))	;
+//        add(new Disease("DIS002910", "Malformative syndrome"))	;
+//        add(new Disease("DIS006985", "Monoarthritis"))	;
+//        add(new Disease("DIS005408", "Nasal septum perforation"))	;
+//        add(new Disease("DIS004924", "Neonatal hepatitis"))	;
+//        add(new Disease("DIS005417", "Orbital cellulitis"))	;
+//        add(new Disease("DIS007913", "Otospondylomegaepiphyseal dysplasia"))	;
+//
+//
+//
+//        add(new Disease("DIS007282", "Plica syndrome"))	;
+//
+//        add(new Disease("DIS006104", "Polyarthritis"))	;
+//        add(new Disease("DIS003148", "Presbylarynx"))	;
+//        add(new Disease("DIS002972", "Priming (steam locomotive)"))	;
+//        add(new Disease("DIS005825", "Pulmonary sequestration"))	;
+//        add(new Disease("DIS005819", "Pyaemia"))	;
+//        add(new Disease("DIS004791", "Pyogenic liver abscess"))	;
+//        add(new Disease("DIS002528", "Rheumatoid pleuritis"))	;
+//        add(new Disease("DIS000111", "Ringbone"))	;
+//        add(new Disease("DIS002651", "Sidebone"))	;
+//        add(new Disease("DIS001728", "Sinonasal undifferentiated carcinoma"))	;
+//        add(new Disease("DIS001602", "Snap oversteer"))	;
+//        add(new Disease("DIS002271", "Software brittleness"))	;
+//        add(new Disease("DIS001303", "Sphenoid wing meningioma"))	;
+//        add(new Disease("DIS007585", "Subdural hygroma"))	;
+//
+//        add(new Disease("DIS002833", "Trochleitis"))	;
+//        add(new Disease("DIS003330", "Ureterocele"))	;
         add(new Disease("DIS000754", "Zadikâ€“Barakâ€“Levin syndrome"))	;
     }};
         Common common = new Common();
@@ -250,14 +250,15 @@ public class WikipediaApiService {
                 Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot(disease, snapshots);
                 disease.setPage(page);
                 disease.setSnapshots(snapshots);
-//            System.out.println(page);
+                disease.setSnapshotCount(snapshots.size());
+            System.out.println(gson.toJson(disease));
                 //Escribir json
-                try {
-                    String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, 1, timeProvider.getNowFormatyyyyMMdd(), "tmp/last_diseases/");
-                    logger.info("Write JSON file successful! => " + fileNAme);
-                } catch (Exception e) {
-                    logger.error("Error to write the JSON file", e);
-                }
+//                try {
+//                    String fileNAme = common.writeAnalysisJSONFile(gson.toJson(disease), disease, 1, timeProvider.getNowFormatyyyyMMdd(), "tmp/last_diseases/");
+//                    logger.info("Write JSON file successful! => " + fileNAme);
+//                } catch (Exception e) {
+//                    logger.error("Error to write the JSON file", e);
+//                }
             }
         }
 //        Page page = getPageIdAndTheirSpecificRevisionByTitleAndSnapshot("COACH syndrome", snapshots);
@@ -864,14 +865,14 @@ public class WikipediaApiService {
     public void analysisAboutToTheJSONDiseases(boolean character, boolean references, boolean medicalTerms) throws IOException {
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
-        File dir = new File(/*Constants.ANALYSIS_HISTORY_DIRECTORY*/"tmp/test/");
+        File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY/*"tmp/test/"*/);
         File[] directoryListing = dir.listFiles();
 //        String diseaseCharactersReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_characters.csv";
 //        String pathDiseaseCharactersReport = "tmp/analysis_result/" + diseaseCharactersReport;
 //        FileWriter fileWriterdiseaseCharactersReport = new FileWriter(pathDiseaseCharactersReport);
 
         String diseaseReferencesReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_references.csv";
-        String pathDiseaseReferencesReport = "tmp/analysis_result/test/" + diseaseReferencesReport;
+        String pathDiseaseReferencesReport = "tmp/analysis_result/" + diseaseReferencesReport;
         FileWriter fileWriterdiseaseReferencesReport = new FileWriter(pathDiseaseReferencesReport);
 
 //        String diseaseMedicalTermsReport = timeProvider.getNowFormatyyyyMMdd() + "_wikipedia_diseases_medical_term.csv";
@@ -1111,21 +1112,38 @@ public class WikipediaApiService {
         if (referenceElements.size()>0) {
             int refCount = 1;
             for (Element liElement : referenceElements) {
-                referenceList.add(createReference(liElement, refCount));
+                referenceList.add(createReference(liElement, refCount, false));
                 refCount++;
             }
         }else {
 //            System.out.println(webDocument.getElementById("References").nextElementSibling().toString());
-            Element element = webDocument.getElementById("References");
-            if (element!=null) {
-                referenceElements = element.parent().nextElementSibling().select(Constants.HTML_LI);
-                if (referenceElements != null) {
-                    int refCount = 1;
-                    for (Element liElement : referenceElements) {
+            referenceElements = null;
+            try {
+                referenceElements = webDocument.getElementById("References").parent().nextElementSibling().select(Constants.HTML_LI);
+                        if (referenceElements != null) {
+                            int refCount = 1;
+                            for (Element liElement : referenceElements) {
 //                System.out.println(liElement.toString());
-                        referenceList.add(createReference(liElement, refCount));
-                        refCount++;
+                                referenceList.add(createReference(liElement, refCount, false));
+                                refCount++;
+                            }
+                        }
+                }catch (Exception e){
+                logger.error("Error to retrieval the reference info by the second method ");
+            }
+            if (referenceElements==null) {
+                try {
+                    Element element = webDocument.getElementById("Sources").parent();
+                    Element nextElementBro = element.nextElementSibling();
+                    int count = 0;
+                    while (nextElementBro != null && nextElementBro.tagName().equalsIgnoreCase("p")) {
+                        count++;
+                        referenceList.add(createReference(nextElementBro, count, true));
+                        // Obtiene el siguiente hermano del nodo para seguir con el ciclo while
+                        nextElementBro = nextElementBro.nextElementSibling();
                     }
+                }catch (Exception e){
+                    logger.error("Error to retrieval the reference info by the third method ");
                 }
             }
         }
@@ -1134,14 +1152,19 @@ public class WikipediaApiService {
 
     }
 
-    public Reference createReference(Element element, int refCount){
+    public Reference createReference(Element element, int refCount, boolean source){
         Reference reference = new Reference();
-        reference.setId(refCount);
-        reference.setReferenceId(element.id());
-        reference.setType(getReferenceType(element));
-        reference.setText(getReferenceText(element));
-        reference.setTextLinks(getReferenceLinks(element));
-        reference.setBackLinks(getBackLinkList(element));
+        if (source){
+            reference.setId(refCount);
+            reference.setText(element.text());
+        }else {
+            reference.setId(refCount);
+            reference.setReferenceId(element.id());
+            reference.setType(getReferenceType(element));
+            reference.setText(getReferenceText(element));
+            reference.setTextLinks(getReferenceLinks(element));
+            reference.setBackLinks(getBackLinkList(element));
+        }
         return reference;
     }
 

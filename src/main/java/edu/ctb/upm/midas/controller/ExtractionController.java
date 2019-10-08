@@ -90,10 +90,10 @@ public class ExtractionController {
 //        wikipediaApiService.init();
 //        wikipediaApiService.findErrorsInTheLog();
 //        wikipediaApiService.test();
-        wikipediaApiService.staticTest();
+//        wikipediaApiService.staticTest();
 //        wikipediaApiService.getDiseasesInfoAndPopulateTheDBProcedure_REFERENCES();
 //        wikipediaApiService.initCompleteSnapshots();
-//        wikipediaApiService.analysisAboutToTheJSONDiseases(false, true);
+        wikipediaApiService.analysisAboutToTheJSONDiseases(false, true, false);
 //        wikipediaApiService.analysisAboutToTheJSONDiseases(false, true, false);
     }
 
