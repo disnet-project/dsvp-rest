@@ -172,73 +172,79 @@ public class WikipediaApiService {
 //            add(new Disease("DIS010801", "Neonatal diabetes mellitus"));
 //        }};
         List<Disease> diseases = new ArrayList<Disease>(){{
-//        add(new Disease("DIS007220", "Abdominal mass"))	;
-//
-//        add(new Disease("DIS002816", "Ammonia poisoning"))	;
-//        add(new Disease("DIS005302", "Atrophic vaginitis"))	;
-//        add(new Disease("DIS006853", "Bird fancier's lung"))	;
-//        add(new Disease("DIS007001", "Brazilian purpuric fever"))	;
-//        add(new Disease("DIS005794", "Bundle branch block"))	;
-//
-//        add(new Disease("DIS004998", "Cholestasis"))	;
-//        add(new Disease("DIS007564", "Coloboma of optic nerve"))	;
-//
-//
-//        add(new Disease("DIS006317", "Dacryoadenitis"))	;
-//        add(new Disease("DIS001079", "Deformity"))	;
-//
-//
-//
-//        add(new Disease("DIS006513", "Enterocolitis"))	;
-//
-//        add(new Disease("DIS006049", "Eye strain"))	;
-//        add(new Disease("DIS006649", "Fragile X-associated tremor/ataxia syndrome"))	;
-//        add(new Disease("DIS007928", "Gastric varices"))	;
-//        add(new Disease("DIS005980", "Gastric volvulus"))	;
-//        add(new Disease("DIS001836", "Granulocytosis"))	;
-//        add(new Disease("DIS002297", "Heinrich event"))	;
-//        add(new Disease("DIS004312", "Hematosalpinx"))	;
-//        add(new Disease("DIS003326", "Hemoglobinuria"))	;
-//        add(new Disease("DIS001001", "Hemoperitoneum"))	;
-//        add(new Disease("DIS006930", "Heterophoria"))	;
-//        add(new Disease("DIS006948", "Hypertropia"))	;
-//        add(new Disease("DIS001714", "Hypochondrogenesis"))	;
-//        add(new Disease("DIS000693", "Hypokalemic acidosis"))	;
-//
-//        add(new Disease("DIS001557", "Idiopathic osteosclerosis"))	;
-//        add(new Disease("DIS005332", "Intraparenchymal hemorrhage"))	;
-//        add(new Disease("DIS001218", "Jargon aphasia"))	;
-//        add(new Disease("DIS003276", "Kyphoscoliosis"))	;
-//        add(new Disease("DIS007444", "Langer mesomelic dysplasia"))	;
-//        add(new Disease("DIS002910", "Malformative syndrome"))	;
-//        add(new Disease("DIS006985", "Monoarthritis"))	;
-//        add(new Disease("DIS005408", "Nasal septum perforation"))	;
-//        add(new Disease("DIS004924", "Neonatal hepatitis"))	;
-//        add(new Disease("DIS005417", "Orbital cellulitis"))	;
-//        add(new Disease("DIS007913", "Otospondylomegaepiphyseal dysplasia"))	;
-//
-//
-//
-//        add(new Disease("DIS007282", "Plica syndrome"))	;
-//
-//        add(new Disease("DIS006104", "Polyarthritis"))	;
-//        add(new Disease("DIS003148", "Presbylarynx"))	;
-//        add(new Disease("DIS002972", "Priming (steam locomotive)"))	;
-//        add(new Disease("DIS005825", "Pulmonary sequestration"))	;
-//        add(new Disease("DIS005819", "Pyaemia"))	;
-//        add(new Disease("DIS004791", "Pyogenic liver abscess"))	;
-//        add(new Disease("DIS002528", "Rheumatoid pleuritis"))	;
-//        add(new Disease("DIS000111", "Ringbone"))	;
-//        add(new Disease("DIS002651", "Sidebone"))	;
-//        add(new Disease("DIS001728", "Sinonasal undifferentiated carcinoma"))	;
-//        add(new Disease("DIS001602", "Snap oversteer"))	;
-//        add(new Disease("DIS002271", "Software brittleness"))	;
-//        add(new Disease("DIS001303", "Sphenoid wing meningioma"))	;
-//        add(new Disease("DIS007585", "Subdural hygroma"))	;
-//
-//        add(new Disease("DIS002833", "Trochleitis"))	;
-//        add(new Disease("DIS003330", "Ureterocele"))	;
+        add(new Disease("DIS007220", "Abdominal mass"))	;
+
+        add(new Disease("DIS002816", "Ammonia poisoning"))	;
+        add(new Disease("DIS005302", "Atrophic vaginitis"))	;
+        add(new Disease("DIS006853", "Bird fancier's lung"))	;
+        add(new Disease("DIS007001", "Brazilian purpuric fever"))	;
+        add(new Disease("DIS005794", "Bundle branch block"))	;
+
+        add(new Disease("DIS004998", "Cholestasis"))	;
+        add(new Disease("DIS007564", "Coloboma of optic nerve"))	;
+
+
+        add(new Disease("DIS006317", "Dacryoadenitis"))	;
+        add(new Disease("DIS001079", "Deformity"))	;
+
+
+
+        add(new Disease("DIS006513", "Enterocolitis"))	;
+
+        add(new Disease("DIS006049", "Eye strain"))	;
+        add(new Disease("DIS006649", "Fragile X-associated tremor/ataxia syndrome"))	;
+        add(new Disease("DIS007928", "Gastric varices"))	;
+        add(new Disease("DIS005980", "Gastric volvulus"))	;
+        add(new Disease("DIS001836", "Granulocytosis"))	;
+        add(new Disease("DIS002297", "Heinrich event"))	;
+        add(new Disease("DIS004312", "Hematosalpinx"))	;
+        add(new Disease("DIS003326", "Hemoglobinuria"))	;
+        add(new Disease("DIS001001", "Hemoperitoneum"))	;
+        add(new Disease("DIS006930", "Heterophoria"))	;
+        add(new Disease("DIS006948", "Hypertropia"))	;
+        add(new Disease("DIS001714", "Hypochondrogenesis"))	;
+        add(new Disease("DIS000693", "Hypokalemic acidosis"))	;
+
+        add(new Disease("DIS001557", "Idiopathic osteosclerosis"))	;
+        add(new Disease("DIS005332", "Intraparenchymal hemorrhage"))	;
+        add(new Disease("DIS001218", "Jargon aphasia"))	;
+        add(new Disease("DIS003276", "Kyphoscoliosis"))	;
+        add(new Disease("DIS007444", "Langer mesomelic dysplasia"))	;
+        add(new Disease("DIS002910", "Malformative syndrome"))	;
+        add(new Disease("DIS006985", "Monoarthritis"))	;
+        add(new Disease("DIS005408", "Nasal septum perforation"))	;
+        add(new Disease("DIS004924", "Neonatal hepatitis"))	;
+        add(new Disease("DIS005417", "Orbital cellulitis"))	;
+        add(new Disease("DIS007913", "Otospondylomegaepiphyseal dysplasia"))	;
+
+
+
+        add(new Disease("DIS007282", "Plica syndrome"))	;
+
+        add(new Disease("DIS006104", "Polyarthritis"))	;
+        add(new Disease("DIS003148", "Presbylarynx"))	;
+        add(new Disease("DIS002972", "Priming (steam locomotive)"))	;
+        add(new Disease("DIS005825", "Pulmonary sequestration"))	;
+        add(new Disease("DIS005819", "Pyaemia"))	;
+        add(new Disease("DIS004791", "Pyogenic liver abscess"))	;
+        add(new Disease("DIS002528", "Rheumatoid pleuritis"))	;
+        add(new Disease("DIS000111", "Ringbone"))	;
+        add(new Disease("DIS002651", "Sidebone"))	;
+        add(new Disease("DIS001728", "Sinonasal undifferentiated carcinoma"))	;
+        add(new Disease("DIS001602", "Snap oversteer"))	;
+        add(new Disease("DIS002271", "Software brittleness"))	;
+        add(new Disease("DIS001303", "Sphenoid wing meningioma"))	;
+        add(new Disease("DIS007585", "Subdural hygroma"))	;
+
+        add(new Disease("DIS002833", "Trochleitis"))	;
+        add(new Disease("DIS003330", "Ureterocele"))	;
         add(new Disease("DIS000754", "Zadikâ€“Barakâ€“Levin syndrome"))	;
+
+
+        add(new Disease("DIS004879", "Chlamydia infection"));
+            add(new Disease("DIS006586", "Trifascicular block"));
+            add(new Disease("DIS001475", "Spectrophobia"));
+
     }};
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
@@ -863,6 +869,81 @@ public class WikipediaApiService {
 
 
     public void analysisAboutToTheJSONDiseases(boolean character, boolean references, boolean medicalTerms) throws IOException {
+        List<Disease> diseasesErrorReferences = new ArrayList<Disease>(){{
+            add(new Disease("DIS007220", "Abdominal mass"))	;
+
+//            add(new Disease("DIS002816", "Ammonia poisoning"))	;//OK: NO TIENE
+            add(new Disease("DIS005302", "Atrophic vaginitis"))	;
+            add(new Disease("DIS006853", "Bird fancier's lung"))	;
+            add(new Disease("DIS007001", "Brazilian purpuric fever"))	;//DIFERENTE FORMATO DE REFERENCIA
+//            add(new Disease("DIS005794", "Bundle branch block"))	;//OK
+
+//            add(new Disease("DIS004998", "Cholestasis"))	;//OK. AL PRINCIPIO NO TENIA, PERO DESPUÉS SI
+//            add(new Disease("DIS007564", "Coloboma of optic nerve"))	;//OK: NO TIENE
+
+
+            add(new Disease("DIS006317", "Dacryoadenitis"))	;
+//            add(new Disease("DIS001079", "Deformity"))	;//OK. SOLO TIENE UNA PERO VERIFICAR PORQUE SE PARECE A OTROS DONDE NO SE OBTIENE INFO
+
+
+
+//            add(new Disease("DIS006513", "Enterocolitis"))	;//OK
+
+//            add(new Disease("DIS006049", "Eye strain"))	;//OK: NO TIENE
+//            add(new Disease("DIS006649", "Fragile X-associated tremor/ataxia syndrome"))	;//OK
+            add(new Disease("DIS007928", "Gastric varices"))	;
+//            add(new Disease("DIS005980", "Gastric volvulus"))	;//OK
+            add(new Disease("DIS001836", "Granulocytosis"))	;
+            add(new Disease("DIS002297", "Heinrich event"))	;
+            add(new Disease("DIS004312", "Hematosalpinx"))	;
+            add(new Disease("DIS003326", "Hemoglobinuria"))	;
+            add(new Disease("DIS001001", "Hemoperitoneum"))	;
+            add(new Disease("DIS006930", "Heterophoria"))	;
+            add(new Disease("DIS006948", "Hypertropia"))	;
+//            add(new Disease("DIS001714", "Hypochondrogenesis"))	; //OK. zNO TIENE REFERENCIAS
+            add(new Disease("DIS000693", "Hypokalemic acidosis"))	;//ERROR. FORMATO DIFERENTE
+
+            add(new Disease("DIS001557", "Idiopathic osteosclerosis"))	;
+            add(new Disease("DIS005332", "Intraparenchymal hemorrhage"))	;
+            add(new Disease("DIS001218", "Jargon aphasia"))	;
+            add(new Disease("DIS003276", "Kyphoscoliosis"))	;
+//            add(new Disease("DIS007444", "Langer mesomelic dysplasia"))	;//OK. NO TIENE REF
+//            add(new Disease("DIS002910", "Malformative syndrome"))	;//OK: NO TIENE REF
+//            add(new Disease("DIS006985", "Monoarthritis"))	;//OK. NO TIENE
+            add(new Disease("DIS005408", "Nasal septum perforation"))	;
+//            add(new Disease("DIS004924", "Neonatal hepatitis"))	;//OK. TIENE REFERECNIAS AL PRINCIPIO
+            add(new Disease("DIS005417", "Orbital cellulitis"))	; //FORMATO DIFERENTE AL PRINCIPIO
+            add(new Disease("DIS007913", "Otospondylomegaepiphyseal dysplasia"))	;
+
+
+
+            add(new Disease("DIS007282", "Plica syndrome"))	;
+
+            add(new Disease("DIS006104", "Polyarthritis"))	;
+            add(new Disease("DIS003148", "Presbylarynx"))	;
+            add(new Disease("DIS002972", "Priming (steam locomotive)"))	;
+            add(new Disease("DIS005825", "Pulmonary sequestration"))	;
+            add(new Disease("DIS005819", "Pyaemia"))	;
+            add(new Disease("DIS004791", "Pyogenic liver abscess"))	;// DISTINTO FORMATO
+            add(new Disease("DIS002528", "Rheumatoid pleuritis"))	;
+//            add(new Disease("DIS000111", "Ringbone"))	;//OK. DIFERENTE SECCION "SOURCES"
+            add(new Disease("DIS002651", "Sidebone"))	;
+//            add(new Disease("DIS001728", "Sinonasal undifferentiated carcinoma"))	;//OK
+//            add(new Disease("DIS001602", "Snap oversteer"))	;//ERROR. NO ES ENFERMEDAD. ES COCHES
+//            add(new Disease("DIS002271", "Software brittleness"))	;//ERROR. NO ES ENFERMEDAD. ES SOFTWARE
+//            add(new Disease("DIS001303", "Sphenoid wing meningioma"))	;//OK
+            add(new Disease("DIS007585", "Subdural hygroma"))	;
+
+            add(new Disease("DIS002833", "Trochleitis"))	;
+            add(new Disease("DIS003330", "Ureterocele"))	;
+            add(new Disease("DIS000754", "Zadikâ€“Barakâ€“Levin syndrome"))	;//distinto estilo
+
+
+//            add(new Disease("DIS004879", "Chlamydia infection"));//OK. recupera todo
+//            add(new Disease("DIS006586", "Trifascicular block"));//OK. PRIMERO SI TENIA DESPUES NO
+//            add(new Disease("DIS001475", "Spectrophobia"));//OK. NO TIENE EN TODAS
+
+        }};
         Common common = new Common();
         TimeProvider timeProvider = new TimeProvider();
         File dir = new File(Constants.ANALYSIS_HISTORY_DIRECTORY/*"tmp/test/"*/);
@@ -886,79 +967,83 @@ public class WikipediaApiService {
             String head = "disease_id,disease_name";
             for (File diseaseFile : directoryListing) {
                 if (!diseaseFile.getName().equalsIgnoreCase(".DS_Store")) {
-//                    try {
+
+                    try {
                         Disease jsonFileDisease = common.readDiseaseJSONFileAnalysis(diseaseFile);
-                        if (!jsonFileDisease.isScorn()) {
-                            count++;
-                            logger.info(count + " to " + total + ". (" + jsonFileDisease.isScorn() + ") " + jsonFileDisease.getId() + " - " + jsonFileDisease.getName() + ": Num Snapshots: " + jsonFileDisease.getSnapshots().size());
+                        if (isDiseaseWithRefError(jsonFileDisease, diseasesErrorReferences)) {
+                            if (!jsonFileDisease.isScorn()) {
+                                count++;
+                                logger.info(count + " to " + total + ". (" + jsonFileDisease.isScorn() + ") " + jsonFileDisease.getId() + " - " + jsonFileDisease.getName() + ": Num Snapshots: " + jsonFileDisease.getSnapshots().size());
 
-                            if (count==1){
-                                int snapCount = 0;
-                                for (String trueSnapshot: Constants.ANALYSIS_SNAPSHOT_LIST) {
-                                    snapCount++;
-                                    head = head + Constants.COMMA + snapCount + "_" + trueSnapshot;
-                                }
-//                                fileWriterdiseaseCharactersReport.write(head + "\n");
-                                fileWriterdiseaseReferencesReport.write(head + "\n");
-//                                fileWriterdiseaseMedicalTermsReport.write(head + "\n");
-                            }
-
-                            List<Object[]> snapshotsDKE = null;
-                            if (medicalTerms) snapshotsDKE = documentService.getDiseaseDKEInfoToAnalysis(jsonFileDisease.getId());
-
-                            String csvString = "";
-                            int snapshotCount = 0;
-                            for (String trueSnapshot: Constants.ANALYSIS_SNAPSHOT_LIST) {
-
-                                snapshotCount++;
-
-                                if (medicalTerms){
-                                    if (snapshotCount == 1) {
-                                        csvString = csvString + getMedicalTermCountBySnapshotInfo(snapshotsDKE, trueSnapshot);
-                                    }else {
-                                        csvString = csvString + Constants.COMMA + getMedicalTermCountBySnapshotInfo(snapshotsDKE, trueSnapshot);
+                                if (count == 1) {
+                                    int snapCount = 0;
+                                    for (String trueSnapshot : Constants.ANALYSIS_SNAPSHOT_LIST) {
+                                        snapCount++;
+                                        head = head + Constants.COMMA + snapCount + "_" + trueSnapshot;
                                     }
-                                }else {
-                                    Snapshot snapshot = findSnapshot(trueSnapshot, jsonFileDisease.getSnapshots());
-                                    if (snapshot != null) {
-                                        Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
-                                        if (references) {
-                                            List<Reference> referenceList = extracReferences(revision.getText());
-                                            revision.setReferenceCount(referenceList.size());
-                                        }
+//                                fileWriterdiseaseCharactersReport.write(head + "\n");
+                                    fileWriterdiseaseReferencesReport.write(head + "\n");
+//                                fileWriterdiseaseMedicalTermsReport.write(head + "\n");
+                                }
+
+                                List<Object[]> snapshotsDKE = null;
+                                if (medicalTerms)
+                                    snapshotsDKE = documentService.getDiseaseDKEInfoToAnalysis(jsonFileDisease.getId());
+
+                                String csvString = "";
+                                int snapshotCount = 0;
+                                for (String trueSnapshot : Constants.ANALYSIS_SNAPSHOT_LIST) {
+
+                                    snapshotCount++;
+
+                                    if (medicalTerms) {
                                         if (snapshotCount == 1) {
-                                            if (character) csvString = csvString + revision.getCharacterCount();
-                                            if (references) csvString = csvString + revision.getReferenceCount();
+                                            csvString = csvString + getMedicalTermCountBySnapshotInfo(snapshotsDKE, trueSnapshot);
                                         } else {
-                                            if (character)
-                                                csvString = csvString + Constants.COMMA + revision.getCharacterCount();
-                                            if (references)
-                                                csvString = csvString + Constants.COMMA + revision.getReferenceCount();
+                                            csvString = csvString + Constants.COMMA + getMedicalTermCountBySnapshotInfo(snapshotsDKE, trueSnapshot);
                                         }
                                     } else {
-                                        if (snapshotCount == 1) {
-                                            csvString = csvString + 0;
+                                        Snapshot snapshot = findSnapshot(trueSnapshot, jsonFileDisease.getSnapshots());
+                                        if (snapshot != null) {
+                                            Revision revision = getRevisionBySnapshot(jsonFileDisease.getPage().getRevisions(), snapshot.getRevId());
+                                            if (references) {
+                                                List<Reference> referenceList = extracReferences(revision.getText());
+                                                revision.setReferenceCount(referenceList.size());
+                                            }
+                                            if (snapshotCount == 1) {
+                                                if (character) csvString = csvString + revision.getCharacterCount();
+                                                if (references) csvString = csvString + revision.getReferenceCount();
+                                            } else {
+                                                if (character)
+                                                    csvString = csvString + Constants.COMMA + revision.getCharacterCount();
+                                                if (references)
+                                                    csvString = csvString + Constants.COMMA + revision.getReferenceCount();
+                                            }
                                         } else {
-                                            csvString = csvString + Constants.COMMA + 0;
+                                            if (snapshotCount == 1) {
+                                                csvString = csvString + 0;
+                                            } else {
+                                                csvString = csvString + Constants.COMMA + 0;
+                                            }
                                         }
                                     }
-                                }
 
-                            }
-                            String row = jsonFileDisease.getId() + Constants.COMMA + Constants.QUOTATION_MARKS + jsonFileDisease.getName() + Constants.QUOTATION_MARKS + Constants.COMMA + csvString;
-                            System.out.println(row);
+                                }
+                                String row = jsonFileDisease.getId() + Constants.COMMA + Constants.QUOTATION_MARKS + jsonFileDisease.getName() + Constants.QUOTATION_MARKS + Constants.COMMA + csvString;
+                                System.out.println(row);
 //                                fileWriterdiseaseCharactersReport.write(row + "\n");
-                            fileWriterdiseaseReferencesReport.write(row + "\n");
+                                fileWriterdiseaseReferencesReport.write(row + "\n");
 //                            fileWriterdiseaseMedicalTermsReport.write(row + "\n");
 
-                        }else{
+                            } else {
 //                            String noRelevantSQL = "UPDATE new_tbl_disease_list SET relevant = 0 WHERE disease_id = '" + jsonFileDisease.getId() + "';";
 //                            System.out.println(noRelevantSQL);
+                            }
                         }
-//                    }//END try
-//                    catch (Exception exception) {
-//                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
-//                    }//END catch
+                    }//END try
+                    catch (Exception exception) {
+                        logger.error("File " + diseaseFile.getAbsolutePath() + " is not OLE");
+                    }//END catch
                 }
             }//END for (File file : directoryListing) {
         }//END if (directoryListing != null) {
@@ -967,6 +1052,12 @@ public class WikipediaApiService {
 //        fileWriterdiseaseMedicalTermsReport.close();
 
         System.out.println("True number of diseases: " + count);
+    }
+
+
+    public boolean isDiseaseWithRefError(Disease disease, List<Disease> diseases){
+        if (diseases.contains(disease)) return true;
+        else return false;
     }
 
 

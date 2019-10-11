@@ -1,11 +1,10 @@
 package edu.ctb.upm.midas.scheduling;
 
 import edu.ctb.upm.midas.common.util.TimeProvider;
-import edu.ctb.upm.midas.constants.Constants;
-import edu.ctb.upm.midas.model.filter.common.Consult;
+import edu.ctb.upm.midas.service._extract.MayoClinicExtractService;
 import edu.ctb.upm.midas.service._extract.WikipediaExtractService;
-import edu.ctb.upm.midas.service.filter.metamap.MetamapService;
-import edu.ctb.upm.midas.service.filter.tvp.TvpService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,14 +21,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExtractionScheduling {
 
+    private static final Logger logger = LoggerFactory.getLogger(ExtractionScheduling.class);
+
+
     @Autowired
     private TimeProvider timeProvider;
-    @Autowired
-    private WikipediaExtractService wikipediaExtractService;
-    @Autowired
-    private MetamapService metamapService;
-    @Autowired
-    private TvpService tvpService;
 
     /**
      * Método para extraer una nueva lista de enfermedades desde DBPedia y almacenar en la
@@ -68,40 +64,20 @@ public class ExtractionScheduling {
                 @Scheduled(cron = "0/15 * 0 ? * 6,7 ")
      */
     @Scheduled(cron = "0 0 4 1 * ?")
-    public void extractionEveryFirstDayOfTheMonth() throws Exception {
+    public void wikipediaExtractionEveryFirstDayOfTheMonth() throws Exception {
         try {
-            System.out.println("Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
+            WikipediaExtractService wikipediaExtractService = new WikipediaExtractService();
+            logger.info("(Wikipedia) Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
             wikipediaExtractService.extract("", false, false, false);
-            Consult consult = new Consult(Constants.SOURCE_WIKIPEDIA, wikipediaExtractService.getSnapshot());
-            System.out.println("");
-//            System.out.println("==================");
-//            System.out.println("Metamap start! ...");
-//            System.out.println("==================");
-//            metamapService.filterAndStorageInJSON(consult);
-//            System.out.println("==================");
-//            System.out.println("Metamap end! ...");
-//            System.out.println("==================");
-//            System.out.println("");
-//            System.out.println("==================");
-//            System.out.println("TVP start! ...");
-//            System.out.println("==================");
-//            tvpService.filter(consult);
-//            System.out.println("==================");
-//            System.out.println("TVP end! ...");
-//            System.out.println("==================");
-            System.out.println("");
-            System.out.println("Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " end.");
+            logger.info("(Wikipedia) Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " end.");
         }catch (Exception e){
-            System.out.println("EIDW_ERR (1stOfTheMonth): " + e.getMessage());
+            logger.error("EIDW_ERR (1stOfTheMonth): " + e.getMessage());
         }
     }
 
 
-    @Scheduled(cron = "0 0 0 2 * ?")
-    public void completeInsert() throws Exception {
-
-    }
-
+//    @Scheduled(cron = "0 0 0 2 * ?")
+//    public void completeInsert() { }
 
 
     /**
@@ -112,33 +88,41 @@ public class ExtractionScheduling {
      */
     //@Scheduled(cron = "0 15 14 15 * ?" )
     //@Scheduled(cron="*/5 * * * * ?")
-    @Scheduled(cron = "0 31 3 15 * ?")
-    public void extractionEvery15thDayOfTheMonth() throws Exception {
+    @Scheduled(cron = "0 0 4 15 * ?")
+    public void wikipediaExtractionEvery15thDayOfTheMonth() {
         try {
-            System.out.println("Scheduled for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
+            WikipediaExtractService wikipediaExtractService = new WikipediaExtractService();
+            logger.info("(Wikipedia) Scheduled for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
             wikipediaExtractService.extract("", false, false, false);
-            Consult consult = new Consult(Constants.SOURCE_WIKIPEDIA, wikipediaExtractService.getSnapshot());
-            System.out.println("");
-//            System.out.println("==================");
-//            System.out.println("Metamap start! ...");
-//            System.out.println("==================");
-//            metamapService.filterAndStorageInJSON(consult);
-//            System.out.println("==================");
-//            System.out.println("Metamap end! ...");
-//            System.out.println("==================");
-//            System.out.println("");
-//            System.out.println("==================");
-//            System.out.println("TVP start! ...");
-//            System.out.println("==================");
-//            tvpService.filter(consult);
-//            System.out.println("==================");
-//            System.out.println("TVP end! ...");
-//            System.out.println("==================");
-            System.out.println("");
-            System.out.println("Scheduled for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " end.");
-
+            logger.info("(Wikipedia) Scheduled for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " end.");
         }catch (Exception e){
-            System.out.println("EIDW_ERR (15thOfTheMonth): " + e.getMessage());
+            logger.error("(Wikipedia) 15thOfTheMonth: " + e.getMessage());
+        }
+    }
+
+
+    @Scheduled(cron = "0 0 2 1 * ?")
+    public void mayoclinicExtractionEveryFirstDayOfTheMonth() {
+        try {
+            MayoClinicExtractService mayoClinicExtractService = new MayoClinicExtractService();
+            logger.info("(MayoClinic) Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
+            mayoClinicExtractService.extract(timeProvider.getNowFormatyyyyMMdd(), false);
+            logger.info("(MayoClinic) Scheduled task for the first of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " end.");
+        }catch (Exception e){
+            logger.error("(MayoClinic) 1stOfTheMonth: " + e.getMessage());
+        }
+    }
+
+
+    @Scheduled(cron = "0 0 2 15 * ?")
+    public void mayoclinicExtractionEvery15thDayOfTheMonth() {
+        try {
+            MayoClinicExtractService mayoClinicExtractService = new MayoClinicExtractService();
+            logger.info("(MayoClinic) Scheduled task for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " start.");
+            mayoClinicExtractService.extract(timeProvider.getNowFormatyyyyMMdd(), true);
+            logger.info("(MayoClinic) Scheduled task for the 15th of each month at midnight " + timeProvider.getNowFormatyyyyMMdd() + " end.");
+        }catch (Exception e){
+            logger.error("(MayoClinic) 15thOfTheMonth: " + e.getMessage());
         }
     }
 
